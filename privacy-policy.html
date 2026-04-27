@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Privacy Policy — Heyxia GST Reco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --bg:#FBF5EE; --bg-blue:#DCE7F7; --card:#F2EAE0;
+    --text:#1A1A1A; --text-soft:#2B2B2B; --text-dim:#5C5C5C; --text-muted:#8A8A8A;
+    --border:rgba(26,26,26,0.08); --border-strong:rgba(26,26,26,0.14);
+    --cta-blue:#A8C8F0; --cta-blue-dark:#8AB1E5; --cta-text:#1A2A4A;
+    --brand-gradient:linear-gradient(90deg,#F5A86E 0%,#E891A0 35%,#C99BCE 65%,#9B7FD4 100%);
+  }
+  *{ -webkit-font-smoothing:antialiased; }
+  html,body{ background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; }
+  .gradient-text{ background:var(--brand-gradient); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .nav-pill{ background:rgba(255,255,255,0.7); backdrop-filter:blur(14px); border:1px solid rgba(26,26,26,0.06); border-radius:9999px; box-shadow:0 4px 20px -8px rgba(26,26,26,0.08); }
+  .btn-primary{ background:var(--cta-blue); color:var(--cta-text); font-weight:600; padding:.9rem 1.6rem; border-radius:9999px; transition:all .2s ease; display:inline-flex; align-items:center; justify-content:center; border:1px solid rgba(74,107,201,0.15); }
+  .btn-primary:hover{ background:var(--cta-blue-dark); transform:translateY(-1px); }
+
+  /* Legal doc styles */
+  .legal-content h2{ font-size:1.15rem; font-weight:700; margin-top:2.5rem; margin-bottom:.75rem; color:var(--text); }
+  .legal-content p{ margin-bottom:.9rem; line-height:1.8; color:var(--text-dim); }
+  .legal-content strong{ color:var(--text-soft); font-weight:600; }
+  .legal-content ul, .legal-content ol{ margin-bottom:.9rem; padding-left:1.5rem; color:var(--text-dim); line-height:1.8; }
+  .legal-content li{ margin-bottom:.35rem; }
+  .legal-content .section-block{ margin-bottom:2rem; padding-bottom:2rem; border-bottom:1px solid var(--border); }
+  .legal-content .section-block:last-child{ border-bottom:none; }
+
+  .toc-link{ display:block; padding:.35rem 0; color:var(--text-dim); font-size:.875rem; transition:color .15s; border-left:2px solid transparent; padding-left:.75rem; }
+  .toc-link:hover{ color:var(--text); border-left-color:var(--cta-blue); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="fixed top-4 inset-x-0 z-50 px-4">
+  <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between">
+    <a href="gst-reco-landing.html" class="flex items-center gap-2 pl-2">
+      <img src="heyxia-logo.jpg" alt="Heyxia" class="h-9 w-auto" />
+      
+    </a>
+    <nav class="hidden md:flex items-center gap-10 text-[15px] text-[var(--text-soft)]">
+      <a href="gst-reco-landing.html#features" class="hover:text-black transition">Features</a>
+      <a href="gst-reco-landing.html#platform" class="hover:text-black transition">Solutions</a>
+      <a href="gst-reco-landing.html#pricing" class="hover:text-black transition">Pricing</a>
+      <a href="blog.html" class="hover:text-black transition">Blogs</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="#" class="btn-primary text-[15px] hidden sm:inline-flex">Sign Up for 14 Day Trial</a>
+      <a href="#" class="btn-primary text-[15px]">Login</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section style="background:linear-gradient(180deg,#FBF5EE 0%,#E8EFF9 100%);" class="pt-36 pb-12">
+  <div class="max-w-3xl mx-auto px-6">
+    <p class="text-sm font-semibold uppercase tracking-[.2em] text-[#4A6BC9] mb-3">Legal</p>
+    <h1 class="font-extrabold text-4xl md:text-5xl tracking-[-0.02em] mb-4">Privacy Policy</h1>
+    <p class="text-[var(--text-dim)]"><strong>Effective Date:</strong> 1st April 2026 &nbsp;·&nbsp; <strong>Last Updated:</strong> 1st April 2026</p>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<section class="py-14">
+  <div class="max-w-6xl mx-auto px-6 flex gap-16">
+
+    <!-- Sticky TOC -->
+    <aside class="hidden lg:block w-64 flex-shrink-0">
+      <div class="sticky top-24">
+        <p class="text-xs font-semibold uppercase tracking-[.15em] text-[var(--text-muted)] mb-4">On this page</p>
+        <nav class="space-y-0.5">
+          <a class="toc-link" href="#s1">1. Introduction</a>
+          <a class="toc-link" href="#s2">2. Nature of the Software</a>
+          <a class="toc-link" href="#s3">3. Definitions</a>
+          <a class="toc-link" href="#s4">4. Categories of Data</a>
+          <a class="toc-link" href="#s5">5. Personal & Business Data</a>
+          <a class="toc-link" href="#s6">6. Sources & Purposes</a>
+          <a class="toc-link" href="#s7">7. Role of the Company</a>
+          <a class="toc-link" href="#s8">8. Subscriber Obligations</a>
+          <a class="toc-link" href="#s9">9. No Professional Advice</a>
+          <a class="toc-link" href="#s10">10. Data Storage & Security</a>
+          <a class="toc-link" href="#s11">11. Logs & Audit Trails</a>
+          <a class="toc-link" href="#s12">12. Data Retention</a>
+          <a class="toc-link" href="#s13">13. Data Sharing</a>
+          <a class="toc-link" href="#s14">14. Cross-Border Transfer</a>
+          <a class="toc-link" href="#s15">15. User Rights</a>
+          <a class="toc-link" href="#s16">16. Confidentiality</a>
+          <a class="toc-link" href="#s17">17. User Age</a>
+          <a class="toc-link" href="#s18">18. Changes to Policy</a>
+          <a class="toc-link" href="#s19">19. Limitation of Liability</a>
+          <a class="toc-link" href="#s20">20. Governing Law</a>
+          <a class="toc-link" href="#s21">21. Contact</a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="flex-1 min-w-0 legal-content">
+      <p class="mb-8 text-[var(--text-dim)] leading-relaxed">This Privacy Policy ("<strong>Policy</strong>") applies to the GST reconciliation, analytics, reporting, and data processing software platform, together with its associated applications, dashboards, modules, interfaces, APIs, integrations, and related services (collectively, the "<strong>Software</strong>" or "<strong>Platform</strong>") operated by <strong>DAHOTRE CORPTECH PRIVATE LIMITED</strong> ("<strong>Company</strong>", "<strong>we</strong>", "<strong>our</strong>", or "<strong>us</strong>").</p>
+      <p class="mb-10 text-[var(--text-dim)] leading-relaxed">This Policy forms an integral part of the applicable Terms of Use, subscription documents, and other binding contractual terms governing access to and use of the Software. By accessing or using the Software, the relevant User and Subscriber acknowledge that they have read and understood this Policy and agree to be bound by it, to the extent applicable.</p>
+
+      <div class="section-block" id="s1">
+        <h2>1. Introduction and Applicability</h2>
+        <p>1.1 This Policy applies to: (i) individual users of the Software ("<strong>Users</strong>"); (ii) organisations subscribing to the Software ("<strong>Subscribers</strong>"); and (iii) authorised personnel, employees, consultants, and representatives of Subscribers.</p>
+        <p>1.2 This Policy governs the processing of data uploaded, transmitted, integrated, received, stored, viewed, downloaded, or otherwise processed through the Software.</p>
+        <p>1.3 In the event of inconsistency between this Policy and the Terms of Use or governing contract, the Terms of Use or governing contract shall prevail to the extent of such inconsistency.</p>
+        <p>1.4 This Policy is product-specific and has been drafted for a GST reconciliation and financial data processing platform used in a business and enterprise context.</p>
+      </div>
+
+      <div class="section-block" id="s2">
+        <h2>2. Nature of the Software</h2>
+        <p>2.1 The Software is a technology platform intended to facilitate: (i) GST reconciliation; (ii) invoice matching and comparison; (iii) financial and transactional data processing; (iv) analytics, dashboards, and reporting; and (v) allied workflow, audit trail, and exception management functions.</p>
+        <p>2.2 The Company provides the Software solely as a technology-enabled platform and does not, merely by providing the Software: (i) provide tax, legal, accounting, or audit advice; (ii) certify correctness of returns, records, reconciliations, or reports; or (iii) assume the Subscriber's statutory or regulatory compliance obligations.</p>
+        <p>2.3 The Software functions on the basis of data made available by the Subscriber or User, whether by upload, manual entry, integration, synchronisation, or other authorised means.</p>
+        <p>2.4 The Company does not independently originate or validate business, accounting, tax, vendor, invoice, or statutory data processed through the Software, except for system-generated logs, usage records, and technical metadata required for operation, security, and support.</p>
+      </div>
+
+      <div class="section-block" id="s3">
+        <h2>3. Definitions</h2>
+        <p>3.1 "<strong>Applicable Law</strong>" means all applicable laws, rules, regulations, notifications, directions, and binding legal requirements, including, where relevant, the Digital Personal Data Protection Act, 2023 and the Information Technology Act, 2000.</p>
+        <p>3.2 "<strong>Personal Data</strong>" shall have the meaning assigned under Applicable Law.</p>
+        <p>3.3 "<strong>Subscriber Data</strong>" means all data, information, files, records, and datasets submitted, uploaded, transmitted, or otherwise made available by or on behalf of the Subscriber through the Software.</p>
+        <p>3.4 "<strong>Processing</strong>" means any operation performed on data, including collection, storage, use, analysis, retrieval, transmission, disclosure, deletion, anonymisation, or destruction.</p>
+      </div>
+
+      <div class="section-block" id="s4">
+        <h2>4. Categories of Data Processed</h2>
+        <p>4.1 The Company may process the following categories of data:</p>
+        <p><strong>(A) Business / Transactional Data</strong></p>
+        <p>(i) GST-related records and return data; (ii) inward and outward supply details; (iii) purchase and sales records; (iv) invoice data, debit notes, credit notes, and adjustments; (v) vendor, supplier, customer, and counterparty details; (vi) accounting and financial records; (vii) reconciliation outputs, mismatches, variances, and audit trails.</p>
+        <p><strong>(B) User and Account Data</strong></p>
+        <p>(i) names, usernames, and login IDs; (ii) email addresses and phone numbers; (iii) user roles, permissions, and account administration details; (iv) authentication-related information.</p>
+        <p><strong>(C) Technical Data</strong></p>
+        <p>(i) IP addresses; (ii) device, browser, and system information; (iii) access timestamps, session logs, and usage analytics; (iv) diagnostic, performance, and security logs.</p>
+        <p><strong>(D) Support and Communication Data</strong></p>
+        <p>(i) support requests; (ii) implementation and onboarding communications; (iii) issue reports and service correspondence.</p>
+        <p>4.2 The nature and extent of data processed will depend on the modules used, integrations enabled, user permissions configured, and the Subscriber's chosen deployment of the Software.</p>
+        <p>4.3 The Company does not independently verify the legality, completeness, authority, or correctness of Subscriber Data unless expressly agreed in writing under a separate service arrangement.</p>
+      </div>
+
+      <div class="section-block" id="s5">
+        <h2>5. Personal Data and Business Data</h2>
+        <p>5.1 A substantial portion of the data processed through the Software may relate to business entities, commercial transactions, statutory registrations, and financial records and may therefore not constitute Personal Data.</p>
+        <p>5.2 The Software may process data relating to listed companies and other business entities. The fact that such information relates to a commercial organisation does not, by itself, make it Personal Data.</p>
+        <p>5.3 To the extent any Personal Data is processed through the Software, such processing shall be subject to Applicable Law.</p>
+        <p>5.4 The Subscriber is responsible for determining the legal character of the data it uploads or causes to be uploaded, including whether such data constitutes Personal Data, confidential information, regulated information, or non-personal business data.</p>
+        <p>5.5 The Company shall not be responsible for incorrect classification, tagging, or treatment of data by the Subscriber or User.</p>
+      </div>
+
+      <div class="section-block" id="s6">
+        <h2>6. Sources and Purposes of Processing</h2>
+        <p>6.1 Data processed through the Software may originate from: (i) direct uploads or manual entries by the Subscriber or User; (ii) imports from ERP, accounting, finance, or billing systems; (iii) third-party integrations or APIs enabled by the Subscriber; (iv) onboarding, implementation, and support interactions; and (v) system-generated logs and metadata.</p>
+        <p>6.2 The Company processes data only for purposes connected with provision and administration of the Software, including: (i) operating the Software and enabling access; (ii) performing reconciliation, analytics, reporting, and matching functions; (iii) enabling integrations, imports, synchronisation, exports, and configurable outputs; (iv) maintaining security, audit trails, system integrity, and abuse prevention; (v) troubleshooting, diagnostics, support, and account management; (vi) improving platform stability, usability, and performance; and (vii) complying with Applicable Law and enforcing contractual rights.</p>
+        <p>6.3 The Company does not sell Personal Data as part of the ordinary business model of the Software.</p>
+        <p>6.4 The Company may use anonymised, aggregated, statistical, or non-identifiable information for internal analytics, service improvement, security analysis, and product enhancement.</p>
+        <p>6.5 The outputs generated by the Software depend on the accuracy, completeness, and configuration of the data supplied by the Subscriber or User. The Company does not guarantee that any output, report, comparison, or reconciliation is accurate, complete, final, or sufficient for statutory, tax, audit, accounting, or legal reliance without independent verification.</p>
+      </div>
+
+      <div class="section-block" id="s7">
+        <h2>7. Role of the Company</h2>
+        <p>7.1 In relation to Subscriber Data, the Company acts primarily as a technology service provider and, where applicable, as a processor or service provider on behalf of the Subscriber, unless otherwise required by Applicable Law or expressly agreed otherwise in writing.</p>
+        <p>7.2 The Subscriber shall be solely responsible for: (i) determining the purpose of processing; (ii) deciding what data is uploaded or integrated; (iii) ensuring lawful collection, disclosure, and processing of such data; (iv) obtaining all required notices, permissions, approvals, and consents; (v) configuring user access and permissions; (vi) determining retention requirements applicable to its business; and (vii) independently validating outputs generated by the Software before reliance for compliance, filing, audit, legal, or financial purposes.</p>
+        <p>7.3 The Company shall not be responsible for verifying: (i) the legality or authority for upload of Subscriber Data; (ii) whether required consents or notices have been obtained; (iii) whether the data is accurate, current, complete, or lawful; or (iv) whether the Subscriber's use of the Software complies with its internal policies, contracts, or statutory duties.</p>
+        <p>7.4 Nothing in this Policy shall be construed to mean that the Company assumes the role of tax advisor, legal counsel, auditor, or compliance manager for the Subscriber.</p>
+      </div>
+
+      <div class="section-block" id="s8">
+        <h2>8. Subscriber and User Obligations</h2>
+        <p>8.1 The Subscriber and each User represent, warrant, and undertake that: (i) all data uploaded or processed through the Software is lawful and properly authorised; (ii) they have the necessary right or lawful basis to provide such data for processing; (iii) all required notices, permissions, and consents have been obtained, where applicable; (iv) use of the Software does not violate Applicable Law, confidentiality obligations, or third-party rights; and (v) important outputs and reconciliations will be independently reviewed before being acted upon.</p>
+        <p>8.2 The Subscriber shall be responsible for maintaining confidentiality of credentials, controlling user access, and promptly notifying the Company of suspected unauthorised access or compromise.</p>
+        <p>8.3 The Company shall have no responsibility or liability for: (i) unlawful or unauthorised data uploaded by the Subscriber or User; (ii) absence of required consent, notice, or authority; (iii) inaccurate, incomplete, stale, duplicate, or misleading data; (iv) misuse or incorrect configuration of the Software by the Subscriber or User; or (v) claims, proceedings, or liabilities arising from Subscriber data handling practices or reliance on Software outputs without independent review.</p>
+      </div>
+
+      <div class="section-block" id="s9">
+        <h2>9. No Professional Advice or No Statutory Substitute</h2>
+        <p>9.1 The Software is a facilitative technology tool and does not constitute tax advice, legal advice, accounting advice, audit certification, or statutory validation.</p>
+        <p>9.2 The Software does not replace independent professional review, internal controls, or statutory due diligence by qualified advisors or internal teams.</p>
+        <p>9.3 Any report, dashboard, summary, mismatch indication, reconciliation, or recommendation generated by the Software is operational and informational in nature and must be independently assessed by the Subscriber before being relied upon for compliance, filing, litigation, audit sign-off, financial statements, or other high-impact decision-making.</p>
+      </div>
+
+      <div class="section-block" id="s10">
+        <h2>10. Data Storage, Cloud Infrastructure, and Security</h2>
+        <p>10.1 Data processed through the Software may be stored, hosted, backed up, transmitted, or otherwise processed using third-party cloud, hosting, database, security, monitoring, and infrastructure providers.</p>
+        <p>10.2 Such infrastructure may be located in India or outside India, subject to Applicable Law and the Company's operational requirements.</p>
+        <p>10.3 The Company may use commercially reasonable care in selecting such providers, but does not own or control the underlying infrastructure of such third parties.</p>
+        <p>10.4 The Subscriber acknowledges that operation of cloud-based software services ordinarily involves reliance on third-party infrastructure and networks.</p>
+        <p>10.5 The Company implements reasonable technical and organisational measures designed to protect data from unauthorised access, misuse, alteration, loss, or disclosure. Such measures may include access controls, role-based permissions, authentication safeguards, encryption where applicable, logging, monitoring, backups, and incident response processes.</p>
+        <p>10.6 No digital system or transmission method is completely secure. Security also depends materially on the Subscriber's internal controls, access management, device hygiene, network security, and third-party integrations.</p>
+        <p>10.7 The Company shall not be liable for downtime, outages, corruption, delay, loss, breaches, or unauthorised access arising from: (i) third-party cloud or infrastructure providers; (ii) compromised credentials; (iii) weak passwords or inadequate access controls by the Subscriber; (iv) insecure Subscriber devices or networks; (v) third-party integrations, APIs, or external systems; or (vi) circumstances beyond the reasonable control of the Company.</p>
+      </div>
+
+      <div class="section-block" id="s11">
+        <h2>11. Logs, Audit Trails, and Monitoring</h2>
+        <p>11.1 The Software may maintain access logs, activity histories, audit trails, usage records, and system logs for security, accountability, traceability, troubleshooting, dispute resolution, and service improvement.</p>
+        <p>11.2 Such logs may include login timestamps, actions performed, records accessed, imports, exports, reports generated, configuration changes, and other system activities.</p>
+        <p>11.3 The Company may use such records internally for security review, incident investigation, support handling, and enforcement of contractual rights.</p>
+      </div>
+
+      <div class="section-block" id="s12">
+        <h2>12. Data Retention and Deletion</h2>
+        <p>12.1 Data shall be retained for such period as may be: (i) necessary during the subscription or service relationship; (ii) operationally required for functioning, support, backup, audit, or security purposes; (iii) required under Applicable Law; or (iv) necessary for enforcement of legal rights or resolution of disputes.</p>
+        <p>12.2 Upon expiry or termination of the applicable relationship: (i) access to the Software may be suspended or revoked; (ii) the Subscriber may lose access to stored data after the applicable transition period, if any; and (iii) data may be deleted, anonymised, archived, or rendered inaccessible in accordance with the Company's retention protocols, contractual commitments, or Applicable Law.</p>
+        <p>12.3 The Company shall have no obligation to retain data indefinitely after termination unless expressly agreed in writing or required by Applicable Law.</p>
+        <p>12.4 Backup copies, residual logs, and archival records may continue to exist for a limited period due to technical, operational, legal, or recovery requirements.</p>
+      </div>
+
+      <div class="section-block" id="s13">
+        <h2>13. Data Sharing and Disclosure</h2>
+        <p>13.1 The Company may disclose or make data available, strictly on a need-to-know basis, to: (i) cloud, hosting, storage, monitoring, and infrastructure providers; (ii) implementation, support, security, and technical service providers; (iii) professional advisors, auditors, or consultants engaged under confidentiality obligations; (iv) affiliates involved in lawful service delivery or support, where applicable; (v) governmental, judicial, quasi-judicial, regulatory, tax, or law enforcement authorities where required by Applicable Law or lawful process; and (vi) a successor entity in connection with merger, acquisition, restructuring, financing, or transfer of business or assets, subject to continuity of obligations where commercially and legally feasible.</p>
+        <p>13.2 The Company does not disclose Subscriber Data to third parties for unrelated sale or marketing as part of the ordinary operation of the Software.</p>
+        <p>13.3 Where the Subscriber enables third-party integrations, exports, connectors, or APIs, data may be transmitted to or from such systems at the Subscriber's direction, and the Company shall not be responsible for the privacy, legality, or security practices of such third parties.</p>
+      </div>
+
+      <div class="section-block" id="s14">
+        <h2>14. Cross-Border Data Transfer</h2>
+        <p>14.1 Data may be stored, transferred, mirrored, or accessed outside India where necessary for operation of the Software, global infrastructure, support workflows, security management, or service delivery.</p>
+        <p>14.2 Any such transfer shall be subject to Applicable Law.</p>
+        <p>14.3 To the extent legally required, the Subscriber shall remain responsible for obtaining any necessary permissions, notices, or consents for such transfer, unless otherwise expressly agreed in writing.</p>
+      </div>
+
+      <div class="section-block" id="s15">
+        <h2>15. User Rights and Requests</h2>
+        <p>15.1 To the extent mandated by Applicable Law and subject to the nature of the Company's role, a User may seek rights such as access, correction, updating, deletion, or withdrawal of consent in relation to Personal Data.</p>
+        <p>15.2 Where the relevant data is controlled by the Subscriber, or where the Company acts only on the Subscriber's behalf, the Company may require such request to be routed through or validated by the Subscriber.</p>
+        <p>15.3 The Company may refuse, limit, or defer a request where: (i) it is not legally required to comply; (ii) compliance is not technically feasible; (iii) the Company is not the correct responding party; (iv) the request affects rights of others; or (v) retention is required for law, security, audit, or dispute-related purposes.</p>
+      </div>
+
+      <div class="section-block" id="s16">
+        <h2>16. Confidentiality, Third-Party Services, and Incidents</h2>
+        <p>16.1 The Company recognises that data processed through the Software may include confidential, commercially sensitive, strategic, financial, or compliance-related information and shall use reasonable measures to maintain confidentiality in accordance with its internal practices and contractual commitments.</p>
+        <p>16.2 The Software may interoperate with third-party applications, APIs, ERP systems, accounting systems, authentication services, and other external tools. The Company does not control the privacy or security practices of such third parties and shall not be liable for losses arising from such third-party systems or integrations.</p>
+        <p>16.3 The Company may maintain internal processes for responding to suspected security incidents affecting the Software and may take such steps as it considers appropriate, including containment, investigation, mitigation, remediation, and legally required notification.</p>
+        <p>16.4 The Company does not guarantee that every attempted attack, anomaly, suspicious event, or unsuccessful threat will result in notice to the Subscriber.</p>
+      </div>
+
+      <div class="section-block" id="s17">
+        <h2>17. User Age</h2>
+        <p>17.1 The Software is an enterprise and business-focused platform and is not intended for use by minors.</p>
+        <p>17.2 The Subscriber shall not knowingly use the Software in a manner that violates Applicable Law relating to children's data.</p>
+      </div>
+
+      <div class="section-block" id="s18">
+        <h2>18. Changes to This Policy</h2>
+        <p>18.1 The Company may update or modify this Policy from time to time due to changes in law, the Software, infrastructure, service model, or risk management requirements.</p>
+        <p>18.2 The updated Policy may be posted on the Platform, website, or otherwise communicated through appropriate means.</p>
+        <p>18.3 Continued use of the Software after such update becomes effective shall constitute acceptance of the revised Policy, to the extent permitted by Applicable Law and the governing contract.</p>
+      </div>
+
+      <div class="section-block" id="s19">
+        <h2>19. Limitation of Liability</h2>
+        <p>19.1 To the maximum extent permitted by Applicable Law, the Company shall not be liable for: (i) data uploaded, shared, entered, or integrated by the Subscriber or User; (ii) unlawful, unauthorised, or improper processing initiated by the Subscriber or User; (iii) absence of required notices, permissions, approvals, or consents; (iv) inaccurate, incomplete, outdated, duplicated, manipulated, or misleading data; (v) any decision, filing, action, or omission taken on the basis of Software-generated outputs without independent review; (vi) losses caused by third-party infrastructure, APIs, connectivity failures, or cloud provider incidents; (vii) breaches caused by compromised credentials, Subscriber systems, User practices, or third-party environments; (viii) indirect, incidental, special, punitive, or consequential losses; or (ix) regulatory action, tax demands, penalties, interest, proceedings, or claims arising from Subscriber conduct, Subscriber data, Subscriber compliance failures, or Subscriber reliance on Software outputs.</p>
+        <p>19.2 The Subscriber expressly acknowledges that the Software is a facilitative tool and that final responsibility for legal, tax, financial, regulatory, and commercial decisions remains with the Subscriber.</p>
+        <p>19.3 This Clause shall be read together with, and shall be subject to, the limitation of liability, disclaimers, exclusions, and risk allocation set out in the Terms of Use and governing contract, which shall prevail where applicable.</p>
+      </div>
+
+      <div class="section-block" id="s20">
+        <h2>20. Governing Law, Jurisdiction, and Contact</h2>
+        <p>20.1 This Policy shall be governed by and construed in accordance with the laws of India.</p>
+        <p>20.2 Subject to any agreed dispute resolution mechanism in the Terms of Use or governing contract, the courts at Pune, Maharashtra shall have exclusive jurisdiction over disputes arising out of or in connection with this Policy.</p>
+      </div>
+
+      <div class="section-block" id="s21">
+        <h2>21. Contact</h2>
+        <p>For questions, requests, notices, or grievances relating to this Policy, Users and Subscribers may contact:</p>
+        <div class="mt-4 p-6 rounded-2xl" style="background:var(--card); border:1px solid var(--border);">
+          <p class="font-bold text-[var(--text)] mb-3">DAHOTRE CORPTECH PRIVATE LIMITED</p>
+          <p><strong>Address:</strong> Floor 7, Kotibhaskar Business Court, Karve Rd, opposite Karishma Society, Kothrud Industrial Area, Kothrud, Pune, Maharashtra 411038</p>
+          <p><strong>Email:</strong> <a href="mailto:varun.d@heyxia.io" class="text-[#4A6BC9] hover:underline">varun.d@heyxia.io</a></p>
+          <p><strong>Phone:</strong> +91 9699984943</p>
+          <p><strong>Attention:</strong> Grievance Officer / Compliance Contact</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:linear-gradient(180deg,#FBF5EE 0%,#E8EFF9 100%);" class="py-20 border-t border-[rgba(26,26,26,0.05)]">
+  <div class="max-w-3xl mx-auto px-6 text-center">
+    <h2 class="font-extrabold text-3xl md:text-4xl tracking-[-0.02em] mb-3">14 Days. Full Access. Zero Risk</h2>
+    <p class="text-[var(--text-dim)] mb-8">Try GST Reco for free and experience the power of Heyxia.</p>
+    <a href="#" class="btn-primary">Sign Up for 14-Day Trial</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:var(--bg);" class="pt-14 pb-10 border-t border-[rgba(26,26,26,0.05)]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-10">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <img src="heyxia-logo.jpg" alt="Heyxia" class="h-9 w-auto" />
+          
+        </div>
+        <p class="text-[var(--text-dim)] max-w-sm leading-relaxed">Heyxia is a brand under company — Dahotre Corp Tech Pvt. Ltd.</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Pages</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="gst-reco-landing.html" class="hover:text-black">Home</a></li>
+          <li><a href="gst-reco-landing.html#features" class="hover:text-black">Features</a></li>
+          <li><a href="gst-reco-landing.html#pricing" class="hover:text-black">Pricing</a></li>
+          <li><a href="blog.html" class="hover:text-black">Blogs</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Information</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="mailto:varun.d@heyxia.io" class="hover:text-black">Contact Us</a></li>
+          <li><a href="privacy-policy.html" class="hover:text-black font-semibold text-black">Privacy Policy</a></li>
+          <li><a href="terms-of-use.html" class="hover:text-black">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-[rgba(26,26,26,0.06)] flex flex-col md:flex-row justify-between gap-2 text-xs text-[var(--text-muted)]">
+      <p>© 2026, Heyxia GST Reco. All Rights Reserved.</p>
+      <p>© 2026, Dahotre CorpTech Pvt. Ltd.</p>
+    </div>
+  </div>
+</footer>
+<script>lucide.createIcons();</script>
+</body>
+</html>

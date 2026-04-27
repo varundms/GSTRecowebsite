@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blog Post — Heyxia GST Reco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --bg:#FBF5EE; --card:#F2EAE0;
+    --text:#1A1A1A; --text-soft:#2B2B2B; --text-dim:#5C5C5C; --text-muted:#8A8A8A;
+    --border:rgba(26,26,26,0.08); --border-strong:rgba(26,26,26,0.14);
+    --cta-blue:#A8C8F0; --cta-blue-dark:#8AB1E5; --cta-text:#1A2A4A;
+    --brand-gradient:linear-gradient(90deg,#F5A86E 0%,#E891A0 35%,#C99BCE 65%,#9B7FD4 100%);
+  }
+  *{ -webkit-font-smoothing:antialiased; }
+  html,body{ background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; }
+  .gradient-text{ background:var(--brand-gradient); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .nav-pill{ background:rgba(255,255,255,0.7); backdrop-filter:blur(14px); border:1px solid rgba(26,26,26,0.06); border-radius:9999px; box-shadow:0 4px 20px -8px rgba(26,26,26,0.08); }
+  .btn-primary{ background:var(--cta-blue); color:var(--cta-text); font-weight:600; padding:.9rem 1.6rem; border-radius:9999px; transition:all .2s ease; display:inline-flex; align-items:center; justify-content:center; border:1px solid rgba(74,107,201,0.15); }
+  .btn-primary:hover{ background:var(--cta-blue-dark); transform:translateY(-1px); }
+
+  /* Post content typography */
+  .post-body{ font-family:'Lora', Georgia, serif; font-size:18px; line-height:1.85; color:var(--text-soft); }
+  .post-body h1{ font-size:32px; font-weight:700; margin:2rem 0 1rem; line-height:1.3; font-family:'Inter',sans-serif; color:var(--text); }
+  .post-body h2{ font-size:26px; font-weight:700; margin:2rem 0 .75rem; line-height:1.3; font-family:'Inter',sans-serif; color:var(--text); }
+  .post-body h3{ font-size:20px; font-weight:600; margin:1.5rem 0 .5rem; font-family:'Inter',sans-serif; color:var(--text); }
+  .post-body p{ margin-bottom:1.4rem; }
+  .post-body ul, .post-body ol{ padding-left:1.5rem; margin-bottom:1.4rem; }
+  .post-body li{ margin-bottom:.5rem; }
+  .post-body blockquote{ border-left:3px solid var(--cta-blue); padding:1rem 1.5rem; margin:1.5rem 0; background:rgba(168,200,240,0.08); border-radius:0 12px 12px 0; font-style:italic; color:var(--text-dim); }
+  .post-body strong{ font-weight:700; color:var(--text); }
+  .post-body a{ color:#4A6BC9; text-decoration:underline; }
+  .post-body img{ max-width:100%; border-radius:12px; margin:1.5rem 0; }
+
+  .cat-pill{ padding:.3rem .9rem; border-radius:9999px; font-size:.8rem; font-weight:600; }
+  .cat-gst{ background:rgba(168,200,240,0.2); color:#2A4A8A; }
+  .cat-itc{ background:rgba(232,145,160,0.2); color:#A03055; }
+  .cat-compliance{ background:rgba(155,127,212,0.2); color:#6A3FBC; }
+  .cat-tally{ background:rgba(245,168,110,0.2); color:#9A5500; }
+  .cat-finance{ background:rgba(74,222,128,0.15); color:#1A7A50; }
+
+  .not-found{ text-align:center; padding:80px 20px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="fixed top-4 inset-x-0 z-50 px-4">
+  <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between">
+    <a href="gst-reco-landing.html" class="flex items-center gap-2 pl-2">
+      <img src="heyxia-logo.jpg" alt="Heyxia" class="h-10 w-auto" style="mix-blend-mode:multiply;" />
+    </a>
+    <nav class="hidden md:flex items-center gap-10 text-[15px] text-[var(--text-soft)]">
+      <a href="gst-reco-landing.html#features" class="hover:text-black transition">Features</a>
+      <a href="gst-reco-landing.html#platform" class="hover:text-black transition">Solutions</a>
+      <a href="gst-reco-landing.html#pricing" class="hover:text-black transition">Pricing</a>
+      <a href="blog.html" class="hover:text-black transition font-semibold">Blogs</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="#" class="btn-primary text-[15px] hidden sm:inline-flex">Sign Up for 14 Day Trial</a>
+      <a href="#" class="btn-primary text-[15px]">Login</a>
+    </div>
+  </div>
+</header>
+
+<!-- POST CONTENT -->
+<main class="pt-32 pb-20" id="post-main">
+  <div class="max-w-3xl mx-auto px-6">
+    <!-- Loading state -->
+    <div id="post-loading" class="not-found">
+      <p style="color:var(--text-dim);">Loading post...</p>
+    </div>
+    <!-- Not found state -->
+    <div id="post-not-found" class="not-found" style="display:none;">
+      <i data-lucide="file-x" style="width:48px;height:48px;color:var(--text-muted);margin:0 auto 16px;display:block;"></i>
+      <h2 style="font-size:24px;font-weight:700;margin-bottom:8px;">Post not found</h2>
+      <p style="color:var(--text-dim);margin-bottom:24px;">This post may have been deleted or the link is incorrect.</p>
+      <a href="blog.html" class="btn-primary">← Back to Blog</a>
+    </div>
+    <!-- Post content -->
+    <div id="post-content-wrap" style="display:none;">
+      <!-- Back link -->
+      <a href="blog.html" style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:var(--text-dim);margin-bottom:32px;text-decoration:none;" class="hover:text-black transition">
+        <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Back to Blog
+      </a>
+      <!-- Category & meta -->
+      <div class="flex items-center gap-3 mb-5 flex-wrap">
+        <span class="cat-pill" id="post-cat-badge"></span>
+        <span style="font-size:13px;color:var(--text-muted);" id="post-meta-date"></span>
+        <span style="font-size:13px;color:var(--text-muted);">·</span>
+        <span style="font-size:13px;color:var(--text-muted);" id="post-meta-read"></span>
+      </div>
+      <!-- Title -->
+      <h1 style="font-size:clamp(28px,5vw,44px);font-weight:800;line-height:1.15;letter-spacing:-0.02em;margin-bottom:20px;" id="post-title-el"></h1>
+      <!-- Author -->
+      <div class="flex items-center gap-3 mb-8 pb-8" style="border-bottom:1px solid var(--border);" id="post-author-el"></div>
+      <!-- Cover image -->
+      <div id="post-cover-el" style="margin-bottom:40px;display:none;">
+        <img id="post-cover-img" style="width:100%;border-radius:16px;max-height:420px;object-fit:cover;" alt="">
+      </div>
+      <!-- Body -->
+      <div class="post-body" id="post-body-el"></div>
+      <!-- Footer -->
+      <div style="margin-top:48px;padding-top:32px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:gap:12px;">
+        <a href="blog.html" class="btn-primary" style="background:var(--card);color:var(--text);border:1px solid var(--border-strong);">← All Posts</a>
+        <div style="font-size:13px;color:var(--text-muted);">Share this article</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- CTA -->
+<section style="background:linear-gradient(180deg,#FBF5EE 0%,#E8EFF9 100%);" class="py-20 border-t border-[rgba(26,26,26,0.05)]">
+  <div class="max-w-3xl mx-auto px-6 text-center">
+    <h2 class="font-extrabold text-3xl md:text-4xl tracking-[-0.02em] mb-3">14 Days. Full Access. Zero Risk</h2>
+    <p style="color:var(--text-dim);margin-bottom:32px;">Try GST Reco for free and experience the power of Heyxia.</p>
+    <a href="#" class="btn-primary">Sign Up for 14-Day Trial</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:var(--bg);" class="pt-14 pb-10 border-t border-[rgba(26,26,26,0.05)]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row justify-between gap-8">
+      <div>
+        <img src="heyxia-logo.jpg" alt="Heyxia" class="h-16 w-auto mb-3">
+        <p style="color:var(--text-dim);font-size:14px;max-width:280px;">Heyxia is a brand under Dahotre Corp Tech Pvt. Ltd.</p>
+      </div>
+      <div class="flex gap-16">
+        <div>
+          <p style="font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;">Pages</p>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--text-dim);">
+            <li><a href="gst-reco-landing.html" class="hover:text-black">Home</a></li>
+            <li><a href="blog.html" class="hover:text-black font-semibold" style="color:var(--text);">Blog</a></li>
+            <li><a href="gst-reco-landing.html#pricing" class="hover:text-black">Pricing</a></li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px;">Info</p>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--text-dim);">
+            <li><a href="mailto:varun.d@heyxia.io" class="hover:text-black">Contact</a></li>
+            <li><a href="privacy-policy.html" class="hover:text-black">Privacy</a></li>
+            <li><a href="terms-of-use.html" class="hover:text-black">Terms</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:40px;padding-top:20px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);">
+      © 2026, Heyxia GST Reco. All Rights Reserved. · © 2026, Dahotre CorpTech Pvt. Ltd.
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  const catPillMap = { 'GST Basics':'cat-gst', 'Reconciliation':'cat-gst', 'ITC & Blocked Credit':'cat-itc', 'Compliance':'cat-compliance', 'Tally Tips':'cat-tally', 'Finance':'cat-finance' };
+
+  function getParam(key) {
+    return new URLSearchParams(window.location.search).get(key);
+  }
+
+  function formatDate(d) {
+    try { return new Date(d).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' }); } catch(e) { return d; }
+  }
+
+  function getInitials(name) {
+    return (name || '?').split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+  }
+
+  const postId = getParam('id');
+  const STORAGE_KEY = 'heyxia_blog_posts';
+
+  if (!postId) {
+    document.getElementById('post-loading').style.display = 'none';
+    document.getElementById('post-not-found').style.display = '';
+    lucide.createIcons();
+  } else {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const posts = raw ? JSON.parse(raw) : [];
+      const post = posts.find(p => p.id === postId && p.status === 'published');
+
+      document.getElementById('post-loading').style.display = 'none';
+
+      if (!post) {
+        document.getElementById('post-not-found').style.display = '';
+        lucide.createIcons();
+      } else {
+        // Set page title
+        document.title = post.title + ' — Heyxia GST Reco';
+
+        // Category badge
+        const catEl = document.getElementById('post-cat-badge');
+        catEl.textContent = post.category || 'Other';
+        catEl.className = 'cat-pill ' + (catPillMap[post.category] || '');
+
+        // Meta
+        document.getElementById('post-meta-date').textContent = formatDate(post.date);
+        document.getElementById('post-meta-read').textContent = (post.readTime || 5) + ' min read';
+
+        // Title
+        document.getElementById('post-title-el').textContent = post.title;
+
+        // Author
+        const initials = getInitials(post.author || 'Author');
+        document.getElementById('post-author-el').innerHTML = `
+          <div style="width:44px;height:44px;border-radius:50%;background:var(--cta-blue);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--cta-text);flex-shrink:0;">${initials}</div>
+          <div>
+            <div style="font-weight:600;font-size:15px;">${post.author || 'Heyxia Team'}</div>
+            <div style="font-size:13px;color:var(--text-muted);">${post.authorRole || ''}</div>
+          </div>`;
+
+        // Cover image
+        if (post.cover) {
+          document.getElementById('post-cover-img').src = post.cover;
+          document.getElementById('post-cover-el').style.display = '';
+        }
+
+        // Body
+        document.getElementById('post-body-el').innerHTML = post.content || '<p>No content.</p>';
+
+        // Show content
+        document.getElementById('post-content-wrap').style.display = '';
+        lucide.createIcons();
+      }
+    } catch(e) {
+      document.getElementById('post-loading').style.display = 'none';
+      document.getElementById('post-not-found').style.display = '';
+      lucide.createIcons();
+    }
+  }
+</script>
+</body>
+</html>

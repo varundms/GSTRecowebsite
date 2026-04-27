@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Heyxia Blog CMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0F1117;
+  --surface: #171B26;
+  --surface-2: #1E2333;
+  --surface-3: #252B3D;
+  --border: rgba(255,255,255,0.07);
+  --border-2: rgba(255,255,255,0.12);
+  --text: #F0F2F8;
+  --text-dim: #8892AA;
+  --text-muted: #525C72;
+  --accent: #A8C8F0;
+  --accent-dark: #1A2A4A;
+  --orange: #F5A86E;
+  --coral: #E891A0;
+  --lavender: #9B7FD4;
+  --green: #4ADE80;
+  --red: #F87171;
+  --brand: linear-gradient(90deg, #F5A86E, #E891A0, #9B7FD4);
+}
+html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); }
+.serif { font-family: 'DM Serif Display', serif; }
+
+/* Layout */
+.app { display: flex; height: 100vh; overflow: hidden; }
+.sidebar {
+  width: 240px; flex-shrink: 0; background: var(--surface);
+  border-right: 1px solid var(--border); display: flex; flex-direction: column;
+  padding: 0; overflow: hidden;
+}
+.main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+
+/* Sidebar */
+.sidebar-logo {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-logo img { height: 36px; width: auto; }
+.cms-badge {
+  display: inline-block; margin-top: 6px;
+  font-size: 10px; font-weight: 600; letter-spacing: .1em;
+  background: var(--brand); -webkit-background-clip: text;
+  background-clip: text; -webkit-text-fill-color: transparent;
+}
+.sidebar-nav { flex: 1; padding: 12px 10px; overflow-y: auto; }
+.nav-section { font-size: 10px; font-weight: 600; letter-spacing: .12em; color: var(--text-muted); text-transform: uppercase; padding: 8px 10px 4px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px;
+  font-size: 14px; font-weight: 500; color: var(--text-dim); cursor: pointer;
+  transition: all .15s; border: 1px solid transparent; margin-bottom: 2px;
+}
+.nav-item:hover { background: var(--surface-2); color: var(--text); }
+.nav-item.active { background: var(--surface-3); color: var(--text); border-color: var(--border-2); }
+.nav-item i { width: 16px; height: 16px; flex-shrink: 0; }
+.nav-count { margin-left: auto; font-size: 11px; background: var(--surface-3); color: var(--text-dim); padding: 1px 7px; border-radius: 9999px; }
+
+.sidebar-footer { padding: 14px; border-top: 1px solid var(--border); }
+.view-site-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 9px; border-radius: 10px; font-size: 13px; font-weight: 600;
+  background: rgba(168,200,240,0.12); color: var(--accent); border: 1px solid rgba(168,200,240,0.2);
+  cursor: pointer; transition: all .15s; text-decoration: none;
+}
+.view-site-btn:hover { background: rgba(168,200,240,0.2); }
+
+/* Top bar */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 28px; border-bottom: 1px solid var(--border);
+  background: var(--bg); position: sticky; top: 0; z-index: 10;
+}
+.page-title { font-size: 20px; font-weight: 600; }
+.topbar-actions { display: flex; gap: 10px; align-items: center; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px; padding: 8px 16px;
+  border-radius: 9px; font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all .15s; border: none; font-family: inherit;
+}
+.btn-primary { background: var(--accent); color: var(--accent-dark); }
+.btn-primary:hover { background: #8AB1E5; transform: translateY(-1px); }
+.btn-ghost { background: var(--surface-2); color: var(--text-dim); border: 1px solid var(--border-2); }
+.btn-ghost:hover { background: var(--surface-3); color: var(--text); }
+.btn-danger { background: rgba(248,113,113,0.12); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+.btn-danger:hover { background: rgba(248,113,113,0.2); }
+.btn-sm { padding: 5px 11px; font-size: 12px; border-radius: 7px; }
+.btn-icon { padding: 8px; width: 36px; height: 36px; justify-content: center; }
+
+/* Content area */
+.content { padding: 24px 28px; flex: 1; }
+
+/* Stats */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+  padding: 18px 20px; position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--brand);
+}
+.stat-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; }
+.stat-value { font-size: 32px; font-weight: 700; margin: 6px 0 2px; }
+.stat-sub { font-size: 12px; color: var(--text-dim); }
+
+/* Table */
+.table-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.table-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+}
+.table-title { font-size: 15px; font-weight: 600; }
+.table-search {
+  display: flex; align-items: center; gap: 8px; background: var(--surface-2);
+  border: 1px solid var(--border-2); border-radius: 8px; padding: 6px 12px;
+}
+.table-search input {
+  background: none; border: none; outline: none; font-size: 13px;
+  color: var(--text); font-family: inherit; width: 200px;
+}
+.table-search input::placeholder { color: var(--text-muted); }
+table { width: 100%; border-collapse: collapse; }
+th {
+  text-align: left; padding: 10px 20px; font-size: 11px; font-weight: 600;
+  color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em;
+  background: var(--surface-2); border-bottom: 1px solid var(--border);
+}
+td { padding: 14px 20px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--surface-2); }
+.post-title-cell { font-weight: 600; color: var(--text); max-width: 280px; }
+.post-title-cell small { display: block; font-size: 11px; font-weight: 400; color: var(--text-dim); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Status badges */
+.badge {
+  display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px;
+  border-radius: 9999px; font-size: 11px; font-weight: 600;
+}
+.badge-published { background: rgba(74,222,128,0.12); color: var(--green); }
+.badge-draft { background: rgba(245,168,110,0.12); color: var(--orange); }
+.badge i { width: 8px; height: 8px; fill: currentColor; }
+
+/* Category pills */
+.cat { padding: 2px 9px; border-radius: 9999px; font-size: 11px; font-weight: 500; }
+.cat-gst { background: rgba(168,200,240,0.15); color: #7AABDE; }
+.cat-itc { background: rgba(232,145,160,0.15); color: #D07888; }
+.cat-compliance { background: rgba(155,127,212,0.15); color: #9B7FD4; }
+.cat-tally { background: rgba(245,168,110,0.15); color: #D4904A; }
+.cat-finance { background: rgba(74,222,128,0.15); color: #3AAA60; }
+.cat-other { background: rgba(255,255,255,0.06); color: var(--text-dim); }
+
+/* Empty state */
+.empty-state { text-align: center; padding: 60px 20px; }
+.empty-state i { width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 16px; }
+.empty-state h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+.empty-state p { color: var(--text-dim); font-size: 14px; }
+
+/* ===== EDITOR ===== */
+.editor-layout { display: grid; grid-template-columns: 1fr 280px; gap: 20px; align-items: start; }
+.editor-main { display: flex; flex-direction: column; gap: 16px; }
+.editor-sidebar-panel { display: flex; flex-direction: column; gap: 14px; }
+
+.editor-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+}
+.editor-card-header { padding: 14px 18px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600; color: var(--text-dim); }
+.editor-card-body { padding: 18px; }
+
+/* Form fields */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 12px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: .06em; }
+.field input, .field select, .field textarea {
+  background: var(--surface-2); border: 1px solid var(--border-2); border-radius: 9px;
+  padding: 10px 13px; font-size: 14px; color: var(--text); font-family: inherit;
+  outline: none; transition: border-color .15s; width: 100%;
+}
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
+.field input::placeholder, .field textarea::placeholder { color: var(--text-muted); }
+.field select option { background: var(--surface-2); }
+.field textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+
+/* Title input special */
+.title-input {
+  font-size: 26px !important; font-weight: 700 !important; padding: 14px 16px !important;
+  border-radius: 11px !important;
+}
+
+/* Rich text toolbar */
+.toolbar {
+  display: flex; gap: 4px; padding: 8px 10px; background: var(--surface-2);
+  border-bottom: 1px solid var(--border); flex-wrap: wrap; align-items: center;
+}
+.toolbar-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 6px; background: none; border: none;
+  color: var(--text-dim); cursor: pointer; font-family: inherit; font-size: 13px;
+  font-weight: 600; transition: all .1s;
+}
+.toolbar-btn:hover { background: var(--surface-3); color: var(--text); }
+.toolbar-btn.active { background: var(--accent); color: var(--accent-dark); }
+.toolbar-sep { width: 1px; height: 20px; background: var(--border-2); margin: 0 4px; }
+.content-editor {
+  min-height: 420px; padding: 18px; outline: none; font-size: 15px; line-height: 1.8;
+  color: var(--text); font-family: inherit;
+}
+.content-editor:empty::before { content: 'Start writing your blog post here...'; color: var(--text-muted); pointer-events: none; }
+.content-editor h1 { font-size: 28px; font-weight: 700; margin: 20px 0 10px; font-family: 'DM Serif Display', serif; }
+.content-editor h2 { font-size: 22px; font-weight: 700; margin: 18px 0 8px; }
+.content-editor h3 { font-size: 18px; font-weight: 600; margin: 14px 0 6px; }
+.content-editor p { margin-bottom: 12px; }
+.content-editor ul, .content-editor ol { padding-left: 24px; margin-bottom: 12px; }
+.content-editor li { margin-bottom: 4px; }
+.content-editor strong { font-weight: 700; }
+.content-editor em { font-style: italic; }
+.content-editor blockquote {
+  border-left: 3px solid var(--accent); padding-left: 16px; margin: 16px 0;
+  color: var(--text-dim); font-style: italic;
+}
+.content-editor a { color: var(--accent); text-decoration: underline; }
+
+/* Publish panel */
+.publish-btn-wrap { padding: 4px; }
+
+/* Cover image */
+.cover-drop {
+  border: 2px dashed var(--border-2); border-radius: 10px; padding: 20px;
+  text-align: center; cursor: pointer; transition: all .15s; position: relative;
+}
+.cover-drop:hover { border-color: var(--accent); background: rgba(168,200,240,0.04); }
+.cover-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.cover-preview { width: 100%; border-radius: 8px; display: none; margin-bottom: 8px; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+  background: var(--surface-3); border: 1px solid var(--border-2); border-radius: 12px;
+  padding: 14px 18px; display: flex; align-items: center; gap: 10px;
+  font-size: 14px; font-weight: 500; box-shadow: 0 20px 50px rgba(0,0,0,.4);
+  transform: translateY(80px); opacity: 0; transition: all .3s cubic-bezier(.34,1.56,.64,1);
+  pointer-events: none;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast i { width: 18px; height: 18px; }
+.toast.success i { color: var(--green); }
+.toast.error i { color: var(--red); }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 100;
+  display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px);
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface); border: 1px solid var(--border-2); border-radius: 18px;
+  padding: 28px; width: 480px; max-width: 90vw;
+}
+.modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.modal p { color: var(--text-dim); font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+/* Import/Export */
+.sync-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+.sync-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.sync-card p { font-size: 13px; color: var(--text-dim); margin-bottom: 14px; line-height: 1.5; }
+.sync-area {
+  background: var(--surface-2); border: 1px solid var(--border-2); border-radius: 9px;
+  padding: 12px; font-size: 12px; font-family: monospace; color: var(--text-dim);
+  min-height: 80px; word-break: break-all; line-height: 1.6; max-height: 120px; overflow-y: auto;
+}
+
+/* Preview */
+.preview-badge {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px;
+  border-radius: 9999px; font-size: 11px; font-weight: 600;
+  background: rgba(245,168,110,0.15); color: var(--orange); margin-bottom: 16px;
+}
+.char-count { font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 4px; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 9999px; }
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+  .editor-layout { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="heyxia-logo.jpg" alt="Heyxia" style="height:44px;width:auto;mix-blend-mode:multiply;" onerror="this.style.display='none'">
+      <div class="cms-badge">BLOG CMS</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">Content</div>
+      <div class="nav-item active" onclick="showView('dashboard')" id="nav-dashboard">
+        <i data-lucide="layout-dashboard"></i> Dashboard
+      </div>
+      <div class="nav-item" onclick="showView('posts')" id="nav-posts">
+        <i data-lucide="file-text"></i> All Posts
+        <span class="nav-count" id="count-all">0</span>
+      </div>
+      <div class="nav-item" onclick="filterView('published')" id="nav-published">
+        <i data-lucide="globe"></i> Published
+        <span class="nav-count" id="count-pub">0</span>
+      </div>
+      <div class="nav-item" onclick="filterView('draft')" id="nav-drafts">
+        <i data-lucide="pencil"></i> Drafts
+        <span class="nav-count" id="count-draft">0</span>
+      </div>
+
+      <div class="nav-section" style="margin-top:12px">Actions</div>
+      <div class="nav-item" onclick="showView('new')" id="nav-new">
+        <i data-lucide="plus-circle"></i> New Post
+      </div>
+      <div class="nav-item" onclick="showView('sync')" id="nav-sync">
+        <i data-lucide="refresh-cw"></i> Sync / Export
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="blog.html" target="_blank" class="view-site-btn">
+        <i data-lucide="external-link" style="width:14px;height:14px;"></i>
+        View Blog
+      </a>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <div class="main">
+
+    <!-- ===== DASHBOARD VIEW ===== -->
+    <div id="view-dashboard">
+      <div class="topbar">
+        <div class="page-title">Dashboard</div>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" onclick="showView('new')">
+            <i data-lucide="plus" style="width:15px;height:15px;"></i> New Post
+          </button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Posts</div>
+            <div class="stat-value" id="stat-total">0</div>
+            <div class="stat-sub">All time</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Published</div>
+            <div class="stat-value" id="stat-published" style="color:var(--green)">0</div>
+            <div class="stat-sub">Live on site</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Drafts</div>
+            <div class="stat-value" id="stat-drafts" style="color:var(--orange)">0</div>
+            <div class="stat-sub">Not published</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Categories</div>
+            <div class="stat-value" id="stat-cats">0</div>
+            <div class="stat-sub">Unique topics</div>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-header">
+            <span class="table-title">Recent Posts</span>
+            <button class="btn btn-ghost btn-sm" onclick="showView('posts')">View All</button>
+          </div>
+          <div id="recent-posts-table">
+            <div class="empty-state">
+              <i data-lucide="file-text"></i>
+              <h3>No posts yet</h3>
+              <p>Create your first blog post to get started.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ALL POSTS VIEW ===== -->
+    <div id="view-posts" style="display:none">
+      <div class="topbar">
+        <div class="page-title" id="posts-view-title">All Posts</div>
+        <div class="topbar-actions">
+          <div class="table-search">
+            <i data-lucide="search" style="width:14px;height:14px;color:var(--text-muted)"></i>
+            <input type="text" placeholder="Search posts..." id="search-input" oninput="renderPostsTable()">
+          </div>
+          <button class="btn btn-primary" onclick="showView('new')">
+            <i data-lucide="plus" style="width:15px;height:15px;"></i> New Post
+          </button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="table-card">
+          <div id="posts-table-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== NEW / EDIT POST VIEW ===== -->
+    <div id="view-new" style="display:none">
+      <div class="topbar">
+        <div class="page-title" id="editor-title">New Post</div>
+        <div class="topbar-actions">
+          <span id="autosave-indicator" style="font-size:12px;color:var(--text-muted);"></span>
+          <button class="btn btn-ghost" onclick="savePost('draft')">
+            <i data-lucide="save" style="width:15px;height:15px;"></i> Save Draft
+          </button>
+          <button class="btn btn-primary" onclick="savePost('published')">
+            <i data-lucide="globe" style="width:15px;height:15px;"></i> Publish
+          </button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="editor-layout">
+          <!-- Main editor -->
+          <div class="editor-main">
+            <div class="editor-card">
+              <div class="editor-card-body" style="padding:0;">
+                <input type="text" class="field input title-input" id="post-title" placeholder="Post title..." style="border:none;border-bottom:1px solid var(--border);border-radius:0;background:var(--surface);padding:18px 20px;font-size:24px;font-weight:700;">
+                <div class="toolbar" id="editor-toolbar">
+                  <button class="toolbar-btn" onclick="fmt('bold')" title="Bold"><b>B</b></button>
+                  <button class="toolbar-btn" onclick="fmt('italic')" title="Italic"><i>I</i></button>
+                  <button class="toolbar-btn" onclick="fmt('underline')" title="Underline"><u>U</u></button>
+                  <div class="toolbar-sep"></div>
+                  <button class="toolbar-btn" onclick="fmtBlock('h2')" title="Heading 2">H2</button>
+                  <button class="toolbar-btn" onclick="fmtBlock('h3')" title="Heading 3">H3</button>
+                  <div class="toolbar-sep"></div>
+                  <button class="toolbar-btn" onclick="fmt('insertUnorderedList')" title="Bullet list">
+                    <i data-lucide="list" style="width:14px;height:14px;pointer-events:none;"></i>
+                  </button>
+                  <button class="toolbar-btn" onclick="fmt('insertOrderedList')" title="Numbered list">
+                    <i data-lucide="list-ordered" style="width:14px;height:14px;pointer-events:none;"></i>
+                  </button>
+                  <div class="toolbar-sep"></div>
+                  <button class="toolbar-btn" onclick="fmtBlock('blockquote')" title="Quote">❝</button>
+                  <button class="toolbar-btn" onclick="insertLink()" title="Link">🔗</button>
+                  <div class="toolbar-sep"></div>
+                  <button class="toolbar-btn" onclick="fmt('removeFormat')" title="Clear formatting" style="font-size:11px;">Clear</button>
+                </div>
+                <div class="content-editor" id="post-content" contenteditable="true"></div>
+              </div>
+            </div>
+
+            <!-- Excerpt -->
+            <div class="editor-card">
+              <div class="editor-card-header">Excerpt / Summary</div>
+              <div class="editor-card-body">
+                <div class="field">
+                  <textarea id="post-excerpt" placeholder="A short description of your post (shown on the blog listing page)..." rows="3" maxlength="300" oninput="updateCharCount(this, 'excerpt-count', 300)"></textarea>
+                  <div class="char-count"><span id="excerpt-count">0</span>/300</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar panel -->
+          <div class="editor-sidebar-panel">
+            <!-- Publish settings -->
+            <div class="editor-card">
+              <div class="editor-card-header">Publish Settings</div>
+              <div class="editor-card-body" style="display:flex;flex-direction:column;gap:12px;">
+                <div class="field">
+                  <label>Status</label>
+                  <select id="post-status">
+                    <option value="draft">Draft</option>
+                    <option value="published">Published</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Publish Date</label>
+                  <input type="date" id="post-date">
+                </div>
+                <div class="field">
+                  <label>Read Time (mins)</label>
+                  <input type="number" id="post-readtime" placeholder="5" min="1" max="60">
+                </div>
+              </div>
+            </div>
+
+            <!-- Category & Meta -->
+            <div class="editor-card">
+              <div class="editor-card-header">Category & Meta</div>
+              <div class="editor-card-body" style="display:flex;flex-direction:column;gap:12px;">
+                <div class="field">
+                  <label>Category</label>
+                  <select id="post-category">
+                    <option value="GST Basics">GST Basics</option>
+                    <option value="Reconciliation">Reconciliation</option>
+                    <option value="ITC & Blocked Credit">ITC & Blocked Credit</option>
+                    <option value="Compliance">Compliance</option>
+                    <option value="Tally Tips">Tally Tips</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Author</label>
+                  <input type="text" id="post-author" placeholder="Your name">
+                </div>
+                <div class="field">
+                  <label>Author Role</label>
+                  <input type="text" id="post-author-role" placeholder="e.g. Founder, Heyxia">
+                </div>
+              </div>
+            </div>
+
+            <!-- Cover image -->
+            <div class="editor-card">
+              <div class="editor-card-header">Cover Image</div>
+              <div class="editor-card-body">
+                <div class="cover-drop" id="cover-drop" onclick="document.getElementById('cover-file').click()">
+                  <input type="file" id="cover-file" accept="image/*" style="display:none" onchange="handleCoverImage(this)">
+                  <img id="cover-preview" class="cover-preview">
+                  <div id="cover-placeholder">
+                    <i data-lucide="image" style="width:28px;height:28px;color:var(--text-muted);margin-bottom:8px;"></i>
+                    <div style="font-size:13px;color:var(--text-dim);font-weight:500;">Click to upload cover image</div>
+                    <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">PNG, JPG up to 5MB</div>
+                  </div>
+                </div>
+                <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:8px;justify-content:center;" onclick="removeCover()" id="remove-cover-btn" style="display:none;">Remove Image</button>
+              </div>
+            </div>
+
+            <!-- Danger zone (only shown when editing) -->
+            <div class="editor-card" id="delete-card" style="display:none;">
+              <div class="editor-card-header" style="color:var(--red);">Danger Zone</div>
+              <div class="editor-card-body">
+                <button class="btn btn-danger" style="width:100%;justify-content:center;" onclick="confirmDelete()">
+                  <i data-lucide="trash-2" style="width:14px;height:14px;"></i> Delete Post
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SYNC VIEW ===== -->
+    <div id="view-sync" style="display:none">
+      <div class="topbar">
+        <div class="page-title">Sync / Export</div>
+      </div>
+      <div class="content" style="max-width:700px;">
+        <p style="color:var(--text-dim);font-size:14px;line-height:1.7;margin-bottom:24px;">
+          Posts are stored in your browser's local storage. Use the tools below to share posts with your intern, back them up, or move them to another device. Both you and your intern can manage posts — just share the exported data file.
+        </p>
+
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="sync-card">
+            <h3>📤 Export All Posts</h3>
+            <p>Download all your blog posts as a JSON file. Share this with your intern so they can import it and manage posts from their browser.</p>
+            <button class="btn btn-primary" onclick="exportPosts()">
+              <i data-lucide="download" style="width:15px;height:15px;"></i> Download posts.json
+            </button>
+          </div>
+
+          <div class="sync-card">
+            <h3>📥 Import Posts</h3>
+            <p>Import posts from a JSON file previously exported from this CMS. This will <strong>merge</strong> with existing posts (won't delete current posts).</p>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+              <input type="file" id="import-file" accept=".json" style="display:none" onchange="importPosts(this)">
+              <button class="btn btn-ghost" onclick="document.getElementById('import-file').click()">
+                <i data-lucide="upload" style="width:15px;height:15px;"></i> Choose File
+              </button>
+              <span style="font-size:13px;color:var(--text-muted);" id="import-status">No file selected</span>
+            </div>
+          </div>
+
+          <div class="sync-card">
+            <h3>🔄 How to sync with your intern</h3>
+            <p style="margin-bottom:8px;">Since this is a local file-based website (no server), here's the recommended workflow:</p>
+            <ol style="color:var(--text-dim);font-size:13px;line-height:2;padding-left:20px;">
+              <li>You or intern makes changes in the CMS</li>
+              <li>Export posts using the button above</li>
+              <li>Share the <code style="background:var(--surface-3);padding:1px 6px;border-radius:4px;">posts.json</code> file via WhatsApp/email/Drive</li>
+              <li>Other person clicks Import to load the latest posts</li>
+              <li>The blog page auto-reads from the same storage</li>
+            </ol>
+          </div>
+
+          <div class="sync-card" style="border-color:rgba(248,113,113,0.2);">
+            <h3 style="color:var(--red);">⚠️ Clear All Posts</h3>
+            <p>Permanently delete all posts from this browser. This cannot be undone. Export first if you want a backup.</p>
+            <button class="btn btn-danger" onclick="confirmClearAll()">
+              <i data-lucide="trash-2" style="width:14px;height:14px;"></i> Clear All Posts
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete confirmation modal -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal">
+    <h3>Delete Post?</h3>
+    <p>This will permanently delete "<span id="delete-post-title"></span>". This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('delete-modal')">Cancel</button>
+      <button class="btn btn-danger" onclick="deletePost()">Delete Post</button>
+    </div>
+  </div>
+</div>
+
+<!-- Clear all modal -->
+<div class="modal-overlay" id="clear-modal">
+  <div class="modal">
+    <h3>Clear All Posts?</h3>
+    <p>This will permanently delete all <strong id="clear-count">0</strong> posts. Make sure you've exported a backup first.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('clear-modal')">Cancel</button>
+      <button class="btn btn-danger" onclick="clearAllPosts()">Yes, Delete All</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">
+  <i data-lucide="check-circle" id="toast-icon"></i>
+  <span id="toast-msg"></span>
+</div>
+
+<script>
+// ===== DATA LAYER =====
+const STORAGE_KEY = 'heyxia_blog_posts';
+let posts = [];
+let currentEditId = null;
+let currentFilter = null;
+let autosaveTimer = null;
+
+function loadPosts() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    posts = raw ? JSON.parse(raw) : [];
+  } catch(e) { posts = []; }
+}
+
+function savePosts() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+  updateCounts();
+}
+
+function getPost(id) { return posts.find(p => p.id === id); }
+
+function updateCounts() {
+  const total = posts.length;
+  const pub = posts.filter(p => p.status === 'published').length;
+  const draft = posts.filter(p => p.status === 'draft').length;
+  const cats = new Set(posts.map(p => p.category)).size;
+
+  document.getElementById('count-all').textContent = total;
+  document.getElementById('count-pub').textContent = pub;
+  document.getElementById('count-draft').textContent = draft;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-published').textContent = pub;
+  document.getElementById('stat-drafts').textContent = draft;
+  document.getElementById('stat-cats').textContent = cats;
+}
+
+// ===== VIEWS =====
+const views = ['dashboard', 'posts', 'new', 'sync'];
+function showView(name) {
+  views.forEach(v => {
+    document.getElementById('view-' + v).style.display = v === name ? '' : 'none';
+  });
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + name);
+  if (navEl) navEl.classList.add('active');
+
+  if (name === 'dashboard') renderDashboard();
+  if (name === 'posts') { currentFilter = null; document.getElementById('posts-view-title').textContent = 'All Posts'; renderPostsTable(); }
+  if (name === 'new') { resetEditor(); document.getElementById('editor-title').textContent = 'New Post'; currentEditId = null; }
+  if (name === 'sync') {}
+}
+
+function filterView(status) {
+  currentFilter = status;
+  showView('posts');
+  document.getElementById('posts-view-title').textContent = status === 'published' ? 'Published Posts' : 'Draft Posts';
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-' + (status === 'published' ? 'published' : 'drafts')).classList.add('active');
+  renderPostsTable();
+}
+
+// ===== DASHBOARD =====
+function renderDashboard() {
+  updateCounts();
+  const recent = [...posts].sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt)).slice(0, 5);
+  const el = document.getElementById('recent-posts-table');
+  if (!recent.length) {
+    el.innerHTML = `<div class="empty-state"><i data-lucide="file-text"></i><h3>No posts yet</h3><p>Create your first blog post to get started.</p></div>`;
+    lucide.createIcons(); return;
+  }
+  el.innerHTML = buildTable(recent, false);
+  lucide.createIcons();
+}
+
+// ===== POSTS TABLE =====
+function renderPostsTable() {
+  const search = (document.getElementById('search-input')?.value || '').toLowerCase();
+  let filtered = currentFilter ? posts.filter(p => p.status === currentFilter) : posts;
+  if (search) filtered = filtered.filter(p => p.title.toLowerCase().includes(search) || (p.category || '').toLowerCase().includes(search));
+  filtered = [...filtered].sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  const el = document.getElementById('posts-table-body');
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty-state"><i data-lucide="search"></i><h3>No posts found</h3><p>${search ? 'Try a different search term.' : 'No posts in this category yet.'}</p></div>`;
+    lucide.createIcons(); return;
+  }
+  el.innerHTML = buildTable(filtered, true);
+  lucide.createIcons();
+}
+
+function buildTable(data, showActions) {
+  return `<table><thead><tr>
+    <th>Title</th><th>Category</th><th>Author</th><th>Status</th><th>Date</th>
+    ${showActions ? '<th></th>' : ''}
+  </tr></thead><tbody>` +
+  data.map(p => `<tr>
+    <td><div class="post-title-cell">${escHtml(p.title || 'Untitled')}<small>${escHtml(p.excerpt || '')}</small></div></td>
+    <td><span class="cat cat-${getCatClass(p.category)}">${escHtml(p.category || 'Other')}</span></td>
+    <td style="color:var(--text-dim);font-size:12px;">${escHtml(p.author || '—')}</td>
+    <td><span class="badge badge-${p.status === 'published' ? 'published' : 'draft'}">${p.status === 'published' ? '● Live' : '● Draft'}</span></td>
+    <td style="color:var(--text-dim);font-size:12px;">${formatDate(p.date || p.updatedAt)}</td>
+    ${showActions ? `<td><div style="display:flex;gap:6px;">
+      <button class="btn btn-ghost btn-sm btn-icon" onclick="editPost('${p.id}')" title="Edit"><i data-lucide="pencil" style="width:13px;height:13px;"></i></button>
+      <button class="btn btn-danger btn-sm btn-icon" onclick="confirmDeleteById('${p.id}')" title="Delete"><i data-lucide="trash-2" style="width:13px;height:13px;"></i></button>
+    </div></td>` : ''}
+  </tr>`).join('') + '</tbody></table>';
+}
+
+// ===== EDITOR =====
+function resetEditor() {
+  document.getElementById('post-title').value = '';
+  document.getElementById('post-content').innerHTML = '';
+  document.getElementById('post-excerpt').value = '';
+  document.getElementById('post-status').value = 'draft';
+  document.getElementById('post-category').value = 'GST Basics';
+  document.getElementById('post-author').value = '';
+  document.getElementById('post-author-role').value = '';
+  document.getElementById('post-readtime').value = '';
+  document.getElementById('post-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('cover-preview').style.display = 'none';
+  document.getElementById('cover-placeholder').style.display = '';
+  document.getElementById('remove-cover-btn').style.display = 'none';
+  document.getElementById('delete-card').style.display = 'none';
+  document.getElementById('excerpt-count').textContent = '0';
+  document.getElementById('autosave-indicator').textContent = '';
+  currentEditId = null;
+  window._coverData = null;
+}
+
+function editPost(id) {
+  const p = getPost(id);
+  if (!p) return;
+  currentEditId = id;
+  showView('new');
+  document.getElementById('editor-title').textContent = 'Edit Post';
+  document.getElementById('post-title').value = p.title || '';
+  document.getElementById('post-content').innerHTML = p.content || '';
+  document.getElementById('post-excerpt').value = p.excerpt || '';
+  document.getElementById('post-status').value = p.status || 'draft';
+  document.getElementById('post-category').value = p.category || 'GST Basics';
+  document.getElementById('post-author').value = p.author || '';
+  document.getElementById('post-author-role').value = p.authorRole || '';
+  document.getElementById('post-readtime').value = p.readTime || '';
+  document.getElementById('post-date').value = p.date || new Date().toISOString().split('T')[0];
+  document.getElementById('excerpt-count').textContent = (p.excerpt || '').length;
+  document.getElementById('delete-card').style.display = '';
+
+  if (p.cover) {
+    document.getElementById('cover-preview').src = p.cover;
+    document.getElementById('cover-preview').style.display = 'block';
+    document.getElementById('cover-placeholder').style.display = 'none';
+    document.getElementById('remove-cover-btn').style.display = '';
+    window._coverData = p.cover;
+  } else {
+    window._coverData = null;
+  }
+}
+
+function savePost(statusOverride) {
+  const title = document.getElementById('post-title').value.trim();
+  if (!title) { showToast('Please add a title before saving.', 'error'); return; }
+
+  const status = statusOverride || document.getElementById('post-status').value;
+  const now = new Date().toISOString();
+
+  const postData = {
+    id: currentEditId || generateId(),
+    title,
+    content: document.getElementById('post-content').innerHTML,
+    excerpt: document.getElementById('post-excerpt').value.trim(),
+    status,
+    category: document.getElementById('post-category').value,
+    author: document.getElementById('post-author').value.trim(),
+    authorRole: document.getElementById('post-author-role').value.trim(),
+    readTime: parseInt(document.getElementById('post-readtime').value) || 5,
+    date: document.getElementById('post-date').value,
+    cover: window._coverData || null,
+    updatedAt: now,
+    createdAt: currentEditId ? (getPost(currentEditId)?.createdAt || now) : now,
+  };
+
+  if (currentEditId) {
+    const idx = posts.findIndex(p => p.id === currentEditId);
+    if (idx !== -1) posts[idx] = postData;
+  } else {
+    posts.unshift(postData);
+    currentEditId = postData.id;
+  }
+
+  savePosts();
+  document.getElementById('delete-card').style.display = '';
+  document.getElementById('editor-title').textContent = 'Edit Post';
+  document.getElementById('autosave-indicator').textContent = 'Saved ✓';
+  setTimeout(() => document.getElementById('autosave-indicator').textContent = '', 3000);
+  showToast(status === 'published' ? 'Post published! 🎉' : 'Draft saved.', 'success');
+}
+
+// Autosave every 30s
+function setupAutosave() {
+  ['post-title', 'post-content', 'post-excerpt'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', () => {
+      clearTimeout(autosaveTimer);
+      document.getElementById('autosave-indicator').textContent = 'Unsaved changes...';
+      autosaveTimer = setTimeout(() => {
+        if (document.getElementById('post-title').value.trim()) {
+          savePost();
+        }
+      }, 30000);
+    });
+  });
+}
+
+// ===== RICH TEXT =====
+function fmt(cmd) { document.getElementById('post-content').focus(); document.execCommand(cmd, false, null); }
+function fmtBlock(tag) {
+  document.getElementById('post-content').focus();
+  if (tag === 'blockquote') { document.execCommand('formatBlock', false, 'blockquote'); }
+  else { document.execCommand('formatBlock', false, tag); }
+}
+function insertLink() {
+  const url = prompt('Enter URL:');
+  if (url) { document.getElementById('post-content').focus(); document.execCommand('createLink', false, url); }
+}
+
+// ===== COVER IMAGE =====
+function handleCoverImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { showToast('Image too large. Max 5MB.', 'error'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    window._coverData = e.target.result;
+    document.getElementById('cover-preview').src = e.target.result;
+    document.getElementById('cover-preview').style.display = 'block';
+    document.getElementById('cover-placeholder').style.display = 'none';
+    document.getElementById('remove-cover-btn').style.display = '';
+  };
+  reader.readAsDataURL(file);
+}
+function removeCover() {
+  window._coverData = null;
+  document.getElementById('cover-preview').style.display = 'none';
+  document.getElementById('cover-placeholder').style.display = '';
+  document.getElementById('remove-cover-btn').style.display = 'none';
+}
+
+// ===== DELETE =====
+let pendingDeleteId = null;
+function confirmDeleteById(id) {
+  pendingDeleteId = id;
+  const p = getPost(id);
+  document.getElementById('delete-post-title').textContent = p?.title || 'this post';
+  document.getElementById('delete-modal').classList.add('open');
+}
+function confirmDelete() { confirmDeleteById(currentEditId); }
+function deletePost() {
+  if (!pendingDeleteId) return;
+  posts = posts.filter(p => p.id !== pendingDeleteId);
+  savePosts();
+  closeModal('delete-modal');
+  showToast('Post deleted.', 'success');
+  pendingDeleteId = null;
+  showView('posts');
+}
+function confirmClearAll() {
+  document.getElementById('clear-count').textContent = posts.length;
+  document.getElementById('clear-modal').classList.add('open');
+}
+function clearAllPosts() {
+  posts = [];
+  savePosts();
+  closeModal('clear-modal');
+  showToast('All posts cleared.', 'success');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ===== EXPORT / IMPORT =====
+function exportPosts() {
+  const data = JSON.stringify(posts, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'heyxia-posts.json'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('Posts exported!', 'success');
+}
+function importPosts(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!Array.isArray(imported)) throw new Error('Invalid format');
+      let added = 0;
+      imported.forEach(p => {
+        if (!posts.find(existing => existing.id === p.id)) { posts.push(p); added++; }
+      });
+      savePosts();
+      document.getElementById('import-status').textContent = `✓ Imported ${added} new post(s)`;
+      showToast(`Imported ${added} post(s) successfully!`, 'success');
+      renderDashboard();
+    } catch(e) {
+      document.getElementById('import-status').textContent = '✗ Invalid file';
+      showToast('Import failed. Please use a valid posts.json file.', 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ===== UTILS =====
+function generateId() { return 'post_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6); }
+function escHtml(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+function formatDate(d) { if (!d) return '—'; try { return new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }); } catch(e) { return d; } }
+function updateCharCount(el, countId, max) { document.getElementById(countId).textContent = el.value.length; }
+function getCatClass(cat) {
+  const map = { 'GST Basics': 'gst', 'Reconciliation': 'gst', 'ITC & Blocked Credit': 'itc', 'Compliance': 'compliance', 'Tally Tips': 'tally', 'Finance': 'finance' };
+  return map[cat] || 'other';
+}
+
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  const icon = document.getElementById('toast-icon');
+  document.getElementById('toast-msg').textContent = msg;
+  t.className = 'toast ' + type;
+  icon.setAttribute('data-lucide', type === 'success' ? 'check-circle' : 'alert-circle');
+  lucide.createIcons();
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ===== INIT =====
+loadPosts();
+updateCounts();
+renderDashboard();
+setupAutosave();
+
+// Set default date
+document.getElementById('post-date').value = new Date().toISOString().split('T')[0];
+
+lucide.createIcons();
+</script>
+
+<!-- Blog page integration script — this is what blog.html reads -->
+<script id="blog-integration-note" type="text/plain">
+  The blog.html page reads posts from localStorage using the key "heyxia_blog_posts".
+  Posts with status "published" are displayed on the blog page.
+</script>
+</body>
+</html>

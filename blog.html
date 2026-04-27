@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blog — Heyxia GST Reco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --bg: #FBF5EE;
+    --bg-blue: #DCE7F7;
+    --card: #F2EAE0;
+    --text: #1A1A1A;
+    --text-soft: #2B2B2B;
+    --text-dim: #5C5C5C;
+    --text-muted: #8A8A8A;
+    --border: rgba(26,26,26,0.08);
+    --border-strong: rgba(26,26,26,0.14);
+    --cta-blue: #A8C8F0;
+    --cta-blue-dark: #8AB1E5;
+    --cta-text: #1A2A4A;
+    --brand-gradient: linear-gradient(90deg,#F5A86E 0%,#E891A0 35%,#C99BCE 65%,#9B7FD4 100%);
+  }
+  *{ -webkit-font-smoothing:antialiased; }
+  html,body{ background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+
+  .gradient-text{
+    background: var(--brand-gradient);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .nav-pill{
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(26,26,26,0.06);
+    border-radius: 9999px;
+    box-shadow: 0 4px 20px -8px rgba(26,26,26,0.08);
+  }
+  .btn-primary{
+    background: var(--cta-blue); color: var(--cta-text); font-weight: 600;
+    padding: .9rem 1.6rem; border-radius: 9999px;
+    transition: all .2s ease; display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(74,107,201,0.15);
+  }
+  .btn-primary:hover{ background: var(--cta-blue-dark); transform: translateY(-1px); }
+
+  /* Blog card */
+  .blog-card{
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .blog-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px -20px rgba(26,26,26,0.15);
+  }
+
+  /* Featured card */
+  .blog-card-featured{
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .blog-card-featured:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px -20px rgba(26,26,26,0.15);
+  }
+
+  /* Category pill */
+  .cat-pill{
+    display: inline-flex; align-items: center;
+    padding: .35rem .85rem; border-radius: 9999px;
+    font-size: .75rem; font-weight: 600; letter-spacing: .04em;
+  }
+  .cat-gst{ background: rgba(168,200,240,0.25); color: #2A4A8A; }
+  .cat-compliance{ background: rgba(155,127,212,0.15); color: #6A3FBC; }
+  .cat-tally{ background: rgba(245,168,110,0.2); color: #9A5500; }
+  .cat-itc{ background: rgba(232,145,160,0.2); color: #A03055; }
+  .cat-finance{ background: rgba(62,210,130,0.15); color: #1A7A50; }
+
+  /* Image placeholder */
+  .img-placeholder{
+    width: 100%; aspect-ratio: 16/9;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem;
+  }
+
+  /* Reveal */
+  .reveal{ opacity:0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  /* Search input */
+  .search-input{
+    background: #fff;
+    border: 1px solid var(--border-strong);
+    border-radius: 9999px;
+    padding: .75rem 1.25rem .75rem 3rem;
+    width: 100%; font-size: .95rem; color: var(--text);
+    outline: none; transition: border-color .2s;
+  }
+  .search-input:focus{ border-color: var(--cta-blue); }
+
+  /* Filter chips */
+  .filter-chip{
+    padding: .5rem 1.1rem; border-radius: 9999px;
+    font-size: .85rem; font-weight: 500;
+    border: 1px solid var(--border-strong);
+    background: rgba(255,255,255,0.6);
+    color: var(--text-dim); cursor: pointer;
+    transition: all .2s;
+  }
+  .filter-chip:hover, .filter-chip.active{
+    background: var(--cta-blue); color: var(--cta-text);
+    border-color: rgba(74,107,201,0.2);
+  }
+
+  .logo-mark{ width:38px; height:38px; flex-shrink:0; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="fixed top-4 inset-x-0 z-50 px-4">
+  <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between">
+    <a href="gst-reco-landing.html" class="flex items-center gap-2 pl-2">
+      <img src="heyxia-logo.jpg" alt="Heyxia" class="h-9 w-auto" />
+      
+    </a>
+    <nav class="hidden md:flex items-center gap-10 text-[15px] text-[var(--text-soft)]">
+      <a href="gst-reco-landing.html#features" class="hover:text-black transition">Features</a>
+      <a href="gst-reco-landing.html#platform" class="hover:text-black transition">Solutions</a>
+      <a href="gst-reco-landing.html#pricing" class="hover:text-black transition">Pricing</a>
+      <a href="blog.html" class="text-black font-semibold">Blogs</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="#" class="btn-primary text-[15px] hidden sm:inline-flex">Sign Up for 14 Day Trial</a>
+      <a href="#" class="btn-primary text-[15px]">Login</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section style="background: linear-gradient(180deg, #FBF5EE 0%, #E8EFF9 100%);" class="pt-36 pb-16">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <p class="text-sm font-semibold uppercase tracking-[.2em] text-[#4A6BC9] mb-4">Heyxia Blog</p>
+    <h1 class="font-extrabold text-5xl md:text-6xl tracking-[-0.03em] mb-5">
+      Insights on <span class="gradient-text">GST, Compliance</span><br class="hidden md:block"> & Finance
+    </h1>
+    <p class="text-lg text-[var(--text-dim)] max-w-2xl mx-auto">
+      Practical guides, expert tips, and the latest updates on GST reconciliation, ITC, and tax compliance for Indian businesses.
+    </p>
+
+    <!-- Search -->
+    <div class="relative max-w-lg mx-auto mt-10">
+      <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-muted)]"></i>
+      <input type="text" placeholder="Search articles…" class="search-input" />
+    </div>
+
+    <!-- Filter chips -->
+    <div class="flex flex-wrap justify-center gap-2 mt-6">
+      <button class="filter-chip active">All</button>
+      <button class="filter-chip">GST Basics</button>
+      <button class="filter-chip">Reconciliation</button>
+      <button class="filter-chip">ITC & Blocked Credit</button>
+      <button class="filter-chip">Compliance</button>
+      <button class="filter-chip">Tally Tips</button>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED POST -->
+<section class="max-w-6xl mx-auto px-6 py-16">
+  <p class="text-xs font-semibold uppercase tracking-[.2em] text-[var(--text-muted)] mb-6">Featured Article</p>
+  <a href="blog-post.html" class="blog-card-featured grid md:grid-cols-2 gap-0 reveal block">
+    <div class="img-placeholder" style="background: linear-gradient(135deg, #C8D9F0, #DDE4F2); aspect-ratio:unset; min-height:320px;">
+      🧾
+    </div>
+    <div class="p-10 flex flex-col justify-center">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="cat-pill cat-gst">GST Reconciliation</span>
+        <span class="text-xs text-[var(--text-muted)]">April 20, 2026 · 8 min read</span>
+      </div>
+      <h2 class="text-2xl md:text-3xl font-bold leading-tight mb-4">
+        GSTR-2B vs GSTR-2A: Key Differences Every Finance Team Must Know in FY 2026-27
+      </h2>
+      <p class="text-[var(--text-dim)] leading-relaxed mb-6">
+        With the GST portal shifting focus entirely to GSTR-2B for ITC claims, understanding the difference between 2A and 2B has never been more critical. Here's a complete breakdown for corporates and CAs.
+      </p>
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-[var(--cta-blue)] flex items-center justify-center text-xs font-bold text-[var(--cta-text)]">VD</div>
+        <div>
+          <div class="text-sm font-semibold">Varun Dahotre</div>
+          <div class="text-xs text-[var(--text-muted)]">Founder, Heyxia</div>
+        </div>
+      </div>
+    </div>
+  </a>
+</section>
+
+<!-- ARTICLE GRID — CMS powered -->
+<section class="max-w-6xl mx-auto px-6 pb-24">
+  <div class="flex items-center justify-between mb-8">
+    <p class="text-xs font-semibold uppercase tracking-[.2em] text-[var(--text-muted)]">Latest Articles</p>
+    <a href="cms.html" class="text-xs font-semibold text-[var(--cta-text)] bg-[var(--cta-blue)] px-3 py-1.5 rounded-full hover:bg-[var(--cta-blue-dark)] transition hidden" id="cms-link">+ Add Post (CMS)</a>
+  </div>
+
+  <!-- CMS posts render here -->
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="cms-posts-grid"></div>
+
+  <!-- Static fallback posts (shown when no CMS posts exist) -->
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="static-posts-grid">
+    <a href="blog-post.html" class="blog-card reveal">
+      <div class="img-placeholder" style="background: linear-gradient(135deg,#F0E2D4,#F5EAE0);">📊</div>
+      <div class="p-6">
+        <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-itc">ITC & Blocked Credit</span></div>
+        <h3 class="text-lg font-bold leading-snug mb-2">Section 17(5): Complete List of Blocked ITC Under GST</h3>
+        <p class="text-sm text-[var(--text-dim)] leading-relaxed mb-5">Motor vehicles, food, club memberships — here's every category of input tax credit you cannot claim, and how to auto-detect them.</p>
+        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>April 15, 2026</span><span>6 min read</span></div>
+      </div>
+    </a>
+    <a href="blog-post.html" class="blog-card reveal">
+      <div class="img-placeholder" style="background: linear-gradient(135deg,#E4EDF8,#D4E4F5);">🔄</div>
+      <div class="p-6">
+        <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-compliance">Compliance</span></div>
+        <h3 class="text-lg font-bold leading-snug mb-2">How to Reconcile GSTR-1 with Your Books: A Step-by-Step Guide</h3>
+        <p class="text-sm text-[var(--text-dim)] leading-relaxed mb-5">Mismatches between your sales register and GSTR-1 can trigger notices. Here's how to catch and fix them before filing.</p>
+        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>April 10, 2026</span><span>7 min read</span></div>
+      </div>
+    </a>
+    <a href="blog-post.html" class="blog-card reveal">
+      <div class="img-placeholder" style="background: linear-gradient(135deg,#EDE4F5,#E0D8F0);">⚡</div>
+      <div class="p-6">
+        <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-tally">Tally Tips</span></div>
+        <h3 class="text-lg font-bold leading-snug mb-2">Connecting Tally to the GST Portal: Best Practices for FY 2026-27</h3>
+        <p class="text-sm text-[var(--text-dim)] leading-relaxed mb-5">Automate your purchase data fetch from Tally and eliminate manual Excel uploads — a practical setup guide for accountants.</p>
+        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>April 5, 2026</span><span>5 min read</span></div>
+      </div>
+    </a>
+    <a href="blog-post.html" class="blog-card reveal">
+      <div class="img-placeholder" style="background: linear-gradient(135deg,#F5EAD4,#F0E0C4);">📋</div>
+      <div class="p-6">
+        <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-gst">GST Basics</span></div>
+        <h3 class="text-lg font-bold leading-snug mb-2">GSTR-3B Filing Checklist: 10 Things to Verify Before You Submit</h3>
+        <p class="text-sm text-[var(--text-dim)] leading-relaxed mb-5">A simple checklist that every accounts team should run through before hitting Submit on their monthly 3B.</p>
+        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>March 28, 2026</span><span>4 min read</span></div>
+      </div>
+    </a>
+    <a href="blog-post.html" class="blog-card reveal">
+      <div class="img-placeholder" style="background: linear-gradient(135deg,#D4ECE0,#C4E4D4);">✅</div>
+      <div class="p-6">
+        <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-finance">Finance</span></div>
+        <h3 class="text-lg font-bold leading-snug mb-2">How CAs Can Handle 3× More Clients Without Hiring More Staff</h3>
+        <p class="text-sm text-[var(--text-dim)] leading-relaxed mb-5">Automation is reshaping CA firms. Here's how leading practices are scaling GST work without growing their headcount.</p>
+        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>March 22, 2026</span><span>6 min read</span></div>
+      </div>
+    </a>
+    <a href="blog-post.html" class="blog-card reveal">
+      <div class="img-placeholder" style="background: linear-gradient(135deg,#F5D8E0,#F0CCD8);">🔍</div>
+      <div class="p-6">
+        <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-itc">ITC & Blocked Credit</span></div>
+        <h3 class="text-lg font-bold leading-snug mb-2">Why Your ITC Claims Keep Getting Rejected — And How to Fix It</h3>
+        <p class="text-sm text-[var(--text-dim)] leading-relaxed mb-5">Portal mismatches, supplier non-filing, and wrong GSTINs are the top three reasons ITC gets denied.</p>
+        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>March 15, 2026</span><span>7 min read</span></div>
+      </div>
+    </a>
+  </div>
+
+  <div class="text-center mt-14" id="load-more-btn" style="display:none;">
+    <button class="btn-primary" onclick="loadMorePosts()">Load More Articles</button>
+  </div>
+</section>
+
+<!-- NEWSLETTER CTA -->
+<section style="background: linear-gradient(180deg,#FBF5EE 0%,#E8EFF9 100%);" class="py-24 border-t border-[rgba(26,26,26,0.05)]">
+  <div class="max-w-2xl mx-auto px-6 text-center">
+    <h2 class="font-extrabold text-4xl md:text-5xl tracking-[-0.02em] mb-4">Stay up to date</h2>
+    <p class="text-[var(--text-dim)] mb-8">Get GST tips, compliance updates, and product news delivered straight to your inbox.</p>
+    <div class="flex gap-2 max-w-md mx-auto">
+      <input type="email" placeholder="your@email.com" class="search-input flex-1" style="border-radius:9999px; padding: .85rem 1.25rem;" />
+      <button class="btn-primary whitespace-nowrap">Subscribe</button>
+    </div>
+    <p class="text-xs text-[var(--text-muted)] mt-3">No spam, ever. Unsubscribe anytime.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background: var(--bg);" class="pt-14 pb-10 border-t border-[rgba(26,26,26,0.05)]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-10">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <img src="heyxia-logo.jpg" alt="Heyxia" class="h-9 w-auto" />
+          
+        </div>
+        <p class="text-[var(--text-dim)] max-w-sm leading-relaxed">AI-powered GST reconciliation for finance teams, corporates, and chartered accountants across India.</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Pages</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="gst-reco-landing.html" class="hover:text-black">Home</a></li>
+          <li><a href="gst-reco-landing.html#features" class="hover:text-black">Features</a></li>
+          <li><a href="gst-reco-landing.html#pricing" class="hover:text-black">Pricing</a></li>
+          <li><a href="blog.html" class="hover:text-black font-semibold text-black">Blogs</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Information</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="mailto:hello@example.com" class="hover:text-black">Contact Us</a></li>
+          <li><a href="#" class="hover:text-black">Privacy Policy</a></li>
+          <li><a href="#" class="hover:text-black">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-[rgba(26,26,26,0.06)] flex flex-col md:flex-row justify-between gap-2 text-xs text-[var(--text-muted)]">
+      <p>© 2026 Heyxia. All Rights Reserved.</p>
+      <p>Made with care for Indian finance teams.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Filter chips
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const cat = chip.textContent.trim();
+      renderCMSPosts(cat === 'All' ? null : cat);
+    });
+  });
+
+  // ===== CMS INTEGRATION =====
+  const STORAGE_KEY = 'heyxia_blog_posts';
+  let allCmsPosts = [];
+  let visibleCount = 6;
+
+  const catBgMap = {
+    'GST Basics': 'background:linear-gradient(135deg,#F5EAD4,#F0E0C4)',
+    'Reconciliation': 'background:linear-gradient(135deg,#E4EDF8,#D4E4F5)',
+    'ITC & Blocked Credit': 'background:linear-gradient(135deg,#F0E2D4,#F5EAE0)',
+    'Compliance': 'background:linear-gradient(135deg,#EDE4F5,#E0D8F0)',
+    'Tally Tips': 'background:linear-gradient(135deg,#EDE4F5,#E0D8F0)',
+    'Finance': 'background:linear-gradient(135deg,#D4ECE0,#C4E4D4)',
+    'Other': 'background:linear-gradient(135deg,#F5D8E0,#F0CCD8)',
+  };
+  const catEmoji = { 'GST Basics':'📋', 'Reconciliation':'🔄', 'ITC & Blocked Credit':'📊', 'Compliance':'⚡', 'Tally Tips':'💡', 'Finance':'✅', 'Other':'🔍' };
+  const catPillMap = { 'GST Basics':'cat-gst', 'Reconciliation':'cat-gst', 'ITC & Blocked Credit':'cat-itc', 'Compliance':'cat-compliance', 'Tally Tips':'cat-tally', 'Finance':'cat-finance', 'Other':'' };
+
+  function formatDate(d) {
+    try { return new Date(d).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' }); } catch(e) { return d; }
+  }
+
+  function buildPostCard(p) {
+    const bg = catBgMap[p.category] || catBgMap['Other'];
+    const emoji = catEmoji[p.category] || '📝';
+    const catPill = catPillMap[p.category] || '';
+    const coverHtml = p.cover
+      ? `<img src="${p.cover}" style="width:100%;aspect-ratio:16/9;object-fit:cover;" alt="">`
+      : `<div class="img-placeholder" style="${bg};">${emoji}</div>`;
+    return `<a href="blog-reader.html?id=${p.id}" class="blog-card reveal">
+      ${coverHtml}
+      <div class="p-6">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="cat-pill ${catPill}">${p.category || 'Other'}</span>
+        </div>
+        <h3 class="text-lg font-bold leading-snug mb-2">${escHtml(p.title)}</h3>
+        <p class="text-sm text-[var(--text-dim)] leading-relaxed mb-5">${escHtml(p.excerpt || '')}</p>
+        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]">
+          <span>${formatDate(p.date)}</span>
+          <span>${p.readTime || 5} min read</span>
+        </div>
+      </div>
+    </a>`;
+  }
+
+  function escHtml(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+
+  function renderCMSPosts(filterCat) {
+    let filtered = allCmsPosts.filter(p => p.status === 'published');
+    if (filterCat) filtered = filtered.filter(p => p.category === filterCat);
+
+    const grid = document.getElementById('cms-posts-grid');
+    const staticGrid = document.getElementById('static-posts-grid');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '';
+      staticGrid.style.display = '';
+      loadMoreBtn.style.display = 'none';
+    } else {
+      staticGrid.style.display = 'none';
+      const toShow = filtered.slice(0, visibleCount);
+      grid.innerHTML = toShow.map(buildPostCard).join('');
+      loadMoreBtn.style.display = filtered.length > visibleCount ? '' : 'none';
+      // Re-observe new cards
+      grid.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      lucide.createIcons();
+    }
+  }
+
+  function loadMorePosts() {
+    visibleCount += 6;
+    renderCMSPosts(null);
+  }
+
+  // Load from localStorage
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    allCmsPosts = raw ? JSON.parse(raw) : [];
+  } catch(e) { allCmsPosts = []; }
+
+  const publishedCount = allCmsPosts.filter(p => p.status === 'published').length;
+  if (publishedCount > 0) {
+    renderCMSPosts(null);
+    // Show CMS link for admins
+    document.getElementById('cms-link').classList.remove('hidden');
+  }
+</script>
+</body>
+</html>
