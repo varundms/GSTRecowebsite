@@ -158,83 +158,86 @@
 
 <script>
   lucide.createIcons();
-
   const catPillMap = { 'GST Basics':'cat-gst', 'Reconciliation':'cat-gst', 'ITC & Blocked Credit':'cat-itc', 'Compliance':'cat-compliance', 'Tally Tips':'cat-tally', 'Finance':'cat-finance' };
+
+  // ===== SUPABASE CONFIG — PASTE YOUR VALUES BELOW =====
+  const SUPABASE_URL = 'PASTE_YOUR_URL_HERE';
+  const SUPABASE_ANON_KEY = 'PASTE_YOUR_KEY_HERE';
+  // =====================================================
 
   function getParam(key) {
     return new URLSearchParams(window.location.search).get(key);
   }
-
   function formatDate(d) {
     try { return new Date(d).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' }); } catch(e) { return d; }
   }
-
   function getInitials(name) {
     return (name || '?').split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
   }
 
   const postId = getParam('id');
-  const STORAGE_KEY = 'heyxia_blog_posts';
 
-  if (!postId) {
+  async function loadPost() {
+    if (!postId) { showNotFound(); return; }
+
+    // Try Supabase first
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?id=eq.${postId}&status=eq.published`, {
+        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.length > 0) {
+          renderPost({ ...data[0], readTime: data[0].read_time, authorRole: data[0].author_role, cover: data[0].cover_url });
+          return;
+        }
+      }
+    } catch(e) {}
+
+    // Fallback to localStorage
+    try {
+      const raw = localStorage.getItem('heyxia_blog_posts');
+      const posts = raw ? JSON.parse(raw) : [];
+      const post = posts.find(p => p.id === postId && p.status === 'published');
+      if (post) { renderPost(post); return; }
+    } catch(e) {}
+
+    showNotFound();
+  }
+
+  function showNotFound() {
     document.getElementById('post-loading').style.display = 'none';
     document.getElementById('post-not-found').style.display = '';
     lucide.createIcons();
-  } else {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const posts = raw ? JSON.parse(raw) : [];
-      const post = posts.find(p => p.id === postId && p.status === 'published');
-
-      document.getElementById('post-loading').style.display = 'none';
-
-      if (!post) {
-        document.getElementById('post-not-found').style.display = '';
-        lucide.createIcons();
-      } else {
-        // Set page title
-        document.title = post.title + ' — Heyxia GST Reco';
-
-        // Category badge
-        const catEl = document.getElementById('post-cat-badge');
-        catEl.textContent = post.category || 'Other';
-        catEl.className = 'cat-pill ' + (catPillMap[post.category] || '');
-
-        // Meta
-        document.getElementById('post-meta-date').textContent = formatDate(post.date);
-        document.getElementById('post-meta-read').textContent = (post.readTime || 5) + ' min read';
-
-        // Title
-        document.getElementById('post-title-el').textContent = post.title;
-
-        // Author
-        const initials = getInitials(post.author || 'Author');
-        document.getElementById('post-author-el').innerHTML = `
-          <div style="width:44px;height:44px;border-radius:50%;background:var(--cta-blue);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--cta-text);flex-shrink:0;">${initials}</div>
-          <div>
-            <div style="font-weight:600;font-size:15px;">${post.author || 'Heyxia Team'}</div>
-            <div style="font-size:13px;color:var(--text-muted);">${post.authorRole || ''}</div>
-          </div>`;
-
-        // Cover image
-        if (post.cover) {
-          document.getElementById('post-cover-img').src = post.cover;
-          document.getElementById('post-cover-el').style.display = '';
-        }
-
-        // Body
-        document.getElementById('post-body-el').innerHTML = post.content || '<p>No content.</p>';
-
-        // Show content
-        document.getElementById('post-content-wrap').style.display = '';
-        lucide.createIcons();
-      }
-    } catch(e) {
-      document.getElementById('post-loading').style.display = 'none';
-      document.getElementById('post-not-found').style.display = '';
-      lucide.createIcons();
-    }
   }
+
+  function renderPost(post) {
+    document.getElementById('post-loading').style.display = 'none';
+    document.title = post.title + ' — Heyxia GST Reco';
+    const catEl = document.getElementById('post-cat-badge');
+    catEl.textContent = post.category || 'Other';
+    catEl.className = 'cat-pill ' + (catPillMap[post.category] || '');
+    document.getElementById('post-meta-date').textContent = formatDate(post.date || post.created_at);
+    document.getElementById('post-meta-read').textContent = (post.readTime || post.read_time || 5) + ' min read';
+    document.getElementById('post-title-el').textContent = post.title;
+    const initials = getInitials(post.author || 'Author');
+    document.getElementById('post-author-el').innerHTML = `
+      <div style="width:44px;height:44px;border-radius:50%;background:var(--cta-blue);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--cta-text);flex-shrink:0;">${initials}</div>
+      <div>
+        <div style="font-weight:600;font-size:15px;">${post.author || 'Heyxia Team'}</div>
+        <div style="font-size:13px;color:var(--text-muted);">${post.authorRole || post.author_role || ''}</div>
+      </div>`;
+    const coverSrc = post.cover || post.cover_url;
+    if (coverSrc) {
+      document.getElementById('post-cover-img').src = coverSrc;
+      document.getElementById('post-cover-el').style.display = '';
+    }
+    document.getElementById('post-body-el').innerHTML = post.content || '<p>No content.</p>';
+    document.getElementById('post-content-wrap').style.display = '';
+    lucide.createIcons();
+  }
+
+  loadPost();
 </script>
 </body>
 </html>

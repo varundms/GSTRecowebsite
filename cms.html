@@ -645,22 +645,69 @@ tr:hover td { background: var(--surface-2); }
 </div>
 
 <script>
-// ===== DATA LAYER =====
-const STORAGE_KEY = 'heyxia_blog_posts';
+// ===== SUPABASE CONFIG — PASTE YOUR VALUES BELOW =====
+const SUPABASE_URL = 'PASTE_YOUR_URL_HERE';
+const SUPABASE_ANON_KEY = 'PASTE_YOUR_KEY_HERE';
+// =====================================================
+
+const SB = {
+  async query(method, path, body) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+      method,
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': method === 'POST' ? 'return=representation' : 'return=representation'
+      },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    if (!res.ok) { const e = await res.text(); throw new Error(e); }
+    const text = await res.text();
+    return text ? JSON.parse(text) : [];
+  },
+  async getAll()       { return this.query('GET', 'posts?order=created_at.desc'); },
+  async insert(data)   { return this.query('POST', 'posts', data); },
+  async update(id, data){ return this.query('PATCH', `posts?id=eq.${id}`, data); },
+  async remove(id)     { return this.query('DELETE', `posts?id=eq.${id}`); },
+};
+
+// ===== STATE =====
 let posts = [];
 let currentEditId = null;
 let currentFilter = null;
 let autosaveTimer = null;
 
-function loadPosts() {
+// ===== DATA LAYER =====
+async function loadPosts() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    posts = raw ? JSON.parse(raw) : [];
-  } catch(e) { posts = []; }
+    showToast('Loading posts...', 'success');
+    posts = await SB.getAll();
+    updateCounts();
+  } catch(e) {
+    showToast('Could not connect to database. Check your Supabase keys.', 'error');
+    posts = [];
+  }
 }
 
-function savePosts() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+async function savePostToDB(postData) {
+  if (currentEditId) {
+    const { id, created_at, ...updates } = postData;
+    await SB.update(currentEditId, { ...updates, updated_at: new Date().toISOString() });
+    const idx = posts.findIndex(p => p.id === currentEditId);
+    if (idx !== -1) posts[idx] = { ...posts[idx], ...updates };
+  } else {
+    const result = await SB.insert(postData);
+    const newPost = Array.isArray(result) ? result[0] : result;
+    posts.unshift(newPost);
+    currentEditId = newPost.id;
+  }
+  updateCounts();
+}
+
+async function deletePostFromDB(id) {
+  await SB.remove(id);
+  posts = posts.filter(p => p.id !== id);
   updateCounts();
 }
 
@@ -671,7 +718,6 @@ function updateCounts() {
   const pub = posts.filter(p => p.status === 'published').length;
   const draft = posts.filter(p => p.status === 'draft').length;
   const cats = new Set(posts.map(p => p.category)).size;
-
   document.getElementById('count-all').textContent = total;
   document.getElementById('count-pub').textContent = pub;
   document.getElementById('count-draft').textContent = draft;
@@ -690,11 +736,9 @@ function showView(name) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   const navEl = document.getElementById('nav-' + name);
   if (navEl) navEl.classList.add('active');
-
   if (name === 'dashboard') renderDashboard();
   if (name === 'posts') { currentFilter = null; document.getElementById('posts-view-title').textContent = 'All Posts'; renderPostsTable(); }
   if (name === 'new') { resetEditor(); document.getElementById('editor-title').textContent = 'New Post'; currentEditId = null; }
-  if (name === 'sync') {}
 }
 
 function filterView(status) {
@@ -709,7 +753,7 @@ function filterView(status) {
 // ===== DASHBOARD =====
 function renderDashboard() {
   updateCounts();
-  const recent = [...posts].sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt)).slice(0, 5);
+  const recent = [...posts].sort((a,b) => new Date(b.updated_at||b.created_at) - new Date(a.updated_at||a.created_at)).slice(0, 5);
   const el = document.getElementById('recent-posts-table');
   if (!recent.length) {
     el.innerHTML = `<div class="empty-state"><i data-lucide="file-text"></i><h3>No posts yet</h3><p>Create your first blog post to get started.</p></div>`;
@@ -724,7 +768,7 @@ function renderPostsTable() {
   const search = (document.getElementById('search-input')?.value || '').toLowerCase();
   let filtered = currentFilter ? posts.filter(p => p.status === currentFilter) : posts;
   if (search) filtered = filtered.filter(p => p.title.toLowerCase().includes(search) || (p.category || '').toLowerCase().includes(search));
-  filtered = [...filtered].sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+  filtered = [...filtered].sort((a,b) => new Date(b.updated_at||b.created_at) - new Date(a.updated_at||a.created_at));
   const el = document.getElementById('posts-table-body');
   if (!filtered.length) {
     el.innerHTML = `<div class="empty-state"><i data-lucide="search"></i><h3>No posts found</h3><p>${search ? 'Try a different search term.' : 'No posts in this category yet.'}</p></div>`;
@@ -744,7 +788,7 @@ function buildTable(data, showActions) {
     <td><span class="cat cat-${getCatClass(p.category)}">${escHtml(p.category || 'Other')}</span></td>
     <td style="color:var(--text-dim);font-size:12px;">${escHtml(p.author || '—')}</td>
     <td><span class="badge badge-${p.status === 'published' ? 'published' : 'draft'}">${p.status === 'published' ? '● Live' : '● Draft'}</span></td>
-    <td style="color:var(--text-dim);font-size:12px;">${formatDate(p.date || p.updatedAt)}</td>
+    <td style="color:var(--text-dim);font-size:12px;">${formatDate(p.date || p.created_at)}</td>
     ${showActions ? `<td><div style="display:flex;gap:6px;">
       <button class="btn btn-ghost btn-sm btn-icon" onclick="editPost('${p.id}')" title="Edit"><i data-lucide="pencil" style="width:13px;height:13px;"></i></button>
       <button class="btn btn-danger btn-sm btn-icon" onclick="confirmDeleteById('${p.id}')" title="Delete"><i data-lucide="trash-2" style="width:13px;height:13px;"></i></button>
@@ -785,63 +829,54 @@ function editPost(id) {
   document.getElementById('post-status').value = p.status || 'draft';
   document.getElementById('post-category').value = p.category || 'GST Basics';
   document.getElementById('post-author').value = p.author || '';
-  document.getElementById('post-author-role').value = p.authorRole || '';
-  document.getElementById('post-readtime').value = p.readTime || '';
+  document.getElementById('post-author-role').value = p.author_role || '';
+  document.getElementById('post-readtime').value = p.read_time || '';
   document.getElementById('post-date').value = p.date || new Date().toISOString().split('T')[0];
   document.getElementById('excerpt-count').textContent = (p.excerpt || '').length;
   document.getElementById('delete-card').style.display = '';
-
-  if (p.cover) {
-    document.getElementById('cover-preview').src = p.cover;
+  if (p.cover_url) {
+    document.getElementById('cover-preview').src = p.cover_url;
     document.getElementById('cover-preview').style.display = 'block';
     document.getElementById('cover-placeholder').style.display = 'none';
     document.getElementById('remove-cover-btn').style.display = '';
-    window._coverData = p.cover;
-  } else {
-    window._coverData = null;
-  }
+    window._coverData = p.cover_url;
+  } else { window._coverData = null; }
 }
 
-function savePost(statusOverride) {
+async function savePost(statusOverride) {
   const title = document.getElementById('post-title').value.trim();
   if (!title) { showToast('Please add a title before saving.', 'error'); return; }
-
   const status = statusOverride || document.getElementById('post-status').value;
   const now = new Date().toISOString();
-
   const postData = {
-    id: currentEditId || generateId(),
     title,
     content: document.getElementById('post-content').innerHTML,
     excerpt: document.getElementById('post-excerpt').value.trim(),
     status,
     category: document.getElementById('post-category').value,
     author: document.getElementById('post-author').value.trim(),
-    authorRole: document.getElementById('post-author-role').value.trim(),
-    readTime: parseInt(document.getElementById('post-readtime').value) || 5,
+    author_role: document.getElementById('post-author-role').value.trim(),
+    read_time: parseInt(document.getElementById('post-readtime').value) || 5,
     date: document.getElementById('post-date').value,
-    cover: window._coverData || null,
-    updatedAt: now,
-    createdAt: currentEditId ? (getPost(currentEditId)?.createdAt || now) : now,
+    cover_url: window._coverData || null,
+    updated_at: now,
   };
+  if (!currentEditId) postData.created_at = now;
 
-  if (currentEditId) {
-    const idx = posts.findIndex(p => p.id === currentEditId);
-    if (idx !== -1) posts[idx] = postData;
-  } else {
-    posts.unshift(postData);
-    currentEditId = postData.id;
+  try {
+    document.getElementById('autosave-indicator').textContent = 'Saving...';
+    await savePostToDB(postData);
+    document.getElementById('delete-card').style.display = '';
+    document.getElementById('editor-title').textContent = 'Edit Post';
+    document.getElementById('autosave-indicator').textContent = 'Saved ✓';
+    setTimeout(() => document.getElementById('autosave-indicator').textContent = '', 3000);
+    showToast(status === 'published' ? 'Post published! 🎉' : 'Draft saved.', 'success');
+  } catch(e) {
+    document.getElementById('autosave-indicator').textContent = 'Save failed';
+    showToast('Failed to save. Check your connection.', 'error');
   }
-
-  savePosts();
-  document.getElementById('delete-card').style.display = '';
-  document.getElementById('editor-title').textContent = 'Edit Post';
-  document.getElementById('autosave-indicator').textContent = 'Saved ✓';
-  setTimeout(() => document.getElementById('autosave-indicator').textContent = '', 3000);
-  showToast(status === 'published' ? 'Post published! 🎉' : 'Draft saved.', 'success');
 }
 
-// Autosave every 30s
 function setupAutosave() {
   ['post-title', 'post-content', 'post-excerpt'].forEach(id => {
     const el = document.getElementById(id);
@@ -850,9 +885,7 @@ function setupAutosave() {
       clearTimeout(autosaveTimer);
       document.getElementById('autosave-indicator').textContent = 'Unsaved changes...';
       autosaveTimer = setTimeout(() => {
-        if (document.getElementById('post-title').value.trim()) {
-          savePost();
-        }
+        if (document.getElementById('post-title').value.trim()) savePost();
       }, 30000);
     });
   });
@@ -862,8 +895,8 @@ function setupAutosave() {
 function fmt(cmd) { document.getElementById('post-content').focus(); document.execCommand(cmd, false, null); }
 function fmtBlock(tag) {
   document.getElementById('post-content').focus();
-  if (tag === 'blockquote') { document.execCommand('formatBlock', false, 'blockquote'); }
-  else { document.execCommand('formatBlock', false, tag); }
+  if (tag === 'blockquote') document.execCommand('formatBlock', false, 'blockquote');
+  else document.execCommand('formatBlock', false, tag);
 }
 function insertLink() {
   const url = prompt('Enter URL:');
@@ -901,63 +934,48 @@ function confirmDeleteById(id) {
   document.getElementById('delete-modal').classList.add('open');
 }
 function confirmDelete() { confirmDeleteById(currentEditId); }
-function deletePost() {
+async function deletePost() {
   if (!pendingDeleteId) return;
-  posts = posts.filter(p => p.id !== pendingDeleteId);
-  savePosts();
-  closeModal('delete-modal');
-  showToast('Post deleted.', 'success');
-  pendingDeleteId = null;
-  showView('posts');
+  try {
+    await deletePostFromDB(pendingDeleteId);
+    closeModal('delete-modal');
+    showToast('Post deleted.', 'success');
+    pendingDeleteId = null;
+    showView('posts');
+  } catch(e) { showToast('Failed to delete.', 'error'); }
 }
 function confirmClearAll() {
   document.getElementById('clear-count').textContent = posts.length;
   document.getElementById('clear-modal').classList.add('open');
 }
-function clearAllPosts() {
-  posts = [];
-  savePosts();
-  closeModal('clear-modal');
-  showToast('All posts cleared.', 'success');
+async function clearAllPosts() {
+  try {
+    for (const p of posts) await SB.remove(p.id);
+    posts = [];
+    updateCounts();
+    closeModal('clear-modal');
+    showToast('All posts cleared.', 'success');
+  } catch(e) { showToast('Failed to clear posts.', 'error'); }
 }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-// ===== EXPORT / IMPORT =====
+// ===== SYNC — now just a refresh button =====
 function exportPosts() {
   const data = JSON.stringify(posts, null, 2);
   const blob = new Blob([data], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'heyxia-posts.json'; a.click();
+  a.href = url; a.download = 'heyxia-posts-backup.json'; a.click();
   URL.revokeObjectURL(url);
   showToast('Posts exported!', 'success');
 }
-function importPosts(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const imported = JSON.parse(e.target.result);
-      if (!Array.isArray(imported)) throw new Error('Invalid format');
-      let added = 0;
-      imported.forEach(p => {
-        if (!posts.find(existing => existing.id === p.id)) { posts.push(p); added++; }
-      });
-      savePosts();
-      document.getElementById('import-status').textContent = `✓ Imported ${added} new post(s)`;
-      showToast(`Imported ${added} post(s) successfully!`, 'success');
-      renderDashboard();
-    } catch(e) {
-      document.getElementById('import-status').textContent = '✗ Invalid file';
-      showToast('Import failed. Please use a valid posts.json file.', 'error');
-    }
-  };
-  reader.readAsText(file);
+async function refreshPosts() {
+  await loadPosts();
+  renderDashboard();
+  showToast('Posts refreshed from database!', 'success');
 }
 
 // ===== UTILS =====
-function generateId() { return 'post_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6); }
 function escHtml(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
 function formatDate(d) { if (!d) return '—'; try { return new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }); } catch(e) { return d; } }
 function updateCharCount(el, countId, max) { document.getElementById(countId).textContent = el.value.length; }
@@ -965,7 +983,6 @@ function getCatClass(cat) {
   const map = { 'GST Basics': 'gst', 'Reconciliation': 'gst', 'ITC & Blocked Credit': 'itc', 'Compliance': 'compliance', 'Tally Tips': 'tally', 'Finance': 'finance' };
   return map[cat] || 'other';
 }
-
 function showToast(msg, type = 'success') {
   const t = document.getElementById('toast');
   const icon = document.getElementById('toast-icon');
@@ -978,21 +995,9 @@ function showToast(msg, type = 'success') {
 }
 
 // ===== INIT =====
-loadPosts();
-updateCounts();
-renderDashboard();
-setupAutosave();
-
-// Set default date
 document.getElementById('post-date').value = new Date().toISOString().split('T')[0];
-
 lucide.createIcons();
-</script>
-
-<!-- Blog page integration script — this is what blog.html reads -->
-<script id="blog-integration-note" type="text/plain">
-  The blog.html page reads posts from localStorage using the key "heyxia_blog_posts".
-  Posts with status "published" are displayed on the blog page.
+loadPosts().then(() => { renderDashboard(); setupAutosave(); });
 </script>
 </body>
 </html>
