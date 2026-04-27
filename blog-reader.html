@@ -233,6 +233,23 @@
       document.getElementById('post-cover-el').style.display = '';
     }
     document.getElementById('post-body-el').innerHTML = post.content || '<p>No content.</p>';
+
+    // Auto-assign IDs to all headings
+    document.querySelectorAll('#post-body-el h2, #post-body-el h3').forEach(h => {
+      const id = h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      h.id = id;
+      h.style.scrollMarginTop = '80px';
+    });
+    // Handle TOC links using name attribute
+    document.querySelectorAll('#post-body-el a.toc-link[name]').forEach(a => {
+      const targetId = a.getAttribute('name').replace('toc-', '');
+      a.style.cursor = 'pointer';
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.getElementById(targetId);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
     document.getElementById('post-content-wrap').style.display = '';
     lucide.createIcons();
   }

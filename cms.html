@@ -173,7 +173,7 @@ tr:hover td { background: var(--surface-2); }
 .editor-sidebar-panel { display: flex; flex-direction: column; gap: 14px; }
 
 .editor-card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: visible;
 }
 .editor-card-header { padding: 14px 18px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600; color: var(--text-dim); }
 .editor-card-body { padding: 18px; }
@@ -199,23 +199,24 @@ tr:hover td { background: var(--surface-2); }
 
 /* Rich text toolbar */
 .toolbar {
-  display: flex; gap: 4px; padding: 8px 10px; background: var(--surface-2);
-  border-bottom: 1px solid var(--border); flex-wrap: wrap; align-items: center;
+  display: flex; gap: 4px; padding: 8px 10px; background: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0; flex-wrap: wrap; align-items: center;
+  position: sticky; top: 57px; z-index: 20; border-radius: 0 0 0 0;
 }
 .toolbar-btn {
   display: inline-flex; align-items: center; justify-content: center;
   width: 30px; height: 30px; border-radius: 6px; background: none; border: none;
-  color: var(--text-dim); cursor: pointer; font-family: inherit; font-size: 13px;
+  color: #444; cursor: pointer; font-family: inherit; font-size: 13px;
   font-weight: 600; transition: all .1s;
 }
-.toolbar-btn:hover { background: var(--surface-3); color: var(--text); }
+.toolbar-btn:hover { background: #e0e0e0; color: #111; }
 .toolbar-btn.active { background: var(--accent); color: var(--accent-dark); }
-.toolbar-sep { width: 1px; height: 20px; background: var(--border-2); margin: 0 4px; }
+.toolbar-sep { width: 1px; height: 20px; background: #ddd; margin: 0 4px; }
 .content-editor {
   min-height: 420px; padding: 18px; outline: none; font-size: 15px; line-height: 1.8;
-  color: var(--text); font-family: inherit;
+  color: #1A1A1A; font-family: inherit; background: #ffffff; border-radius: 0 0 14px 14px;
 }
-.content-editor:empty::before { content: 'Start writing your blog post here...'; color: var(--text-muted); pointer-events: none; }
+.content-editor:empty::before { content: 'Start writing your blog post here...'; color: #999; pointer-events: none; }
 .content-editor h1 { font-size: 28px; font-weight: 700; margin: 20px 0 10px; font-family: 'DM Serif Display', serif; }
 .content-editor h2 { font-size: 22px; font-weight: 700; margin: 18px 0 8px; }
 .content-editor h3 { font-size: 18px; font-weight: 600; margin: 14px 0 6px; }
@@ -425,6 +426,9 @@ tr:hover td { background: var(--surface-2); }
         <div class="page-title" id="editor-title">New Post</div>
         <div class="topbar-actions">
           <span id="autosave-indicator" style="font-size:12px;color:var(--text-muted);"></span>
+          <button class="btn btn-ghost" onclick="previewPost()">
+            <i data-lucide="eye" style="width:15px;height:15px;"></i> Preview
+          </button>
           <button class="btn btn-ghost" onclick="savePost('draft')">
             <i data-lucide="save" style="width:15px;height:15px;"></i> Save Draft
           </button>
@@ -439,7 +443,7 @@ tr:hover td { background: var(--surface-2); }
           <div class="editor-main">
             <div class="editor-card">
               <div class="editor-card-body" style="padding:0;">
-                <input type="text" class="field input title-input" id="post-title" placeholder="Post title..." style="border:none;border-bottom:1px solid var(--border);border-radius:0;background:var(--surface);padding:18px 20px;font-size:24px;font-weight:700;">
+                <input type="text" class="field input title-input" id="post-title" placeholder="Post title..." style="border:none;border-bottom:1px solid var(--border);border-radius:0;background:#ffffff;padding:18px 20px;font-size:24px;font-weight:700;color:#1A1A1A;width:100%;outline:none;font-family:inherit;">
                 <div class="toolbar" id="editor-toolbar">
                   <button class="toolbar-btn" onclick="fmt('bold')" title="Bold"><b>B</b></button>
                   <button class="toolbar-btn" onclick="fmt('italic')" title="Italic"><i>I</i></button>
@@ -457,6 +461,29 @@ tr:hover td { background: var(--surface-2); }
                   <div class="toolbar-sep"></div>
                   <button class="toolbar-btn" onclick="fmtBlock('blockquote')" title="Quote">❝</button>
                   <button class="toolbar-btn" onclick="insertLink()" title="Link">🔗</button>
+                  <div class="toolbar-sep"></div>
+                  <!-- Text color -->
+                  <div style="position:relative;display:inline-flex;align-items:center;" title="Text Color">
+                    <button class="toolbar-btn" onclick="document.getElementById('text-color-picker').click()" title="Text Color" style="position:relative;">
+                      <span style="font-weight:700;font-size:13px;">A</span>
+                      <span id="text-color-bar" style="position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:14px;height:3px;background:#000;border-radius:2px;"></span>
+                    </button>
+                    <input type="color" id="text-color-picker" value="#000000"
+                      style="position:absolute;opacity:0;width:0;height:0;pointer-events:none;"
+                      onchange="applyTextColor(this.value)">
+                  </div>
+                  <!-- Highlight color -->
+                  <div style="position:relative;display:inline-flex;align-items:center;" title="Highlight Color">
+                    <button class="toolbar-btn" onclick="document.getElementById('highlight-color-picker').click()" title="Highlight">
+                      <span style="font-size:13px;">🖊</span>
+                      <span id="highlight-color-bar" style="position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:14px;height:3px;background:#FFD700;border-radius:2px;"></span>
+                    </button>
+                    <input type="color" id="highlight-color-picker" value="#FFD700"
+                      style="position:absolute;opacity:0;width:0;height:0;pointer-events:none;"
+                      onchange="applyHighlight(this.value)">
+                  </div>
+                  <div class="toolbar-sep"></div>
+                  <button class="toolbar-btn" onclick="insertTOC()" title="Insert Table of Contents (auto-links all headings)" style="font-size:11px;font-weight:700;">TOC</button>
                   <div class="toolbar-sep"></div>
                   <button class="toolbar-btn" onclick="fmt('removeFormat')" title="Clear formatting" style="font-size:11px;">Clear</button>
                 </div>
@@ -825,6 +852,8 @@ function editPost(id) {
   document.getElementById('editor-title').textContent = 'Edit Post';
   document.getElementById('post-title').value = p.title || '';
   document.getElementById('post-content').innerHTML = p.content || '';
+  // Re-attach TOC handlers if post has TOC
+  setTimeout(attachTOCHandlers, 100);
   document.getElementById('post-excerpt').value = p.excerpt || '';
   document.getElementById('post-status').value = p.status || 'draft';
   document.getElementById('post-category').value = p.category || 'GST Basics';
@@ -902,8 +931,172 @@ function insertLink() {
   const url = prompt('Enter URL:');
   if (url) { document.getElementById('post-content').focus(); document.execCommand('createLink', false, url); }
 }
+function applyTextColor(color) {
+  document.getElementById('text-color-bar').style.background = color;
+  document.getElementById('post-content').focus();
+  document.execCommand('foreColor', false, color);
+}
+function applyHighlight(color) {
+  document.getElementById('highlight-color-bar').style.background = color;
+  document.getElementById('post-content').focus();
+  document.execCommand('hiliteColor', false, color);
+}
+function insertTOC() {
+  const editor = document.getElementById('post-content');
+  // Step 1: Auto-assign IDs to ALL h2/h3 headings
+  editor.querySelectorAll('h2, h3').forEach(h => {
+    const id = h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    h.id = id;
+    h.style.scrollMarginTop = '80px';
+  });
+  const headings = editor.querySelectorAll('h2[id], h3[id]');
+  if (!headings.length) { showToast('No headings found in your post.', 'error'); return; }
 
-// ===== COVER IMAGE =====
+  // Step 2: Build TOC — use name attribute on <a> tags (preserved by browsers)
+  // and attach handlers after insertion
+  let items = '';
+  headings.forEach(h => {
+    const indent = h.tagName === 'H3' ? 'margin-left:16px;' : '';
+    items += `<li style="${indent}margin-bottom:6px;list-style:none;"><a class="toc-link" name="toc-${h.id}" style="color:#4A6BC9;text-decoration:none;cursor:pointer;">${h.textContent.trim()}</a></li>`;
+  });
+  const tocHtml = `<div class="toc-block"><p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#8A8A8A;margin-bottom:8px;">IN THIS ARTICLE</p><ul style="list-style:none;padding-left:0;margin:0 0 8px 0;">${items}</ul></div><p><br></p>`;
+
+  editor.focus();
+  document.execCommand('insertHTML', false, tocHtml);
+
+  // Step 3: Attach click handlers immediately after insertion
+  attachTOCHandlers();
+  showToast('Table of Contents inserted! Headings auto-linked.', 'success');
+}
+
+function attachTOCHandlers() {
+  const editor = document.getElementById('post-content');
+  editor.querySelectorAll('a.toc-link[name]').forEach(a => {
+    a.onclick = function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const targetId = this.getAttribute('name').replace('toc-', '');
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return false;
+    };
+  });
+}
+
+// ===== PREVIEW =====
+function previewPost() {
+  const title = document.getElementById('post-title').value.trim() || 'Untitled Post';
+  const excerpt = document.getElementById('post-excerpt').value.trim();
+  const category = document.getElementById('post-category').value;
+  const author = document.getElementById('post-author').value.trim() || 'Heyxia Team';
+  const authorRole = document.getElementById('post-author-role').value.trim();
+  const readTime = document.getElementById('post-readtime').value || 5;
+  const date = document.getElementById('post-date').value;
+  const cover = window._coverData || null;
+
+  // Clone editor content, auto-assign IDs to all headings
+  const editorEl = document.getElementById('post-content');
+  const clone = editorEl.cloneNode(true);
+  clone.querySelectorAll('h2, h3').forEach(h => {
+    const id = h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    h.id = id;
+  });
+  const content = clone.innerHTML;
+
+  const initials = author.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+  const formattedDate = date ? new Date(date).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' }) : '';
+  const coverHtml = cover ? `<img src="${cover}" style="width:100%;border-radius:16px;max-height:420px;object-fit:cover;margin-bottom:40px;" alt="">` : '';
+
+  const catColors = {
+    'GST Basics': 'background:rgba(168,200,240,0.2);color:#2A4A8A',
+    'Reconciliation': 'background:rgba(168,200,240,0.2);color:#2A4A8A',
+    'ITC & Blocked Credit': 'background:rgba(232,145,160,0.2);color:#A03055',
+    'Compliance': 'background:rgba(155,127,212,0.2);color:#6A3FBC',
+    'Tally Tips': 'background:rgba(245,168,110,0.2);color:#9A5500',
+    'Finance': 'background:rgba(74,222,128,0.15);color:#1A7A50',
+  };
+  const catStyle = catColors[category] || 'background:rgba(255,255,255,0.1);color:#555';
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${title} — Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *{ box-sizing:border-box; margin:0; padding:0; -webkit-font-smoothing:antialiased; }
+  body{ background:#FBF5EE; color:#1A1A1A; font-family:'Inter',sans-serif; }
+  .preview-banner{
+    background:#2B2B2B; color:#fff; text-align:center; padding:10px;
+    font-size:13px; font-weight:500; letter-spacing:.02em;
+    position:sticky; top:0; z-index:100;
+  }
+  .preview-banner span{ background:#F5A86E; color:#1A1A1A; border-radius:4px; padding:2px 8px; font-weight:700; margin-right:8px; font-size:11px; }
+  .container{ max-width:720px; margin:0 auto; padding:60px 24px 80px; }
+  .meta{ display:flex; align-items:center; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+  .cat-badge{ padding:4px 12px; border-radius:9999px; font-size:12px; font-weight:600; ${catStyle}; }
+  .meta-text{ font-size:13px; color:#8A8A8A; }
+  h1{ font-size:clamp(28px,5vw,44px); font-weight:800; line-height:1.15; letter-spacing:-0.02em; margin-bottom:20px; }
+  .author-row{ display:flex; align-items:center; gap:12px; padding:20px 0; border-top:1px solid rgba(26,26,26,0.08); border-bottom:1px solid rgba(26,26,26,0.08); margin-bottom:36px; }
+  .author-avatar{ width:44px; height:44px; border-radius:50%; background:#A8C8F0; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#1A2A4A; flex-shrink:0; }
+  .author-name{ font-weight:600; font-size:15px; }
+  .author-role{ font-size:13px; color:#8A8A8A; }
+  .post-body{ font-family:'Lora',Georgia,serif; font-size:18px; line-height:1.85; color:#2B2B2B; }
+  .post-body h1{ font-size:28px; font-weight:700; margin:2rem 0 1rem; font-family:'Inter',sans-serif; color:#1A1A1A; }
+  .post-body h2{ font-size:24px; font-weight:700; margin:2rem 0 .75rem; font-family:'Inter',sans-serif; color:#1A1A1A; }
+  .post-body h3{ font-size:20px; font-weight:600; margin:1.5rem 0 .5rem; font-family:'Inter',sans-serif; color:#1A1A1A; }
+  .post-body p{ margin-bottom:1.4rem; }
+  .post-body ul,.post-body ol{ padding-left:1.5rem; margin-bottom:1.4rem; }
+  .post-body li{ margin-bottom:.5rem; }
+  .post-body blockquote{ border-left:3px solid #A8C8F0; padding:1rem 1.5rem; margin:1.5rem 0; background:rgba(168,200,240,0.08); border-radius:0 12px 12px 0; font-style:italic; color:#5C5C5C; }
+  .post-body strong{ font-weight:700; color:#1A1A1A; }
+  .post-body a{ color:#4A6BC9; text-decoration:underline; cursor:pointer; }
+  .post-body img{ max-width:100%; border-radius:12px; margin:1.5rem 0; }
+</style>
+</head>
+<body>
+<div class="preview-banner"><span>PREVIEW</span> This is a preview — not published yet. Close this tab to go back to the editor.</div>
+<div class="container">
+  <div class="meta">
+    <span class="cat-badge">${category}</span>
+    <span class="meta-text">${formattedDate}</span>
+    <span class="meta-text">·</span>
+    <span class="meta-text">${readTime} min read</span>
+  </div>
+  <h1>${title}</h1>
+  <div class="author-row">
+    <div class="author-avatar">${initials}</div>
+    <div>
+      <div class="author-name">${author}</div>
+      <div class="author-role">${authorRole}</div>
+    </div>
+  </div>
+  ${coverHtml}
+  <div class="post-body">${content}</div>
+</div>
+<script>
+  // Handle TOC links - use name attribute which survives sanitization
+  document.querySelectorAll('a.toc-link[name]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var targetId = this.getAttribute('name').replace('toc-', '');
+      var target = document.getElementById(targetId);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+<\/script>
+</body>
+</html>`;
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
+}
+
+
 function handleCoverImage(input) {
   const file = input.files[0];
   if (!file) return;
@@ -997,6 +1190,18 @@ function showToast(msg, type = 'success') {
 // ===== INIT =====
 document.getElementById('post-date').value = new Date().toISOString().split('T')[0];
 lucide.createIcons();
+
+// Delegated click handler for TOC links — works no matter when they are inserted
+document.getElementById('post-content').addEventListener('click', function(e) {
+  const link = e.target.closest('a.toc-link[name]');
+  if (!link) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const targetId = link.getAttribute('name').replace('toc-', '');
+  const target = document.getElementById(targetId);
+  if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
 loadPosts().then(() => { renderDashboard(); setupAutosave(); });
 </script>
 </body>
