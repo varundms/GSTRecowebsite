@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GST Reco — GST Reconciliation in Minutes, Not Days</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --bg: #FBF5EE;
+    --bg-blue: #DCE7F7;
+    --bg-stat: #C9DCF1;
+    --card: #F2EAE0;
+    --card-2: #EFE6DA;
+    --text: #1A1A1A;
+    --text-soft: #2B2B2B;
+    --text-dim: #5C5C5C;
+    --text-muted: #8A8A8A;
+    --border: rgba(26,26,26,0.08);
+    --border-strong: rgba(26,26,26,0.14);
+    --cta-blue: #A8C8F0;
+    --cta-blue-dark: #8AB1E5;
+    --cta-text: #1A2A4A;
+    --brand-orange: #F5A86E;
+    --brand-coral: #E891A0;
+    --brand-pink: #D49AC4;
+    --brand-lavender: #B89FE0;
+    --brand-violet: #9B7FD4;
+    --brand-gradient: linear-gradient(90deg,#F5A86E 0%,#E891A0 35%,#C99BCE 65%,#9B7FD4 100%);
+    --dot-blue: #4A6BC9;
+    --dot-orange: #F39C3F;
+  }
+  *{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+  html,body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .gradient-text{
+    background: var(--brand-gradient);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .btn-primary{
+    background: var(--cta-blue);
+    color: var(--cta-text);
+    font-weight: 600;
+    padding: .9rem 1.6rem;
+    border-radius: 9999px;
+    transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(74,107,201,0.15);
+  }
+  .btn-primary:hover{ background: var(--cta-blue-dark); transform: translateY(-1px); }
+  .btn-dark{
+    background: #111;
+    color: #fff;
+    font-weight: 600;
+    padding: .9rem 1.6rem;
+    border-radius: 9999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all .2s ease;
+  }
+  .btn-dark:hover{ background:#000; transform: translateY(-1px); }
+  .btn-ghost{
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    padding: .85rem 1.5rem;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.5);
+    transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .btn-ghost:hover{ background: rgba(255,255,255,0.9); border-color: var(--text-dim); }
+  .card{
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+  }
+  .card-soft{
+    background: rgba(255,255,255,0.4);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+  }
+  .nav-pill{
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(26,26,26,0.06);
+    border-radius: 9999px;
+    box-shadow: 0 4px 20px -8px rgba(26,26,26,0.08);
+  }
+  .logo-mark{ width:38px; height:38px; flex-shrink:0; }
+  .logo-mark svg{ width:100%; height:100%; display:block; }
+  .pop{
+    background: linear-gradient(160deg, #C8D9F0 0%, #D5DEEC 50%, #F0E2D4 100%);
+    border: 1px solid rgba(74,107,201,0.18);
+    box-shadow: 0 30px 60px -30px rgba(74,107,201,0.25);
+  }
+  .toggle-pill{ position: relative; display:inline-flex; align-items:center; gap: 1rem; }
+  .toggle-track{
+    position: relative; width: 64px; height: 32px;
+    background: #7C9BFF; border-radius: 9999px; cursor: pointer;
+    transition: background .25s ease;
+  }
+  .toggle-knob{
+    position:absolute; top:3px; left:3px; width:26px; height:26px;
+    background: #fff; border-radius:50%;
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .toggle-pill[data-state="annual"] .toggle-knob{ transform: translateX(32px); }
+  .reveal{ opacity:0; transform: translateY(20px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+  .marquee{ overflow:hidden; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+  .marquee-track{ display:flex; flex-direction:row; align-items:center; gap:64px; animation: marquee 30s linear infinite; width: max-content; padding: 0 32px; }
+  @keyframes marquee{ from{ transform:translateX(0)} to{ transform: translateX(-50%)} }
+  /* Full-width video card */
+  .video-card-full{
+    position: relative;
+    width: 100%;
+    background: #C8D9F0;
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 30px 80px -20px rgba(26,26,26,0.14);
+  }
+  .video-card-full video{
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+  }
+  .video-card-full .video-placeholder{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 320px;
+    background: #F8F4EE;
+    border-radius: 12px;
+    padding: 40px;
+  }
+
+  /* Small side video card (kept for hero) */
+  .video-card{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/10;
+    background: #fff;
+    border: 1px solid rgba(26,26,26,0.08);
+    border-radius: 16px;
+    box-shadow: 0 30px 80px -30px rgba(26,26,26,0.18);
+    overflow: hidden;
+  }
+  .video-placeholder{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    inset: 0;
+    background: #F8F4EE;
+  }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display:none; }
+  details[open] .accordion-icon { transform: rotate(45deg); }
+  .accordion-icon { transition: transform .25s ease; }
+  .mock-window{
+    background: #fff;
+    border: 1px solid rgba(26,26,26,0.08);
+    border-radius: 16px;
+    box-shadow: 0 30px 80px -30px rgba(26,26,26,0.18);
+  }
+  .meter{ height:8px; background: rgba(26,26,26,0.08); border-radius: 9999px; overflow:hidden; }
+  .meter > span{ display:block; height:100%; background: linear-gradient(90deg, var(--cta-blue), var(--brand-lavender)); border-radius: 9999px; transition: width 1.6s cubic-bezier(.2,.8,.2,1); }
+  .bg-section-stats{ background: linear-gradient(180deg, #C9DCF1 0%, #DDE1ED 50%, #F0E2D4 100%); }
+  .bg-section-pricing{ background: linear-gradient(180deg, #E5EDF8 0%, #DCE7F7 100%); }
+  .bg-section-cream{ background: var(--bg); }
+  .bg-section-soft-blue{ background: linear-gradient(180deg, #FBF5EE 0%, #E8EFF9 100%); }
+
+  /* Hero slideshow */
+  .hero-slides{ position: relative; width:100%; height:100%; }
+  .hero-slide{
+    position: absolute; inset: 0;
+    opacity: 0; transition: opacity .6s ease;
+    pointer-events: none;
+  }
+  .hero-slide.active{ opacity: 1; pointer-events: auto; }
+  .hero-slide-frame{
+    width: 100%; height: 100%;
+    background: #F8F4EE;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px -30px rgba(26,26,26,0.18);
+  }
+  .hero-stage{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .hero-stage video{
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  /* Hero tab buttons (synced with slideshow) */
+  .hero-tab{
+    position: relative;
+    padding: .7rem 1.4rem;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(26,26,26,0.06);
+    color: var(--text-soft);
+    font-size: .9rem; font-weight: 500;
+    transition: background .25s ease, color .25s ease, border-color .25s ease;
+    overflow: hidden;
+  }
+  .hero-tab.active{
+    background: var(--cta-blue);
+    color: var(--cta-text);
+    border-color: rgba(74,107,201,0.2);
+    font-weight: 600;
+  }
+  .hero-tab .progress-bar{
+    position: absolute; left: 0; bottom: 0; height: 2px;
+    background: rgba(26,42,74,0.6);
+    width: 0%;
+    transition: width linear;
+  }
+  .hero-tab.active .progress-bar{ width: 100%; }
+
+  /* Hero tab buttons — 3×2 grid */
+  #hero-tabs{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .75rem;
+    max-width: 740px;
+    margin: 1.5rem auto 0;
+  }
+  #hero-tabs .hero-tab{ width: 100%; text-align: center; }
+
+  /* Video card */
+  .video-card{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/10;
+    background: #fff;
+    border: 1px solid rgba(26,26,26,0.08);
+    border-radius: 16px;
+    box-shadow: 0 30px 80px -30px rgba(26,26,26,0.18);
+    overflow: hidden;
+  }
+  .video-placeholder{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    inset: 0;
+    background: #F8F4EE;
+  }
+
+  /* Hero slide video — hide placeholder when video loads */
+  .hero-slide-frame video{ display:block; }
+  .hero-slide-frame video + .video-placeholder{ display:none !important; }
+  .hero-slide-frame video:not([src]), .hero-slide-frame video[src=""]{ display:none !important; }
+  .hero-slide-frame video:not([src]) + .video-placeholder,
+  .hero-slide-frame video[src=""] + .video-placeholder{ display:flex !important; }
+
+  /* Donut for blocked credit */
+  .donut{
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: conic-gradient(#F39C3F 0% 32%, #E891A0 32% 50%, #9B7FD4 50% 70%, #4A6BC9 70% 100%);
+    display: flex; align-items:center; justify-content:center;
+    position: relative;
+  }
+  .donut::after{
+    content: ""; position: absolute; inset: 14px; background: #fff; border-radius: 50%;
+  }
+  .donut-label{ position:relative; z-index:1; text-align:center; }
+
+  /* Subtle slide-up animation */
+  @keyframes slideFadeIn { from { opacity:0; transform: translateY(10px);} to { opacity:1; transform:none;} }
+  .hero-slide.active .anim { animation: slideFadeIn .55s .1s both; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="fixed top-4 inset-x-0 z-50 px-4">
+  <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between">
+    <a href="#" class="flex items-center pl-2">
+      <img src="heyxia-logo.jpg" alt="Heyxia" class="h-10 w-auto" style="mix-blend-mode:multiply;" />
+    </a>
+    <nav class="hidden md:flex items-center gap-10 text-[15px] text-[var(--text-soft)]">
+      <a href="#features" class="hover:text-black transition">Features</a>
+      <a href="#solutions" class="hover:text-black transition">Solutions</a>
+      <a href="#pricing" class="hover:text-black transition">Pricing</a>
+      <a href="blog.html" class="hover:text-black transition">Blogs</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="#" class="btn-primary text-[15px] hidden sm:inline-flex">Sign Up for 14 Day Trial</a>
+      <a href="#" class="btn-primary text-[15px]">Login</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="bg-section-cream pt-36 pb-20 relative overflow-hidden">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <h1 class="font-extrabold text-5xl md:text-7xl leading-[1.05] tracking-[-0.03em] text-[var(--text)]">
+      GST Reconciliation in<br>Minutes, Not Days
+    </h1>
+    <p class="mt-10 text-lg md:text-xl text-[var(--text-dim)] font-medium">
+      AI-Powered Reconciliation &nbsp;|&nbsp; 100% Accuracy &nbsp;|&nbsp; Blocked Credit Detection
+    </p>
+    <p class="mt-6 max-w-2xl mx-auto text-[var(--text-dim)] leading-relaxed">
+      Automate GST Reco with intelligent matching, discrepancy detection, to ensure accurate, compliant, and audit-ready filings.
+    </p>
+    <div class="mt-10">
+      <a href="#" class="btn-primary text-base">Sign Up for 14-Day Trial</a>
+    </div>
+
+    <!-- Hero product slideshow -->
+    <div class="mt-20 reveal max-w-5xl mx-auto">
+      <p class="text-center text-sm font-semibold tracking-wide text-[var(--text-soft)] mb-5">See GST Reco in Action</p>
+
+      <!-- Slideshow stage -->
+      <div class="hero-stage mock-window text-left">
+        <div class="hero-slides h-full">
+
+          <!-- Slide 1: Upload & Fetch -->
+          <div class="hero-slide active" data-slide="0">
+            <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
+              <video src="VIDEO_UPLOAD_FETCH.mp4" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
+              <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
+                <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
+                <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_UPLOAD_FETCH.mp4</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 2: Analytics Dashboard -->
+          <div class="hero-slide" data-slide="1">
+            <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
+              <video src="VIDEO_ANALYTICS.mp4" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
+              <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
+                <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
+                <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_ANALYTICS.mp4</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 3: Party-Wise Summary -->
+          <div class="hero-slide" data-slide="2">
+            <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
+              <video src="VIDEO_PARTYWISE.mp4" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
+              <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
+                <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
+                <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_PARTYWISE.mp4</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 4: Detailed Entries -->
+          <div class="hero-slide" data-slide="3">
+            <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
+              <video src="VIDEO_DETAILED.mp4" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
+              <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
+                <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
+                <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_DETAILED.mp4</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 5: IMS (2 videos play sequentially) -->
+          <div class="hero-slide" data-slide="4" id="ims-slide">
+            <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
+              <!-- Video 1 -->
+              <video id="ims-video-1" src="VIDEO_IMS_1.mp4" muted playsinline
+                class="w-full h-full object-cover absolute inset-0"
+                style="opacity:1; transition: opacity .4s ease;"
+                onerror="this.style.display='none';"></video>
+              <!-- Video 2 -->
+              <video id="ims-video-2" src="VIDEO_IMS_2.mp4" muted playsinline
+                class="w-full h-full object-cover absolute inset-0"
+                style="opacity:0; transition: opacity .4s ease;"
+                onerror="this.style.display='none';"></video>
+              <!-- Placeholder shown when neither video loads -->
+              <div id="ims-placeholder" class="video-placeholder absolute inset-0" style="display:none;">
+                <i data-lucide="play-circle" class="w-16 h-16 text-[rgba(26,26,26,0.18)] mb-3"></i>
+                <span class="text-sm text-[var(--text-muted)] font-medium">IMS — Drop in your videos</span>
+                <span class="text-xs text-[var(--text-muted)] mt-1">Rename files: <code class="bg-white/60 px-1 rounded">VIDEO_IMS_1.mp4</code> and <code class="bg-white/60 px-1 rounded">VIDEO_IMS_2.mp4</code></span>
+              </div>
+              <!-- Video indicator dots -->
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                <span id="ims-dot-1" class="w-2 h-2 rounded-full bg-white opacity-100 transition-opacity"></span>
+                <span id="ims-dot-2" class="w-2 h-2 rounded-full bg-white opacity-40 transition-opacity"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 6: Blocked Credit Detection -->
+          <div class="hero-slide" data-slide="5">
+            <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
+              <video src="VIDEO_BLOCKED.mp4" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
+              <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
+                <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
+                <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_BLOCKED.mp4</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Sync'd tab buttons -->
+      <div id="hero-tabs">
+        <button class="hero-tab active" data-target="0">
+          Upload &amp; Fetch
+          <span class="progress-bar"></span>
+        </button>
+        <button class="hero-tab" data-target="1">
+          Analytics Dashboard
+          <span class="progress-bar"></span>
+        </button>
+        <button class="hero-tab" data-target="2">
+          Party-Wise Summary
+          <span class="progress-bar"></span>
+        </button>
+        <button class="hero-tab" data-target="3">
+          Detailed Entries
+          <span class="progress-bar"></span>
+        </button>
+        <button class="hero-tab" data-target="4">
+          IMS
+          <span class="progress-bar"></span>
+        </button>
+        <button class="hero-tab" data-target="5">
+          Blocked Credit Detection
+          <span class="progress-bar"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGO TICKER -->
+<section class="bg-section-cream py-14 border-y border-[rgba(26,26,26,0.05)]">
+  <p class="text-center text-xs text-[var(--text-muted)] uppercase tracking-[.25em] mb-10">Trusted by finance teams across India</p>
+  <div style="overflow:hidden; mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);">
+    <div style="display:flex; align-items:center; gap:80px; width:max-content; animation:ticker 18s linear infinite; padding:0 40px;">
+      <img src="logo-newpower.png"  alt="New Power"          style="height:44px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+      <img src="logo-Kundlik.png"   alt="Kundlik Automation" style="height:36px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+      <img src="logo-hts.svg"       alt="HTS Switchgears"    style="height:40px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+      <img src="logo-ftg.webp"      alt="FTG Fluorotech"     style="height:44px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+      <img src="logo-dahotre.jpeg"  alt="Dahotre & Dahotre"  style="height:40px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+      <img src="logo-bathija.png"   alt="Bathija Enterprises" style="height:36px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+      <!-- Duplicate for seamless loop -->
+      <img src="logo-newpower.png"  alt="New Power"          style="height:44px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+      <img src="logo-Kundlik.png"   alt="Kundlik Automation" style="height:36px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+      <img src="logo-hts.svg"       alt="HTS Switchgears"    style="height:40px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+      <img src="logo-ftg.webp"      alt="FTG Fluorotech"     style="height:44px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+      <img src="logo-dahotre.jpeg"  alt="Dahotre & Dahotre"  style="height:40px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+      <img src="logo-bathija.png"   alt="Bathija Enterprises" style="height:36px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+    </div>
+  </div>
+</section>
+<style>
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+</style>
+
+<!-- FEATURES -->
+<section id="features" class="bg-section-cream py-28">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16 reveal">
+      <h2 class="font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em] leading-[1.05]">
+        <span class="gradient-text">Everything your finance team</span><br>
+        <span class="gradient-text">needs to close GST in seconds</span>
+      </h2>
+      <p class="mt-6 text-2xl md:text-3xl font-semibold">Tailored Solutions for Corporates</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="repeat-2" class="w-7 h-7 text-[#4A6BC9]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Tally/Other Software Integration</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Two-way data exchange between accounting software and platform.</p>
+      </div>
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="globe" class="w-7 h-7 text-[#F39C3F]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Live GST Portal Connection</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Secure API Access to GSTR-2A/2B, 3B and GSTR-1 data.</p>
+      </div>
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="brain-circuit" class="w-7 h-7 text-[#9B7FD4]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">AI-Powered Intelligent Matching</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Advanced algorithms for matching invoices despite bad accounting.</p>
+      </div>
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="search-check" class="w-7 h-7 text-[#E891A0]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">AI Supplier Search &amp; Blocked Credit Detection</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">AI Supplier search directly from software entries &amp; smart policy filters detecting blocked credit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTIONS FOR SERVICE PROVIDERS -->
+<section id="platform" class="bg-section-cream py-28 border-t border-[rgba(26,26,26,0.05)]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16 reveal">
+      <h2 class="text-[2rem] md:text-[2.75rem] font-bold">Tailored Solutions for Service Providers</h2>
+    </div>
+    <div class="grid md:grid-cols-2 gap-5">
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="layers" class="w-7 h-7 text-[#4A6BC9]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Scale Your Practice</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Handle multiple clients efficiently with our multi-tenant platform and automated workflows.</p>
+      </div>
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="user-square-2" class="w-7 h-7 text-[#F39C3F]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Client Portal Access</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Provide secure, branded portals for each client with real-time reconciliation status.</p>
+      </div>
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="file-text" class="w-7 h-7 text-[#9B7FD4]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Professional Reports</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Generate comprehensive, client-ready reports that demonstrate value and expertise.</p>
+      </div>
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="trending-up" class="w-7 h-7 text-[#E891A0]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Increase Capacity</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Process more clients in less time, increasing your practice revenue without adding staff.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE — full-width video stacked layout -->
+<section id="solutions" class="bg-section-soft-blue py-28">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <h2 class="text-center font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em] mb-24 reveal">
+      <span class="gradient-text">Reconcile, Monitor, Follow-Up — all without leaving the platform</span>
+    </h2>
+
+    <!-- ── Row 1: IMS ── -->
+    <div class="mb-28 reveal">
+      <div class="text-center mb-10">
+        <p class="text-sm font-semibold uppercase tracking-[.18em] text-[#4A6BC9] mb-3">Invoice Management System</p>
+        <h3 class="text-3xl md:text-4xl font-bold mb-4">Invoice Management System (IMS)</h3>
+        <p class="text-lg text-[var(--text-dim)] max-w-2xl mx-auto">Intelligent invoice reconciliation with real-time visibility, automated matching, and compliance control.</p>
+      </div>
+      <!-- Full-width video -->
+      <div class="video-card-full">
+        <video src="VIDEO_IMS.mp4" autoplay muted loop playsinline class="w-full" onloadeddata="this.nextElementSibling.style.display='none';"></video>
+        <div class="video-placeholder" style="border-radius:12px;">
+          <i data-lucide="play-circle" class="w-16 h-16 text-[rgba(26,26,26,0.18)] mb-3"></i>
+          <span class="text-sm text-[var(--text-muted)] font-medium">IMS — Drop in your video</span>
+          <span class="text-xs text-[var(--text-muted)] mt-1">Rename your file to <code class="bg-white/60 px-1 rounded">VIDEO_IMS.mp4</code></span>
+        </div>
+      </div>
+      <!-- Bullets below -->
+      <div class="flex flex-wrap justify-center gap-6 mt-8">
+        <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="check-circle-2" class="w-5 h-5 text-[#4A6BC9]"></i><span>Live Invoice Visibility</span></div>
+        <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="check-circle-2" class="w-5 h-5 text-[#4A6BC9]"></i><span>2B Automation</span></div>
+        <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="check-circle-2" class="w-5 h-5 text-[#4A6BC9]"></i><span>Discrepancy Identification</span></div>
+        <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="check-circle-2" class="w-5 h-5 text-[#4A6BC9]"></i><span>Audit Trail &amp; Records</span></div>
+      </div>
+    </div>
+
+    <!-- ── Row 2: Health Dashboard ── -->
+    <div class="mb-28 reveal">
+      <div class="text-center mb-10">
+        <p class="text-sm font-semibold uppercase tracking-[.18em] text-[#9B7FD4] mb-3">Health Dashboard</p>
+        <h3 class="text-3xl md:text-4xl font-bold mb-4">Health Dashboard</h3>
+        <p class="text-lg text-[var(--text-dim)] max-w-2xl mx-auto">Centralized score dashboard showing accounting &amp; portal/filing gaps.</p>
+      </div>
+      <div class="video-card-full">
+        <video src="VIDEO_HEALTH.mp4" autoplay muted loop playsinline class="w-full" onloadeddata="this.nextElementSibling.style.display='none';"></video>
+        <div class="video-placeholder" style="border-radius:12px;">
+          <i data-lucide="play-circle" class="w-16 h-16 text-[rgba(26,26,26,0.18)] mb-3"></i>
+          <span class="text-sm text-[var(--text-muted)] font-medium">Health Dashboard — Drop in your video</span>
+          <span class="text-xs text-[var(--text-muted)] mt-1">Rename your file to <code class="bg-white/60 px-1 rounded">VIDEO_HEALTH.mp4</code></span>
+        </div>
+      </div>
+      <div class="flex flex-wrap justify-center gap-6 mt-8">
+        <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="activity" class="w-5 h-5 text-[#9B7FD4]"></i><span>Real Time Health Visibility</span></div>
+        <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="activity" class="w-5 h-5 text-[#9B7FD4]"></i><span>Overall Health Detection</span></div>
+        <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="activity" class="w-5 h-5 text-[#9B7FD4]"></i><span>Actionable Insights</span></div>
+        <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="activity" class="w-5 h-5 text-[#9B7FD4]"></i><span>Increased Efficiency</span></div>
+      </div>
+    </div>
+
+    <!-- ── Row 3: Automated Follow-Up ── -->
+    <div class="reveal">
+      <div class="text-center mb-10">
+        <p class="text-sm font-semibold uppercase tracking-[.18em] text-[#F39C3F] mb-3">Automated Follow-Up</p>
+        <h3 class="text-3xl md:text-4xl font-bold mb-4">Automated Follow-Up</h3>
+        <p class="text-lg text-[var(--text-dim)] max-w-2xl mx-auto">Email/WhatsApp reminders to suppliers for missing filings &amp; internal departments' coordination for missing data.</p>
+      </div>
+      <div class="video-card-full">
+        <video src="VIDEO_FOLLOWUP.mp4" autoplay muted loop playsinline class="w-full" onloadeddata="this.nextElementSibling.style.display='none';"></video>
+        <div class="video-placeholder" style="border-radius:12px;">
+          <i data-lucide="play-circle" class="w-16 h-16 text-[rgba(26,26,26,0.18)] mb-3"></i>
+          <span class="text-sm text-[var(--text-muted)] font-medium">Automated Follow-Up — Drop in your video</span>
+          <span class="text-xs text-[var(--text-muted)] mt-1">Rename your file to <code class="bg-white/60 px-1 rounded">VIDEO_FOLLOWUP.mp4</code></span>
+        </div>
+      </div>
+      <div class="flex flex-wrap justify-center gap-6 mt-8">
+        <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="zap" class="w-5 h-5 text-[#F39C3F]"></i><span>No Missing Invoices</span></div>
+        <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="zap" class="w-5 h-5 text-[#F39C3F]"></i><span>Overall Error Detection</span></div>
+        <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="zap" class="w-5 h-5 text-[#F39C3F]"></i><span>No Manual Chasing</span></div>
+        <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="zap" class="w-5 h-5 text-[#F39C3F]"></i><span>Complete Accountability</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="bg-section-stats py-28">
+  <div class="max-w-6xl mx-auto px-6">
+    <h2 class="text-center font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em] mb-16 reveal">
+      Efficiency you can quantify
+    </h2>
+
+    <div class="grid md:grid-cols-3 gap-10">
+      <p class="text-lg md:text-xl font-semibold text-[var(--text-dim)] leading-tight text-center reveal">
+        Reconciliation Time<br>reduced from <span class="text-[var(--text)] font-bold">MINUTES</span><br>to <span class="text-[var(--text)] font-bold">SECONDS</span>
+      </p>
+      <p class="text-lg md:text-xl font-semibold text-[var(--text-dim)] leading-tight text-center reveal">
+        Accuracy<br>Achieved
+      </p>
+      <p class="text-lg md:text-xl font-semibold text-[var(--text-dim)] leading-tight text-center reveal">
+        Invoice Accounting<br>Completeness
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-10 mt-8 items-end">
+      <div class="text-center reveal">
+        <span class="font-extrabold text-[clamp(2rem,5vw,3.5rem)] leading-none">
+          <span data-counter-from="5760" data-counter-to="2" class="counter">5,760</span>
+        </span>
+      </div>
+      <div class="text-center reveal">
+        <span class="font-extrabold text-[clamp(2rem,5vw,3.5rem)] leading-none">
+          <span data-counter-from="0" data-counter-to="96" class="counter">0</span><span>%</span>
+        </span>
+      </div>
+      <div class="text-center reveal">
+        <span class="font-extrabold text-[clamp(2rem,5vw,3.5rem)] leading-none">
+          <span data-counter-from="0" data-counter-to="92" class="counter">0</span><span>%</span>
+        </span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="bg-section-cream py-28">
+  <div class="max-w-6xl mx-auto px-6">
+    <h2 class="text-center font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em] mb-4 reveal">Loved by Corporates &amp; Chartered Accountants</h2>
+    <p class="text-center text-[var(--text-dim)] mb-14 reveal">Real teams. Real time saved.</p>
+
+    <div class="relative">
+      <div class="overflow-hidden">
+        <div id="testimonial-slides" class="flex transition-transform duration-500 ease-out">
+          <div class="min-w-full px-2 md:px-12">
+            <div class="card p-10 md:p-14 max-w-3xl mx-auto text-center">
+              <i data-lucide="quote" class="w-10 h-10 text-[#9B7FD4] mx-auto mb-6"></i>
+              <p class="text-2xl md:text-3xl leading-snug mb-8 font-medium">GST Reco saved days of work for my team. It's quick, accurate, and helps improve accounting practices. The supplier follow-up feature reduced our manual effort dramatically.</p>
+              <div class="text-sm">
+                <div class="font-bold">Nayana Oak</div>
+                <div class="text-[var(--text-muted)]">Senior Accountant · New Power Electricals Pvt. Ltd.</div>
+              </div>
+            </div>
+          </div>
+          <div class="min-w-full px-2 md:px-12">
+            <div class="card p-10 md:p-14 max-w-3xl mx-auto text-center">
+              <i data-lucide="quote" class="w-10 h-10 text-[#4A6BC9] mx-auto mb-6"></i>
+              <p class="text-2xl md:text-3xl leading-snug mb-8 font-medium">Earlier, reconciliation took us 3–4 days. Now it's done in 10 minutes. The software detects missed entries in our books, so accounting stays updated in real time.</p>
+              <div class="text-sm">
+                <div class="font-bold">Vikas Lohar</div>
+                <div class="text-[var(--text-muted)]">Accounts Manager · HTS Switchgears</div>
+              </div>
+            </div>
+          </div>
+          <div class="min-w-full px-2 md:px-12">
+            <div class="card p-10 md:p-14 max-w-3xl mx-auto text-center">
+              <i data-lucide="quote" class="w-10 h-10 text-[#F39C3F] mx-auto mb-6"></i>
+              <p class="text-2xl md:text-3xl leading-snug mb-8 font-medium">Mismatches, missing invoices, constant follow-ups — all gone. GST Reco automatically detects mismatches, finds missing entries, and saves our team hours of manual work.</p>
+              <div class="text-sm">
+                <div class="font-bold">Chitra Saraf</div>
+                <div class="text-[var(--text-muted)]">Senior Bookkeeping Executive · Dahotre and Dahotre Chartered Accountants</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-center gap-3 mt-8">
+        <button id="t-prev" class="w-11 h-11 rounded-full bg-white border border-[rgba(26,26,26,0.1)] hover:bg-[#F8F4EE] flex items-center justify-center transition"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+        <button id="t-next" class="w-11 h-11 rounded-full bg-white border border-[rgba(26,26,26,0.1)] hover:bg-[#F8F4EE] flex items-center justify-center transition"><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="bg-section-pricing py-16">
+  <div class="max-w-6xl mx-auto px-6">
+    <h2 class="text-center font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em] mb-8 reveal">
+      Flexible Pricing Plans - Corporates
+    </h2>
+
+    <div class="flex justify-center mb-10">
+      <div class="toggle-pill" id="price-toggle" data-state="monthly">
+        <span class="text-base font-medium">Monthly</span>
+        <div class="toggle-track" onclick="togglePrice()">
+          <div class="toggle-knob"></div>
+        </div>
+        <span class="text-lg font-medium leading-tight">Annually<br><span class="text-xs font-normal text-[var(--text-dim)]">(2 Months Free)</span></span>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="card-soft p-6 reveal">
+        <h3 class="text-xl font-bold">Essential</h3>
+        <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">Ideal for small businesses &amp; startups</p>
+        <div class="flex items-baseline gap-1">
+          <span class="text-4xl font-extrabold" data-monthly="6,000" data-annual="5,000" class="text-4xl font-extrabold">₹6,000</span>
+          <span class="text-[var(--text-dim)]">/month</span>
+        </div>
+        <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
+        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: Up to 4,000/yr</p>
+        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>AI Powered Recognition for mismatches</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Sales-only E-invoice Sync</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Manual blocked credit detection</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Email Support</li>
+        </ul>
+        <a href="#" class="btn-ghost w-full mt-6">Sign Up</a>
+      </div>
+
+      <div class="pop p-6 rounded-3xl reveal">
+        <h3 class="text-xl font-bold">Advanced</h3>
+        <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">AI-Powered for growing businesses</p>
+        <div class="flex items-baseline gap-1">
+          <span class="text-4xl font-extrabold" data-monthly="12,000" data-annual="10,000" class="text-4xl font-extrabold">₹12,000</span>
+          <span class="text-[var(--text-dim)]">/month</span>
+        </div>
+        <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
+        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 4,000 to 8,000/yr</p>
+        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Everything in Essential</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Auto-detection of Blocked Credit</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Health dashboard</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Priority Chat Support</li>
+        </ul>
+        <a href="#" class="btn-dark w-full mt-6">Sign Up</a>
+      </div>
+
+      <div class="card-soft p-6 reveal">
+        <h3 class="text-xl font-bold">Premium</h3>
+        <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">Enterprise-grade full suite solution</p>
+        <div class="flex items-baseline gap-1">
+          <span class="text-4xl font-extrabold" data-monthly="18,000" data-annual="15,000" class="text-4xl font-extrabold">₹18,000</span>
+          <span class="text-[var(--text-dim)]">/month</span>
+        </div>
+        <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
+        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 8,000+ Unlimited</p>
+        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Everything in Advanced</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Dedicated Account Manager</li>
+        </ul>
+        <a href="mailto:hello@example.com" class="btn-ghost w-full mt-6">Contact Sales</a>
+      </div>
+    </div>
+
+    <h2 class="text-center font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em] mt-16 mb-8 reveal">
+      Flexible Pricing Plans - CAs &amp; Service Providers
+    </h2>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="card-soft p-6 reveal">
+        <h3 class="text-xl font-bold">Essential</h3>
+        <div class="flex items-baseline gap-1 mt-8">
+          <span class="text-5xl font-extrabold">₹25,000</span>
+          <span class="text-[var(--text-dim)]">/yr</span>
+        </div>
+        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: Up to 75 GSTINs/yr</p>
+        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>AI Powered Recognition for mismatches</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Sales-only E-invoice Sync</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Manual blocked credit detection</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Email Support</li>
+        </ul>
+        <a href="#" class="btn-ghost w-full mt-6">Sign Up</a>
+      </div>
+      <div class="pop p-6 rounded-3xl reveal">
+        <h3 class="text-xl font-bold">Advanced</h3>
+        <div class="flex items-baseline gap-1 mt-8">
+          <span class="text-5xl font-extrabold">₹40,000</span>
+          <span class="text-[var(--text-dim)]">/yr</span>
+        </div>
+        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 75 to 150 GSTINs/yr</p>
+        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Everything in Essential</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Auto-detection of Blocked Credit</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Health dashboard</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Priority Chat Support</li>
+        </ul>
+        <a href="#" class="btn-dark w-full mt-6">Sign Up</a>
+      </div>
+      <div class="card-soft p-6 reveal">
+        <h3 class="text-xl font-bold">Premium</h3>
+        <div class="mt-8">
+          <div class="flex items-baseline gap-2 flex-wrap">
+            <span class="text-5xl font-extrabold">₹40,000</span>
+            <span class="text-xl font-bold text-[var(--text-dim)]">+ ₹10,000/GSTIN/yr</span>
+          </div>
+        </div>
+        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 150+ GSTIN Unlimited/yr</p>
+        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Everything in Advanced</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Dedicated Account Manager</li>
+        </ul>
+        <a href="mailto:hello@example.com" class="btn-ghost w-full mt-6">Contact Sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="bg-section-cream py-28">
+  <div class="max-w-3xl mx-auto px-6">
+    <p class="text-center text-sm text-[var(--text-muted)] uppercase tracking-[.2em] mb-3">Everything you need to know about GST Reco</p>
+    <h2 class="text-center font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em] mb-14 reveal">
+      Frequently Asked Questions
+    </h2>
+
+    <div class="space-y-3">
+      <details class="card-soft p-6">
+        <summary class="flex items-center justify-between gap-4">
+          <span class="text-lg font-semibold">How does AI Matching work?</span>
+          <span class="accordion-icon w-9 h-9 rounded-full bg-white border border-[rgba(26,26,26,0.08)] flex items-center justify-center flex-shrink-0"><i data-lucide="plus" class="w-4 h-4"></i></span>
+        </summary>
+        <p class="mt-4 text-[var(--text-dim)] leading-relaxed">Our AI uses advanced algorithms to match entries across Books, GSTR-1, GSTR-2A, GSTR-2B, and GSTR-3B using name similarity, amount matching, and date triangulation. The system supports both Purchase and Sales reconciliation and learns from your data patterns to improve accuracy over time.</p>
+      </details>
+
+      <details class="card-soft p-6">
+        <summary class="flex items-center justify-between gap-4">
+          <span class="text-lg font-semibold">Can I use GST Reco for multiple companies?</span>
+          <span class="accordion-icon w-9 h-9 rounded-full bg-white border border-[rgba(26,26,26,0.08)] flex items-center justify-center flex-shrink-0"><i data-lucide="plus" class="w-4 h-4"></i></span>
+        </summary>
+        <p class="mt-4 text-[var(--text-dim)] leading-relaxed">Absolutely! Our multi-tenant architecture supports multiple organizations. You can manage reconciliations for multiple entities, business units, or clients from a single account with proper access controls.</p>
+      </details>
+
+      <details class="card-soft p-6">
+        <summary class="flex items-center justify-between gap-4">
+          <span class="text-lg font-semibold">What file formats are supported?</span>
+          <span class="accordion-icon w-9 h-9 rounded-full bg-white border border-[rgba(26,26,26,0.08)] flex items-center justify-center flex-shrink-0"><i data-lucide="plus" class="w-4 h-4"></i></span>
+        </summary>
+        <p class="mt-4 text-[var(--text-dim)] leading-relaxed">You can pull GSTR-1, GSTR-2A, GSTR-2B, and GSTR-3B directly from the GST portal, or upload Excel files (.xlsx, .xls) manually. Our intelligent system automatically detects and maps columns, making the process seamless. We support both Purchase and Sales reconciliation.</p>
+      </details>
+
+      <details class="card-soft p-6">
+        <summary class="flex items-center justify-between gap-4">
+          <span class="text-lg font-semibold">Is there a user limit to any of the subscription plans?</span>
+          <span class="accordion-icon w-9 h-9 rounded-full bg-white border border-[rgba(26,26,26,0.08)] flex items-center justify-center flex-shrink-0"><i data-lucide="plus" class="w-4 h-4"></i></span>
+        </summary>
+        <p class="mt-4 text-[var(--text-dim)] leading-relaxed">No, there is absolutely no limit to no. of users. You can have unlimited users on GST Reco.</p>
+      </details>
+
+      <details class="card-soft p-6">
+        <summary class="flex items-center justify-between gap-4">
+          <span class="text-lg font-semibold">What happens if entries don't match?</span>
+          <span class="accordion-icon w-9 h-9 rounded-full bg-white border border-[rgba(26,26,26,0.08)] flex items-center justify-center flex-shrink-0"><i data-lucide="plus" class="w-4 h-4"></i></span>
+        </summary>
+        <p class="mt-4 text-[var(--text-dim)] leading-relaxed">Unmatched entries are clearly categorized (In Books Only, In Portal Only, Mismatch, etc.) with detailed breakdowns. You can use our AI-powered matching feature to resolve complex cases, or export the data for manual review.</p>
+      </details>
+
+      <details class="card-soft p-6">
+        <summary class="flex items-center justify-between gap-4">
+          <span class="text-lg font-semibold">Is there a client assignment feature for service providers/CAs?</span>
+          <span class="accordion-icon w-9 h-9 rounded-full bg-white border border-[rgba(26,26,26,0.08)] flex items-center justify-center flex-shrink-0"><i data-lucide="plus" class="w-4 h-4"></i></span>
+        </summary>
+        <p class="mt-4 text-[var(--text-dim)] leading-relaxed">Yes, you can assign clients to your company users in GST Reco.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="bg-section-soft-blue py-28">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    <h2 class="font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em]">14 Days. Full Access. Zero Risk</h2>
+    <p class="mt-6 text-lg text-[var(--text-dim)]">Try GST Reco for free and experience the power of automation.</p>
+    <div class="mt-10">
+      <a href="#" class="btn-primary text-base">Sign Up for 14-Day Trial</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-section-cream pt-16 pb-10 border-t border-[rgba(26,26,26,0.05)]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-10">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <img src="heyxia-logo.jpg" alt="Heyxia" class="h-10 w-auto" style="mix-blend-mode:multiply;" />
+        </div>
+        <p class="text-[var(--text-dim)] max-w-sm leading-relaxed">AI-powered GST reconciliation for finance teams, corporates, and chartered accountants across India.</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Pages</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="#" class="hover:text-black">Home</a></li>
+          <li><a href="#features" class="hover:text-black">Features</a></li>
+          <li><a href="#platform" class="hover:text-black">Solutions</a></li>
+          <li><a href="#pricing" class="hover:text-black">Pricing</a></li>
+          <li><a href="blog.html" class="hover:text-black">Blogs</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Information</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="mailto:hello@example.com" class="hover:text-black">Contact Us</a></li>
+          <li><a href="privacy-policy.html" class="hover:text-black">Privacy Policy</a></li>
+          <li><a href="terms-of-use.html" class="hover:text-black">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-[rgba(26,26,26,0.06)] flex flex-col md:flex-row justify-between gap-2 text-xs text-[var(--text-muted)]">
+      <p>© 2026 GST Reco. All Rights Reserved.</p>
+      <p>Made with care for Indian finance teams.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target;
+        const from = parseInt(el.dataset.counterFrom ?? el.dataset.counter ?? '0', 10);
+        const to   = parseInt(el.dataset.counterTo   ?? el.dataset.counter ?? '0', 10);
+        const duration = 1800;
+        const start = performance.now();
+        const animate = (now) => {
+          const p = Math.min((now - start) / duration, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          const val = Math.round(from + (to - from) * ease);
+          el.textContent = val.toLocaleString('en-IN');
+          if (p < 1) requestAnimationFrame(animate);
+        };
+        requestAnimationFrame(animate);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+  function togglePrice(){
+    const tog = document.getElementById('price-toggle');
+    const newMode = tog.dataset.state === 'monthly' ? 'annual' : 'monthly';
+    tog.dataset.state = newMode;
+    document.querySelectorAll('[data-monthly]').forEach(el => {
+      el.textContent = '₹' + (newMode === 'monthly' ? el.dataset.monthly : el.dataset.annual);
+    });
+  }
+
+  const slides = document.getElementById('testimonial-slides');
+  let idx = 0;
+  const total = slides.children.length;
+  const update = () => slides.style.transform = `translateX(-${idx * 100}%)`;
+  document.getElementById('t-prev').addEventListener('click', () => { idx = (idx - 1 + total) % total; update(); });
+  document.getElementById('t-next').addEventListener('click', () => { idx = (idx + 1) % total; update(); });
+  setInterval(() => { idx = (idx + 1) % total; update(); }, 6000);
+
+  // ===== Hero slideshow — video-duration driven =====
+  (function(){
+    const heroSlides = document.querySelectorAll('.hero-slide');
+    const heroTabs   = document.querySelectorAll('.hero-tab');
+    const total      = heroSlides.length;
+    let   current    = 0;
+
+    // IMS dual-video elements (slide index 4)
+    const imsV1   = document.getElementById('ims-video-1');
+    const imsV2   = document.getElementById('ims-video-2');
+    const imsDot1 = document.getElementById('ims-dot-1');
+    const imsDot2 = document.getElementById('ims-dot-2');
+    const IMS_IDX = 4;
+
+    // Get the <video> element inside a slide (for non-IMS slides)
+    function getVideo(slideEl){
+      return slideEl.querySelector('video:not(#ims-video-1):not(#ims-video-2)');
+    }
+
+    // Update tab highlight + animate progress bar for the duration of the video
+    function setTabActive(i, durationMs){
+      heroTabs.forEach((t, n) => {
+        t.classList.toggle('active', n === i);
+        const bar = t.querySelector('.progress-bar');
+        if (!bar) return;
+        bar.style.transition = 'none';
+        bar.style.width = '0%';
+        void bar.offsetWidth;
+        if (n === i && durationMs > 0){
+          bar.style.transition = `width ${durationMs}ms linear`;
+          bar.style.width = '100%';
+        }
+      });
+    }
+
+    // Advance to next slide
+    function next(){ goTo((current + 1) % total); }
+
+    // Clean up current slide's video listeners
+    function cleanupCurrent(){
+      if (current === IMS_IDX){
+        if (imsV1){ imsV1.pause(); imsV1.onended = null; }
+        if (imsV2){ imsV2.pause(); imsV2.onended = null; }
+      } else {
+        const v = getVideo(heroSlides[current]);
+        if (v){ v.pause(); v.onended = null; }
+      }
+    }
+
+    function goTo(i){
+      cleanupCurrent();
+
+      // Fade slides
+      heroSlides.forEach((s, n) => s.classList.toggle('active', n === i));
+      current = i;
+
+      if (i === IMS_IDX){
+        // Reset both IMS videos
+        if (imsV1 && imsV2){
+          imsV1.currentTime = 0; imsV2.currentTime = 0;
+          imsV1.style.opacity = '1'; imsV2.style.opacity = '0';
+          if (imsDot1){ imsDot1.style.opacity='1'; imsDot2.style.opacity='0.4'; }
+
+          // Estimate total duration for the progress bar (v1 + v2)
+          const totalDur = ((imsV1.duration||0) + (imsV2.duration||0)) * 1000 || 10000;
+          setTabActive(i, totalDur);
+
+          imsV1.play().catch(()=>{});
+          imsV1.onended = () => {
+            imsV1.style.opacity = '0'; imsV2.style.opacity = '1';
+            if (imsDot1){ imsDot1.style.opacity='0.4'; imsDot2.style.opacity='1'; }
+            imsV2.play().catch(()=>{});
+            imsV2.onended = () => next();
+          };
+        } else {
+          // No IMS videos — fallback after 5s
+          setTabActive(i, 5000);
+          setTimeout(next, 5000);
+        }
+      } else {
+        const v = getVideo(heroSlides[i]);
+        if (v){
+          v.currentTime = 0;
+          const dur = (v.duration && !isNaN(v.duration)) ? v.duration * 1000 : 0;
+          // If duration already known, set bar immediately; otherwise wait for metadata
+          if (dur > 0){
+            setTabActive(i, dur);
+          } else {
+            setTabActive(i, 0);
+            v.addEventListener('loadedmetadata', function onMeta(){
+              setTabActive(i, v.duration * 1000);
+              v.removeEventListener('loadedmetadata', onMeta);
+            });
+          }
+          v.play().catch(()=>{});
+          v.onended = () => next();
+        } else {
+          // No video element — fallback 5s
+          setTabActive(i, 5000);
+          setTimeout(next, 5000);
+        }
+      }
+    }
+
+    // Tab click — jump to that slide
+    heroTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        goTo(parseInt(tab.dataset.target, 10));
+      });
+    });
+
+    // Start
+    goTo(0);
+  })();
+</script>
+</body>
+</html>
