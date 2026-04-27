@@ -199,9 +199,9 @@ tr:hover td { background: var(--surface-2); }
 
 /* Rich text toolbar */
 .toolbar {
-  display: flex; gap: 4px; padding: 8px 10px; background: #f5f5f5;
+  display: flex; gap: 4px; padding: 10px; background: #f5f5f5;
   border-bottom: 1px solid #e0e0e0; flex-wrap: wrap; align-items: center;
-  position: sticky; top: 57px; z-index: 20; border-radius: 0 0 0 0;
+  position: sticky; top: 57px; z-index: 20; min-height: 44px;
 }
 .toolbar-btn {
   display: inline-flex; align-items: center; justify-content: center;
@@ -445,13 +445,62 @@ tr:hover td { background: var(--surface-2); }
               <div class="editor-card-body" style="padding:0;">
                 <input type="text" class="field input title-input" id="post-title" placeholder="Post title..." style="border:none;border-bottom:1px solid var(--border);border-radius:0;background:#ffffff;padding:18px 20px;font-size:24px;font-weight:700;color:#1A1A1A;width:100%;outline:none;font-family:inherit;">
                 <div class="toolbar" id="editor-toolbar">
-                  <button class="toolbar-btn" onclick="fmt('bold')" title="Bold"><b>B</b></button>
-                  <button class="toolbar-btn" onclick="fmt('italic')" title="Italic"><i>I</i></button>
-                  <button class="toolbar-btn" onclick="fmt('underline')" title="Underline"><u>U</u></button>
+                  <!-- Row 1: Font & Size -->
+                  <div style="display:flex;gap:8px;align-items:center;padding:0 8px;">
+                    <select id="font-family" style="padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:12px;max-width:160px;" onchange="changeFontFamily(this.value)">
+                      <option value="">Font Family</option>
+                      <option value="'Inter',sans-serif">Inter</option>
+                      <option value="'Arial',sans-serif">Arial</option>
+                      <option value="'Helvetica',sans-serif">Helvetica</option>
+                      <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+                      <option value="'Verdana',sans-serif">Verdana</option>
+                      <option value="'Tahoma',sans-serif">Tahoma</option>
+                      <option value="'Georgia',serif">Georgia</option>
+                      <option value="'Lora',serif">Lora</option>
+                      <option value="'Times New Roman',serif">Times New Roman</option>
+                      <option value="'Garamond',serif">Garamond</option>
+                      <option value="'Palatino',serif">Palatino</option>
+                      <option value="'Courier New',monospace">Courier New</option>
+                      <option value="'Lucida Console',monospace">Lucida Console</option>
+                      <option value="'Comic Sans MS',cursive">Comic Sans</option>
+                      <option value="'Impact',fantasy">Impact</option>
+                    </select>
+                    <select id="font-size" style="padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:12px;width:75px;" onchange="changeFontSize(this.value)">
+                      <option value="">Size</option>
+                      <option value="10px">10px</option>
+                      <option value="11px">11px</option>
+                      <option value="12px">12px</option>
+                      <option value="13px">13px</option>
+                      <option value="14px">14px</option>
+                      <option value="16px">16px</option>
+                      <option value="18px">18px</option>
+                      <option value="20px">20px</option>
+                      <option value="22px">22px</option>
+                      <option value="24px">24px</option>
+                      <option value="28px">28px</option>
+                      <option value="32px">32px</option>
+                      <option value="36px">36px</option>
+                      <option value="42px">42px</option>
+                      <option value="48px">48px</option>
+                      <option value="60px">60px</option>
+                      <option value="72px">72px</option>
+                    </select>
+                  </div>
                   <div class="toolbar-sep"></div>
-                  <button class="toolbar-btn" onclick="fmtBlock('h2')" title="Heading 2">H2</button>
-                  <button class="toolbar-btn" onclick="fmtBlock('h3')" title="Heading 3">H3</button>
+
+                  <!-- Row 2: Text Formatting -->
+                  <button class="toolbar-btn" onclick="fmt('bold')" title="Bold (Cmd+B)"><b>B</b></button>
+                  <button class="toolbar-btn" onclick="fmt('italic')" title="Italic (Cmd+I)"><i>I</i></button>
+                  <button class="toolbar-btn" onclick="fmt('underline')" title="Underline (Cmd+U)"><u>U</u></button>
+                  <button class="toolbar-btn" onclick="fmt('strikethrough')" title="Strikethrough"><s>S</s></button>
                   <div class="toolbar-sep"></div>
+
+                  <!-- Row 3: Structure -->
+                  <button class="toolbar-btn" onclick="fmtBlock('h2')" title="Heading 2" style="font-weight:700;font-size:11px;">H2</button>
+                  <button class="toolbar-btn" onclick="fmtBlock('h3')" title="Heading 3" style="font-weight:700;font-size:11px;">H3</button>
+                  <div class="toolbar-sep"></div>
+
+                  <!-- Row 4: Lists -->
                   <button class="toolbar-btn" onclick="fmt('insertUnorderedList')" title="Bullet list">
                     <i data-lucide="list" style="width:14px;height:14px;pointer-events:none;"></i>
                   </button>
@@ -459,10 +508,13 @@ tr:hover td { background: var(--surface-2); }
                     <i data-lucide="list-ordered" style="width:14px;height:14px;pointer-events:none;"></i>
                   </button>
                   <div class="toolbar-sep"></div>
+
+                  <!-- Row 5: Special -->
                   <button class="toolbar-btn" onclick="fmtBlock('blockquote')" title="Quote">❝</button>
                   <button class="toolbar-btn" onclick="insertLink()" title="Link">🔗</button>
                   <div class="toolbar-sep"></div>
-                  <!-- Text color -->
+
+                  <!-- Row 6: Colors -->
                   <div style="position:relative;display:inline-flex;align-items:center;" title="Text Color">
                     <button class="toolbar-btn" onclick="document.getElementById('text-color-picker').click()" title="Text Color" style="position:relative;">
                       <span style="font-weight:700;font-size:13px;">A</span>
@@ -472,7 +524,6 @@ tr:hover td { background: var(--surface-2); }
                       style="position:absolute;opacity:0;width:0;height:0;pointer-events:none;"
                       onchange="applyTextColor(this.value)">
                   </div>
-                  <!-- Highlight color -->
                   <div style="position:relative;display:inline-flex;align-items:center;" title="Highlight Color">
                     <button class="toolbar-btn" onclick="document.getElementById('highlight-color-picker').click()" title="Highlight">
                       <span style="font-size:13px;">🖊</span>
@@ -483,9 +534,16 @@ tr:hover td { background: var(--surface-2); }
                       onchange="applyHighlight(this.value)">
                   </div>
                   <div class="toolbar-sep"></div>
-                  <button class="toolbar-btn" onclick="insertTOC()" title="Insert Table of Contents (auto-links all headings)" style="font-size:11px;font-weight:700;">TOC</button>
+
+                  <!-- Row 7: Alignment -->
+                  <button class="toolbar-btn" onclick="fmt('justifyLeft')" title="Align left">⬅️</button>
+                  <button class="toolbar-btn" onclick="fmt('justifyCenter')" title="Align center">↔️</button>
+                  <button class="toolbar-btn" onclick="fmt('justifyRight')" title="Align right">➡️</button>
                   <div class="toolbar-sep"></div>
-                  <button class="toolbar-btn" onclick="fmt('removeFormat')" title="Clear formatting" style="font-size:11px;">Clear</button>
+
+                  <!-- Row 8: Tools -->
+                  <button class="toolbar-btn" onclick="insertTOC()" title="Insert Table of Contents (auto-links all headings)" style="font-size:11px;font-weight:700;">TOC</button>
+                  <button class="toolbar-btn" onclick="fmt('removeFormat')" title="Clear all formatting" style="font-size:11px;">Clear</button>
                 </div>
                 <div class="content-editor" id="post-content" contenteditable="true"></div>
               </div>
@@ -940,6 +998,35 @@ function applyHighlight(color) {
   document.getElementById('highlight-color-bar').style.background = color;
   document.getElementById('post-content').focus();
   document.execCommand('hiliteColor', false, color);
+}
+
+function changeFontFamily(font) {
+  document.getElementById('post-content').focus();
+  const sel = window.getSelection();
+  if (!sel.rangeCount || sel.isCollapsed) return;
+  const range = sel.getRangeAt(0);
+  const span = document.createElement('span');
+  span.style.fontFamily = font;
+  range.surroundContents(span);
+}
+
+function changeFontSize(size) {
+  document.getElementById('post-content').focus();
+  const sel = window.getSelection();
+  if (!sel.rangeCount || sel.isCollapsed) return;
+  const range = sel.getRangeAt(0);
+  try {
+    const span = document.createElement('span');
+    span.style.fontSize = size;
+    range.surroundContents(span);
+  } catch(e) {
+    // If surroundContents fails (selection crosses elements), use execCommand fallback
+    document.execCommand('fontSize', false, '7');
+    document.querySelectorAll('#post-content font[size="7"]').forEach(el => {
+      el.removeAttribute('size');
+      el.style.fontSize = size;
+    });
+  }
 }
 function insertTOC() {
   const editor = document.getElementById('post-content');
