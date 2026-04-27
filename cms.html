@@ -1086,6 +1086,15 @@ function previewPost() {
   // Clone editor content, auto-assign IDs to all headings
   const editorEl = document.getElementById('post-content');
   const clone = editorEl.cloneNode(true);
+  // Strip any inline width/margin/padding constraints from all elements
+  clone.querySelectorAll('*').forEach(el => {
+    el.style.removeProperty('max-width');
+    el.style.removeProperty('width');
+    el.style.removeProperty('margin-left');
+    el.style.removeProperty('margin-right');
+    el.style.removeProperty('padding-left');
+    el.style.removeProperty('padding-right');
+  });
   clone.querySelectorAll('h2, h3').forEach(h => {
     const id = h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     h.id = id;
@@ -1122,7 +1131,8 @@ function previewPost() {
     position:sticky; top:0; z-index:100;
   }
   .preview-banner span{ background:#F5A86E; color:#1A1A1A; border-radius:4px; padding:2px 8px; font-weight:700; margin-right:8px; font-size:11px; }
-  .container{ max-width:720px; margin:0 auto; padding:60px 24px 80px; }
+  .container{ width:100%; padding:60px 48px 80px; }
+  .inner{ max-width:900px; margin:0 auto; }
   .meta{ display:flex; align-items:center; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
   .cat-badge{ padding:4px 12px; border-radius:9999px; font-size:12px; font-weight:600; ${catStyle}; }
   .meta-text{ font-size:13px; color:#8A8A8A; }
@@ -1131,7 +1141,7 @@ function previewPost() {
   .author-avatar{ width:44px; height:44px; border-radius:50%; background:#A8C8F0; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#1A2A4A; flex-shrink:0; }
   .author-name{ font-weight:600; font-size:15px; }
   .author-role{ font-size:13px; color:#8A8A8A; }
-  .post-body{ font-family:'Lora',Georgia,serif; font-size:18px; line-height:1.85; color:#2B2B2B; }
+  .post-body{ font-family:'Lora',Georgia,serif; font-size:18px; line-height:1.85; color:#2B2B2B; max-width:100%; }
   .post-body h1{ font-size:28px; font-weight:700; margin:2rem 0 1rem; font-family:'Inter',sans-serif; color:#1A1A1A; }
   .post-body h2{ font-size:24px; font-weight:700; margin:2rem 0 .75rem; font-family:'Inter',sans-serif; color:#1A1A1A; }
   .post-body h3{ font-size:20px; font-weight:600; margin:1.5rem 0 .5rem; font-family:'Inter',sans-serif; color:#1A1A1A; }
@@ -1147,6 +1157,7 @@ function previewPost() {
 <body>
 <div class="preview-banner"><span>PREVIEW</span> This is a preview — not published yet. Close this tab to go back to the editor.</div>
 <div class="container">
+  <div class="inner">
   <div class="meta">
     <span class="cat-badge">${category}</span>
     <span class="meta-text">${formattedDate}</span>
@@ -1163,6 +1174,7 @@ function previewPost() {
   </div>
   ${coverHtml}
   <div class="post-body">${content}</div>
+  </div>
 </div>
 <script>
   // Handle TOC links - use name attribute which survives sanitization
