@@ -70,7 +70,8 @@
 
 <!-- POST CONTENT -->
 <main class="pt-32 pb-20" id="post-main">
-  <div class="max-w-7xl mx-auto px-4">
+  <div style="width:100%;padding:0 48px;">
+    <div style="max-width:900px;margin:0 auto;">
     <!-- Loading state -->
     <div id="post-loading" class="not-found">
       <p style="color:var(--text-dim);">Loading post...</p>
@@ -110,6 +111,7 @@
         <a href="blog.html" class="btn-primary" style="background:var(--card);color:var(--text);border:1px solid var(--border-strong);">← All Posts</a>
         <div style="font-size:13px;color:var(--text-muted);">Share this article</div>
       </div>
+    </div>
     </div>
   </div>
 </main>
@@ -233,6 +235,16 @@
       document.getElementById('post-cover-el').style.display = '';
     }
     document.getElementById('post-body-el').innerHTML = post.content || '<p>No content.</p>';
+
+    // Strip inline width/margin constraints so content fills full width
+    document.querySelectorAll('#post-body-el *').forEach(el => {
+      el.style.removeProperty('max-width');
+      el.style.removeProperty('width');
+      el.style.removeProperty('margin-left');
+      el.style.removeProperty('margin-right');
+      el.style.removeProperty('padding-left');
+      el.style.removeProperty('padding-right');
+    });
 
     // Auto-assign IDs to all headings
     document.querySelectorAll('#post-body-el h2, #post-body-el h3').forEach(h => {
