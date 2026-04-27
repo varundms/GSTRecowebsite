@@ -179,7 +179,7 @@
 <!-- FEATURED POST -->
 <section class="max-w-6xl mx-auto px-6 py-16">
   <p class="text-xs font-semibold uppercase tracking-[.2em] text-[var(--text-muted)] mb-6">Featured Article</p>
-  <a href="blog-post.html" class="blog-card-featured grid md:grid-cols-2 gap-0 reveal block">
+  <a href="blog-reader.html" class="blog-card-featured grid md:grid-cols-2 gap-0 reveal block">
     <div class="img-placeholder" style="background: linear-gradient(135deg, #C8D9F0, #DDE4F2); aspect-ratio:unset; min-height:320px;">
       🧾
     </div>
@@ -217,7 +217,7 @@
 
   <!-- Static fallback posts (shown when no CMS posts exist) -->
   <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="static-posts-grid">
-    <a href="blog-post.html" class="blog-card reveal">
+    <a href="blog-reader.html" class="blog-card reveal">
       <div class="img-placeholder" style="background: linear-gradient(135deg,#F0E2D4,#F5EAE0);">📊</div>
       <div class="p-6">
         <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-itc">ITC & Blocked Credit</span></div>
@@ -226,7 +226,7 @@
         <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>April 15, 2026</span><span>6 min read</span></div>
       </div>
     </a>
-    <a href="blog-post.html" class="blog-card reveal">
+    <a href="blog-reader.html" class="blog-card reveal">
       <div class="img-placeholder" style="background: linear-gradient(135deg,#E4EDF8,#D4E4F5);">🔄</div>
       <div class="p-6">
         <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-compliance">Compliance</span></div>
@@ -235,7 +235,7 @@
         <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>April 10, 2026</span><span>7 min read</span></div>
       </div>
     </a>
-    <a href="blog-post.html" class="blog-card reveal">
+    <a href="blog-reader.html" class="blog-card reveal">
       <div class="img-placeholder" style="background: linear-gradient(135deg,#EDE4F5,#E0D8F0);">⚡</div>
       <div class="p-6">
         <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-tally">Tally Tips</span></div>
@@ -244,7 +244,7 @@
         <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>April 5, 2026</span><span>5 min read</span></div>
       </div>
     </a>
-    <a href="blog-post.html" class="blog-card reveal">
+    <a href="blog-reader.html" class="blog-card reveal">
       <div class="img-placeholder" style="background: linear-gradient(135deg,#F5EAD4,#F0E0C4);">📋</div>
       <div class="p-6">
         <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-gst">GST Basics</span></div>
@@ -253,7 +253,7 @@
         <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>March 28, 2026</span><span>4 min read</span></div>
       </div>
     </a>
-    <a href="blog-post.html" class="blog-card reveal">
+    <a href="blog-reader.html" class="blog-card reveal">
       <div class="img-placeholder" style="background: linear-gradient(135deg,#D4ECE0,#C4E4D4);">✅</div>
       <div class="p-6">
         <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-finance">Finance</span></div>
@@ -262,7 +262,7 @@
         <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>March 22, 2026</span><span>6 min read</span></div>
       </div>
     </a>
-    <a href="blog-post.html" class="blog-card reveal">
+    <a href="blog-reader.html" class="blog-card reveal">
       <div class="img-placeholder" style="background: linear-gradient(135deg,#F5D8E0,#F0CCD8);">🔍</div>
       <div class="p-6">
         <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-itc">ITC & Blocked Credit</span></div>
@@ -345,7 +345,11 @@
     });
   });
 
-  // ===== CMS INTEGRATION =====
+  // ===== SUPABASE CONFIG — PASTE YOUR VALUES BELOW =====
+  const SUPABASE_URL = 'https://qkswqnyucjqtcoptxyjz.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFrc3dxbnl1Y2pxdGNvcHR4eWp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzA4MzQsImV4cCI6MjA5Mjg0NjgzNH0.1RrH6ZTg4AuPndco4d_j-yYHRbGbQFCJRKD6N38Pz-A';
+  // =====================================================
+
   const STORAGE_KEY = 'heyxia_blog_posts';
   let allCmsPosts = [];
   let visibleCount = 6;
@@ -419,18 +423,45 @@
     renderCMSPosts(null);
   }
 
-  // Load from localStorage
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    allCmsPosts = raw ? JSON.parse(raw) : [];
-  } catch(e) { allCmsPosts = []; }
-
-  const publishedCount = allCmsPosts.filter(p => p.status === 'published').length;
-  if (publishedCount > 0) {
-    renderCMSPosts(null);
-    // Show CMS link for admins
-    document.getElementById('cms-link').classList.remove('hidden');
+  // Load from Supabase
+  async function fetchFromSupabase() {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/posts?status=eq.published&order=created_at.desc`, {
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      });
+      return res.ok ? await res.json() : [];
+    } catch(e) { return []; }
   }
+
+  // Try Supabase first, fall back to localStorage
+  fetchFromSupabase().then(data => {
+    if (data.length > 0) {
+      allCmsPosts = data;
+      // Map Supabase field names to what renderCMSPosts expects
+      allCmsPosts = allCmsPosts.map(p => ({
+        ...p,
+        readTime: p.read_time,
+        authorRole: p.author_role,
+        cover: p.cover_url,
+      }));
+      renderCMSPosts(null);
+      document.getElementById('cms-link').classList.remove('hidden');
+    } else {
+      // Fallback to localStorage
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        allCmsPosts = raw ? JSON.parse(raw) : [];
+      } catch(e) { allCmsPosts = []; }
+      const publishedCount = allCmsPosts.filter(p => p.status === 'published').length;
+      if (publishedCount > 0) {
+        renderCMSPosts(null);
+        document.getElementById('cms-link').classList.remove('hidden');
+      }
+    }
+  });
 </script>
 </body>
 </html>
