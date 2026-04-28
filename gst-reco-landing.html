@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/png" href="favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Heyxia GST Reco — GST Reconciliation in Minutes, Not Days</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,6 +59,62 @@
     border: 1px solid rgba(74,107,201,0.15);
   }
   .btn-primary:hover{ background: var(--cta-blue-dark); transform: translateY(-1px); }
+
+  .btn-signup {
+    background: var(--cta-blue);
+    color: var(--cta-text);
+    font-weight: 600;
+    padding: .9rem 1.6rem;
+    border-radius: 9999px;
+    transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(74,107,201,0.15);
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+  .btn-signup:hover{ background: var(--cta-blue-dark); transform: translateY(-1px); }
+
+  @keyframes glowPulse {
+    0%   { box-shadow: 0 0 6px 2px rgba(100,160,255,0.2); }
+    50%  { box-shadow: 0 0 16px 5px rgba(100,160,255,0.45), 0 0 30px 10px rgba(100,160,255,0.2); }
+    100% { box-shadow: 0 0 6px 2px rgba(100,160,255,0.2); }
+  }
+
+  .btn-demo {
+    background: transparent;
+    color: var(--cta-text);
+    font-weight: 600;
+    padding: .9rem 1.6rem;
+    border-radius: 9999px;
+    transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+    position: relative;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    animation: borderSpin 3s linear infinite;
+  }
+  .btn-demo::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 9999px;
+    padding: 2px;
+    background: conic-gradient(from var(--angle, 0deg), #A8C8F0, #7B6FE8, #F5A86E, #A8C8F0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: rotateBorder 2s linear infinite;
+  }
+  .btn-demo:hover{ transform: translateY(-1px); box-shadow: 0 0 30px 8px rgba(168,200,240,0.6); }
+
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+  @keyframes rotateBorder {
+    from { --angle: 0deg; }
+    to   { --angle: 360deg; }
+  }
   .btn-dark{
     background: #111;
     color: #fff;
@@ -308,7 +365,7 @@
       <a href="blog.html" class="hover:text-black transition">Blogs</a>
     </nav>
     <div class="flex items-center gap-2">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-primary text-[15px] hidden sm:inline-flex">Sign Up for 14 Day Trial</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[15px] hidden sm:inline-flex">Sign Up for 14 Day Trial</a>
       <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px]">Login</a>
     </div>
   </div>
@@ -327,8 +384,8 @@
       Automate GST Reco with intelligent matching, discrepancy detection, to ensure accurate, compliant, and audit-ready filings.
     </p>
     <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-primary text-base">Sign Up for 14-Day Trial</a>
-      <a href="mailto:varun.d@heyxia.io" class="btn-primary text-base" style="background:transparent;border:2px solid var(--cta-blue);color:var(--cta-text);">Book a Demo</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Sign Up for 14-Day Trial</a>
+      <a href="mailto:varun.d@heyxia.io" class="btn-demo text-base">Book a Demo</a>
     </div>
 
     <!-- Hero product slideshow -->
@@ -768,7 +825,7 @@
           <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Manual blocked credit detection</li>
           <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Email Support</li>
         </ul>
-        <a href="https://gstreco.heyxia.app/signup" class="btn-ghost w-full mt-6">Sign Up</a>
+        <a href="https://gstreco.heyxia.app/signup" class="btn-signup w-full mt-6">Sign Up</a>
       </div>
 
       <div class="pop p-6 rounded-3xl reveal">
@@ -824,7 +881,7 @@
           <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Manual blocked credit detection</li>
           <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Email Support</li>
         </ul>
-        <a href="https://gstreco.heyxia.app/signup" class="btn-ghost w-full mt-6">Sign Up</a>
+        <a href="https://gstreco.heyxia.app/signup" class="btn-signup w-full mt-6">Sign Up</a>
       </div>
       <div class="pop p-6 rounded-3xl reveal">
         <h3 class="text-xl font-bold">Advanced</h3>
@@ -926,7 +983,7 @@
     <h2 class="font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em]">14 Days. Full Access. Zero Risk</h2>
     <p class="mt-6 text-lg text-[var(--text-dim)]">Try GST Reco for free and experience the power of automation.</p>
     <div class="mt-10">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-primary text-base">Sign Up for 14-Day Trial</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Sign Up for 14-Day Trial</a>
     </div>
   </div>
 </section>
