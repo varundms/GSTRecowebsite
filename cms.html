@@ -1104,7 +1104,7 @@ function previewPost() {
 
   const initials = author.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
   const formattedDate = date ? new Date(date).toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' }) : '';
-  const coverHtml = cover ? `<img src="${cover}" style="width:100%;border-radius:16px;max-height:420px;object-fit:cover;margin-bottom:40px;" alt="">` : '';
+  const coverHtml = cover ? `<img src="${cover}" style="width:100%;border-radius:16px;height:auto;object-fit:contain;margin-bottom:40px;" alt="">` : '';
 
   const catColors = {
     'GST Basics': 'background:rgba(168,200,240,0.2);color:#2A4A8A',
