@@ -1468,9 +1468,8 @@
       if (newMode === 'monthly') {
         el.textContent = '₹' + el.dataset.monthly;
       } else {
-        // For annual, show monthly cost (annual ÷ 12)
-        const monthlyFromAnnual = Math.round(parseInt(el.dataset.annual.replace(',', '')) / 12).toLocaleString('en-IN');
-        el.textContent = '₹' + monthlyFromAnnual;
+        // For annual, show hardcoded annual price
+        el.textContent = '₹' + el.dataset.annual;
       }
     });
   }
