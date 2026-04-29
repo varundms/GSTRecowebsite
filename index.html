@@ -523,10 +523,10 @@
       GST Reconciliation in<br>Minutes, Not Days
     </h1>
     <p class="mt-10 text-lg md:text-xl text-[var(--text-dim)] font-medium">
-      AI-Powered Reconciliation &nbsp;|&nbsp; 100% Accuracy &nbsp;|&nbsp; Blocked Credit Detection
+      AI-Powered Reconciliation &nbsp;|&nbsp; IMS Reconciliation &nbsp;|&nbsp; 100% Accuracy &nbsp;|&nbsp; Blocked Credit Detection
     </p>
     <p class="mt-6 max-w-2xl mx-auto text-[var(--text-dim)] leading-relaxed">
-      Automate GST Reco with intelligent matching, discrepancy detection, to ensure accurate, compliant, and audit-ready filings.
+      Eliminate manual effort with seamlessly integrated GST and IMS reconciliation. Our intelligent matching and discrepancy detection work in tandem to ensure 100% accuracy and audit-ready filings.
     </p>
     <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
       <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Sign Up for 14-Day Trial</a>
@@ -1219,7 +1219,7 @@
         <h3 class="text-xl font-bold">Essential</h3>
         <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">Ideal for small businesses &amp; startups</p>
         <div class="flex items-baseline gap-1">
-          <span class="text-4xl font-extrabold" data-monthly="6,000" data-annual="5,000" class="text-4xl font-extrabold">₹6,000</span>
+          <span class="text-4xl font-extrabold" data-monthly="5,000" data-annual="50,000" class="text-4xl font-extrabold">₹5,000</span>
           <span class="text-[var(--text-dim)]">/month</span>
         </div>
         <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
@@ -1237,7 +1237,7 @@
         <h3 class="text-xl font-bold">Advanced</h3>
         <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">AI-Powered for growing businesses</p>
         <div class="flex items-baseline gap-1">
-          <span class="text-4xl font-extrabold" data-monthly="12,000" data-annual="10,000" class="text-4xl font-extrabold">₹12,000</span>
+          <span class="text-4xl font-extrabold" data-monthly="10,000" data-annual="100,000" class="text-4xl font-extrabold">₹10,000</span>
           <span class="text-[var(--text-dim)]">/month</span>
         </div>
         <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
@@ -1255,7 +1255,7 @@
         <h3 class="text-xl font-bold">Premium</h3>
         <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">Enterprise-grade full suite solution</p>
         <div class="flex items-baseline gap-1">
-          <span class="text-4xl font-extrabold" data-monthly="18,000" data-annual="15,000" class="text-4xl font-extrabold">₹18,000</span>
+          <span class="text-4xl font-extrabold" data-monthly="15,000" data-annual="150,000" class="text-4xl font-extrabold">₹15,000</span>
           <span class="text-[var(--text-dim)]">/month</span>
         </div>
         <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
@@ -1276,7 +1276,7 @@
       <div class="card-soft p-6 reveal">
         <h3 class="text-xl font-bold">Essential</h3>
         <div class="flex items-baseline gap-1 mt-8">
-          <span class="text-4xl font-extrabold">₹25,000</span>
+          <span class="text-4xl font-extrabold">₹50,000</span>
           <span class="text-[var(--text-dim)]">/yr</span>
         </div>
         <p class="text-sm text-[var(--text-dim)] mt-4">Vol: Up to 75 GSTINs/yr</p>
@@ -1291,7 +1291,7 @@
       <div class="pop p-6 rounded-3xl reveal">
         <h3 class="text-xl font-bold">Advanced</h3>
         <div class="flex items-baseline gap-1 mt-8">
-          <span class="text-4xl font-extrabold">₹40,000</span>
+          <span class="text-4xl font-extrabold">₹100,000</span>
           <span class="text-[var(--text-dim)]">/yr</span>
         </div>
         <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 75 to 150 GSTINs/yr</p>
@@ -1307,8 +1307,8 @@
         <h3 class="text-xl font-bold">Premium</h3>
         <div class="mt-8">
           <div class="flex items-baseline gap-2 flex-wrap">
-            <span class="text-4xl font-extrabold">₹40,000</span>
-            <span class="text-xl font-bold text-[var(--text-dim)]">+ ₹10,000/GSTIN/yr</span>
+            <span class="text-4xl font-extrabold">₹150,000</span>
+            <span class="text-xl font-bold text-[var(--text-dim)]">+ ₹15,000/GSTIN/yr</span>
           </div>
         </div>
         <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 150+ GSTIN Unlimited/yr</p>
@@ -1465,7 +1465,13 @@
     const newMode = tog.dataset.state === 'monthly' ? 'annual' : 'monthly';
     tog.dataset.state = newMode;
     document.querySelectorAll('[data-monthly]').forEach(el => {
-      el.textContent = '₹' + (newMode === 'monthly' ? el.dataset.monthly : el.dataset.annual);
+      if (newMode === 'monthly') {
+        el.textContent = '₹' + el.dataset.monthly;
+      } else {
+        // For annual, show monthly cost (annual ÷ 12)
+        const monthlyFromAnnual = Math.round(parseInt(el.dataset.annual.replace(',', '')) / 12).toLocaleString('en-IN');
+        el.textContent = '₹' + monthlyFromAnnual;
+      }
     });
   }
 
