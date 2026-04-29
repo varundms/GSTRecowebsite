@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Important Links — Heyxia GST Reco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --bg:#ffffff; --bg-blue:#DCE7F7; --card:#F2EAE0;
+    --text:#1A1A1A; --text-soft:#2B2B2B; --text-dim:#5C5C5C; --text-muted:#8A8A8A;
+    --border:rgba(26,26,26,0.08); --border-strong:rgba(26,26,26,0.14);
+    --cta-blue:#A8C8F0; --cta-blue-dark:#8AB1E5; --cta-text:#1A2A4A;
+    --brand-gradient:linear-gradient(90deg,#F5A86E 0%,#E891A0 35%,#C99BCE 65%,#9B7FD4 100%);
+  }
+  *{ -webkit-font-smoothing:antialiased; box-sizing:border-box; }
+  html,body{ background:var(--bg); color:var(--text); font-family:'Inter',system-ui,sans-serif; margin:0; padding:0; }
+  .gradient-text{ background:var(--brand-gradient); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .nav-pill{ background:rgba(255,255,255,0.7); backdrop-filter:blur(14px); border:1px solid rgba(26,26,26,0.06); border-radius:9999px; box-shadow:0 4px 20px -8px rgba(26,26,26,0.08); }
+  .btn-primary{ background:var(--cta-blue); color:var(--cta-text); font-weight:600; padding:.9rem 1.6rem; border-radius:9999px; transition:all .2s ease; display:inline-flex; align-items:center; justify-content:center; border:1px solid rgba(74,107,201,0.15); text-decoration:none; }
+  .btn-primary:hover{ background:var(--cta-blue-dark); transform:translateY(-1px); }
+
+  /* Table styles */
+  .links-table{ width:100%; border-collapse:collapse; font-size:14px; font-family:'Inter',system-ui,sans-serif; }
+  .link-row{ border-bottom:1px solid rgba(26,26,26,0.06); transition:background 0.15s; }
+  .link-row:hover{ background:rgba(26,26,26,0.02); }
+  .link-row td{ padding:14px 18px; vertical-align:middle; }
+  .col-name{ width:22%; font-weight:600; color:var(--text); font-size:14px; }
+  .col-url{ width:28%; }
+  .col-url a{ color:#185FA5; text-decoration:none; font-size:12.5px; font-family:'Inter',monospace; word-break:break-all; font-weight:500; }
+  .col-url a:hover{ text-decoration:underline; }
+  .col-tier{ width:16%; }
+  .col-purpose{ width:34%; color:var(--text-dim); font-size:13.5px; line-height:1.6; font-weight:400; }
+  .badge{ display:inline-block; padding:3px 10px; border-radius:99px; font-size:11px; font-weight:600; white-space:nowrap; }
+  .badge-core{ background:#E6F1FB; color:#0C447C; }
+  .badge-contextual{ background:#EEEDFE; color:#3C3489; }
+  .badge-supplementary{ background:#E1F5EE; color:#085041; }
+  .section-header-row td{ padding:10px 18px; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); background:rgba(26,26,26,0.025); border-bottom:1px solid rgba(26,26,26,0.06); }
+  .tier-dot{ width:7px; height:7px; border-radius:50%; flex-shrink:0; display:inline-block; }
+  .dot-core{ background:#378ADD; }
+  .dot-contextual{ background:#7F77DD; }
+  .dot-supplementary{ background:#1D9E75; }
+
+  .toc-link{ display:block; padding:.35rem 0; color:var(--text-dim); font-size:.875rem; transition:color .15s; border-left:2px solid transparent; padding-left:.75rem; text-decoration:none; }
+  .toc-link:hover{ color:var(--text); border-left-color:var(--cta-blue); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="fixed top-4 inset-x-0 z-50 px-4">
+  <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-2 pl-2">
+      <img src="heyxia-logo.svg" alt="Heyxia" class="h-10 w-auto" />
+    </a>
+    <nav class="hidden md:flex items-center gap-10 text-[15px] text-[var(--text-soft)]">
+      <a href="index.html#features" class="hover:text-black transition">Features</a>
+      <a href="index.html#platform" class="hover:text-black transition">Solutions</a>
+      <a href="index.html#pricing" class="hover:text-black transition">Pricing</a>
+      <a href="blog.html" class="hover:text-black transition">Blogs</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="https://gstreco.heyxia.app/signup" class="btn-primary text-[15px] hidden sm:inline-flex">Sign Up for 14 Day Trial</a>
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px]">Login</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section style="background:linear-gradient(180deg,#ffffff 0%,#E8EFF9 100%);" class="pt-36 pb-14">
+  <div class="max-w-4xl mx-auto px-6">
+    <p class="text-xs font-semibold uppercase tracking-[.2em] text-[#0F6E56] mb-3">Resources</p>
+    <h1 class="font-extrabold text-4xl md:text-5xl tracking-[-0.02em] mb-4">Important GST Links</h1>
+    <p class="text-lg text-[var(--text-dim)] max-w-2xl leading-relaxed">A curated directory of official GST government portals, compliance resources, and reference tools — everything your team needs in one place.</p>
+    <div class="flex flex-wrap gap-5 mt-8 text-sm text-[var(--text-dim)]">
+      <span class="flex items-center gap-2"><span class="tier-dot dot-core"></span> Core — essential portals for daily use</span>
+      <span class="flex items-center gap-2"><span class="tier-dot dot-contextual"></span> Contextual — reference &amp; compliance tools</span>
+      <span class="flex items-center gap-2"><span class="tier-dot dot-supplementary"></span> Supplementary — background &amp; logistics</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT -->
+<section class="py-16">
+  <div class="max-w-6xl mx-auto px-6">
+
+    <!-- Core Links -->
+    <div class="mb-10">
+      <div class="flex items-center gap-3 mb-5">
+        <span class="tier-dot dot-core"></span>
+        <h2 class="text-lg font-bold text-[var(--text)]">Core Portals</h2>
+        <span class="text-xs font-600 px-3 py-1 rounded-full bg-[#E6F1FB] text-[#0C447C] font-semibold">5 links</span>
+      </div>
+      <div class="rounded-2xl border border-[rgba(26,26,26,0.08)] overflow-hidden">
+        <table class="links-table">
+          <thead>
+            <tr>
+              <td class="col-name" style="padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);background:rgba(26,26,26,0.02);border-bottom:1px solid rgba(26,26,26,0.07);">Page / Section</td>
+              <td class="col-url" style="padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);background:rgba(26,26,26,0.02);border-bottom:1px solid rgba(26,26,26,0.07);">URL</td>
+              <td class="col-tier" style="padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);background:rgba(26,26,26,0.02);border-bottom:1px solid rgba(26,26,26,0.07);">Tier</td>
+              <td class="col-purpose" style="padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);background:rgba(26,26,26,0.02);border-bottom:1px solid rgba(26,26,26,0.07);">Purpose</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="link-row">
+              <td class="col-name">GST Portal Home</td>
+              <td class="col-url"><a href="https://www.gst.gov.in/" target="_blank" rel="noopener noreferrer">gst.gov.in</a></td>
+              <td class="col-tier"><span class="badge badge-core">Core</span></td>
+              <td class="col-purpose">Primary taxpayer portal — anchor point for all GST activity</td>
+            </tr>
+            <tr class="link-row">
+              <td class="col-name">GST Login</td>
+              <td class="col-url"><a href="https://services.gst.gov.in/services/login" target="_blank" rel="noopener noreferrer">services.gst.gov.in/login</a></td>
+              <td class="col-tier"><span class="badge badge-core">Core</span></td>
+              <td class="col-purpose">Users log in here to access and download their GSTR data</td>
+            </tr>
+            <tr class="link-row">
+              <td class="col-name">Returns Help (GSTR-2B)</td>
+              <td class="col-url"><a href="https://www.gst.gov.in/help/returns" target="_blank" rel="noopener noreferrer">gst.gov.in/help/returns</a></td>
+              <td class="col-tier"><span class="badge badge-core">Core</span></td>
+              <td class="col-purpose">Official guide on GSTR-2B — the return central to ITC reconciliation</td>
+            </tr>
+            <tr class="link-row">
+              <td class="col-name">Invoice Management System</td>
+              <td class="col-url"><a href="https://www.gst.gov.in/" target="_blank" rel="noopener noreferrer">gst.gov.in (IMS section)</a></td>
+              <td class="col-tier"><span class="badge badge-core">Core</span></td>
+              <td class="col-purpose">Post-Oct 2024 IMS directly impacts reconciliation workflows</td>
+            </tr>
+            <tr class="link-row" style="border-bottom:none;">
+              <td class="col-name">Grievance Redressal</td>
+              <td class="col-url"><a href="https://selfservice.gstsystem.in/" target="_blank" rel="noopener noreferrer">selfservice.gstsystem.in</a></td>
+              <td class="col-tier"><span class="badge badge-core">Core</span></td>
+              <td class="col-purpose">Log and track portal-side issues users encounter</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Contextual Links -->
+    <div class="mb-10">
+      <div class="flex items-center gap-3 mb-5">
+        <span class="tier-dot dot-contextual"></span>
+        <h2 class="text-lg font-bold text-[var(--text)]">Contextual Resources</h2>
+        <span class="text-xs px-3 py-1 rounded-full bg-[#EEEDFE] text-[#3C3489] font-semibold">5 links</span>
+      </div>
+      <div class="rounded-2xl border border-[rgba(26,26,26,0.08)] overflow-hidden">
+        <table class="links-table">
+          <thead>
+            <tr>
+              <td class="col-name" style="padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);background:rgba(26,26,26,0.02);border-bottom:1px solid rgba(26,26,26,0.07);">Page / Section</td>
+              <td class="col-url" style="padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);background:rgba(26,26,26,0.02);border-bottom:1px solid rgba(26,26,26,0.07);">URL</td>
+              <td class="col-tier" style="padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);background:rgba(26,26,26,0.02);border-bottom:1px solid rgba(26,26,26,0.07);">Tier</td>
+              <td class="col-purpose" style="padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);background:rgba(26,26,26,0.02);border-bottom:1px solid rgba(26,26,26,0.07);">Purpose</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="link-row">
+              <td class="col-name">GST Registration</td>
+              <td class="col-url"><a href="https://reg.gst.gov.in/registration" target="_blank" rel="noopener noreferrer">reg.gst.gov.in/registration</a></td>
+              <td class="col-tier"><span class="badge badge-contextual">Contextual</span></td>
+              <td class="col-purpose">New businesses or new GSTIN registration for fresh users</td>
+            </tr>
+            <tr class="link-row">
+              <td class="col-name">Due Dates Calendar</td>
+              <td class="col-url"><a href="https://www.gst.gov.in/" target="_blank" rel="noopener noreferrer">gst.gov.in (due dates)</a></td>
+              <td class="col-tier"><span class="badge badge-contextual">Contextual</span></td>
+              <td class="col-purpose">Filing deadlines awareness — critical for timely reconciliation</td>
+            </tr>
+            <tr class="link-row">
+              <td class="col-name">GST Rates Search</td>
+              <td class="col-url"><a href="https://cbic-gst.gov.in/gst-goods-services-rates.html" target="_blank" rel="noopener noreferrer">cbic-gst.gov.in/rates</a></td>
+              <td class="col-tier"><span class="badge badge-contextual">Contextual</span></td>
+              <td class="col-purpose">HSN/SAC rate lookup for verifying tax applied on invoices</td>
+            </tr>
+            <tr class="link-row">
+              <td class="col-name">CBIC Circulars &amp; Notifications</td>
+              <td class="col-url"><a href="https://cbic-gst.gov.in/" target="_blank" rel="noopener noreferrer">cbic-gst.gov.in</a></td>
+              <td class="col-tier"><span class="badge badge-contextual">Contextual</span></td>
+              <td class="col-purpose">Compliance rule changes that affect reconciliation logic</td>
+            </tr>
+            <tr class="link-row" style="border-bottom:none;">
+              <td class="col-name">GST Council Updates</td>
+              <td class="col-url"><a href="https://gstcouncil.gov.in/" target="_blank" rel="noopener noreferrer">gstcouncil.gov.in</a></td>
+              <td class="col-tier"><span class="badge badge-contextual">Contextual</span></td>
+              <td class="col-purpose">Policy decisions that may change how reconciliation works</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Supplementary Links -->
+    <div class="mb-16">
+      <div class="flex items-center gap-3 mb-5">
+        <span class="tier-dot dot-supplementary"></span>
+        <h2 class="text-lg font-bold text-[var(--text)]">Supplementary</h2>
+        <span class="text-xs px-3 py-1 rounded-full bg-[#E1F5EE] text-[#085041] font-semibold">2 links</span>
+      </div>
+      <div class="rounded-2xl border border-[rgba(26,26,26,0.08)] overflow-hidden">
+        <table class="links-table">
+          <thead>
+            <tr>
+              <td class="col-name" style="padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);background:rgba(26,26,26,0.02);border-bottom:1px solid rgba(26,26,26,0.07);">Page / Section</td>
+              <td class="col-url" style="padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);background:rgba(26,26,26,0.02);border-bottom:1px solid rgba(26,26,26,0.07);">URL</td>
+              <td class="col-tier" style="padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);background:rgba(26,26,26,0.02);border-bottom:1px solid rgba(26,26,26,0.07);">Tier</td>
+              <td class="col-purpose" style="padding:10px 18px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);background:rgba(26,26,26,0.02);border-bottom:1px solid rgba(26,26,26,0.07);">Purpose</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="link-row">
+              <td class="col-name">GSTN (Network Body)</td>
+              <td class="col-url"><a href="https://www.gstn.org.in/" target="_blank" rel="noopener noreferrer">gstn.org.in</a></td>
+              <td class="col-tier"><span class="badge badge-supplementary">Supplementary</span></td>
+              <td class="col-purpose">Explains the technical infrastructure behind the GST portal</td>
+            </tr>
+            <tr class="link-row" style="border-bottom:none;">
+              <td class="col-name">E-Way Bill Portal</td>
+              <td class="col-url"><a href="https://ewaybillgst.gov.in/" target="_blank" rel="noopener noreferrer">ewaybillgst.gov.in</a></td>
+              <td class="col-tier"><span class="badge badge-supplementary">Supplementary</span></td>
+              <td class="col-purpose">For businesses reconciling logistics and supply chain data</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CTA Banner -->
+    <div class="rounded-2xl p-8 text-center" style="background:linear-gradient(135deg,#DCE7F7,#EDE8F5);">
+      <p class="text-xs font-semibold uppercase tracking-[.18em] text-[#4A6BC9] mb-3">Powered by Heyxia GST Reco</p>
+      <h3 class="text-2xl font-extrabold mb-3">Stop switching between portals manually</h3>
+      <p class="text-[var(--text-dim)] max-w-xl mx-auto mb-6 leading-relaxed">Heyxia GST Reco connects directly to the GST portal via secure API — pulling your GSTR data automatically so you never have to log in and download manually again.</p>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-primary text-base">Start Free 14-Day Trial</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="pt-16 pb-10 border-t border-[rgba(26,26,26,0.05)]" style="background:#ffffff;">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-10">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <img src="heyxia-logo.svg" alt="Heyxia" class="h-10 w-auto" />
+        </div>
+        <p class="text-[var(--text-dim)] max-w-sm leading-relaxed">AI-powered GST reconciliation for finance teams, corporates, and chartered accountants across India.</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Pages</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="index.html" class="hover:text-black">Home</a></li>
+          <li><a href="index.html#features" class="hover:text-black">Features</a></li>
+          <li><a href="index.html#platform" class="hover:text-black">Solutions</a></li>
+          <li><a href="index.html#pricing" class="hover:text-black">Pricing</a></li>
+          <li><a href="blog.html" class="hover:text-black">Blogs</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Information</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="mailto:varun.d@heyxia.io" class="hover:text-black">Contact Us</a></li>
+          <li><a href="privacy-policy.html" class="hover:text-black">Privacy Policy</a></li>
+          <li><a href="terms-of-use.html" class="hover:text-black">Terms of Use</a></li>
+          <li><a href="important-links.html" class="hover:text-black">Important Links</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-[rgba(26,26,26,0.06)] flex flex-col md:flex-row justify-between gap-2 text-xs text-[var(--text-muted)]">
+      <p>© 2026 GST Reco. All Rights Reserved.</p>
+      <p>Made with care for Indian finance teams.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
+</body>
+</html>
