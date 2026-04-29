@@ -451,11 +451,65 @@
       <a href="blog.html" class="hover:text-black transition">Blogs</a>
     </nav>
     <div class="flex items-center gap-2">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[15px] hidden sm:inline-flex">Sign Up for 14 Day Trial</a>
-      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px]">Login</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[15px]">Sign Up for 14 Day Trial</a>
+      <!-- Hamburger button — mobile only -->
+      <button id="nav-hamburger" class="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-full hover:bg-gray-100 transition ml-1" aria-label="Open menu">
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300 my-[4px]"></span>
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile dropdown menu -->
+  <div id="mobile-menu" class="md:hidden hidden mt-2 mx-auto max-w-6xl px-4">
+    <div class="bg-white border border-gray-200 rounded-lg px-6 py-5 flex flex-col gap-4 text-[15px] text-[var(--text-soft)]">
+      <a href="#features" class="hover:text-black transition" onclick="closeMobileMenu()">Features</a>
+      <a href="#solutions" class="hover:text-black transition" onclick="closeMobileMenu()">Solutions</a>
+      <a href="#pricing" class="hover:text-black transition" onclick="closeMobileMenu()">Pricing</a>
+      <a href="blog.html" class="hover:text-black transition" onclick="closeMobileMenu()">Blogs</a>
+      <hr class="border-gray-200">
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[15px] text-center">Sign Up for 14-Day Trial</a>
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px] text-center">Login</a>
     </div>
   </div>
 </header>
+
+<script>
+  const hamburger = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = !mobileMenu.classList.contains('hidden');
+    mobileMenu.classList.toggle('hidden', isOpen);
+    // Animate lines to X when open
+    const lines = hamburger.querySelectorAll('.ham-line');
+    if (!isOpen) {
+      lines[0].style.transform = 'translateY(6px) rotate(45deg)';
+      lines[1].style.opacity = '0';
+      lines[2].style.transform = 'translateY(-6px) rotate(-45deg)';
+    } else {
+      lines[0].style.transform = '';
+      lines[1].style.opacity = '';
+      lines[2].style.transform = '';
+    }
+  });
+
+  function closeMobileMenu() {
+    mobileMenu.classList.add('hidden');
+    const lines = hamburger.querySelectorAll('.ham-line');
+    lines[0].style.transform = '';
+    lines[1].style.opacity = '';
+    lines[2].style.transform = '';
+  }
+
+  // Close menu on outside click
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+      closeMobileMenu();
+    }
+  });
+</script>
 
 <!-- HERO -->
 <section class="bg-section-cream pt-36 pb-20 relative overflow-hidden">
