@@ -1492,19 +1492,39 @@
     }
 
     // Update tab highlight + animate progress bar for the duration of the video
+    let progressInterval = null;
     function setTabActive(i, durationMs){
+      if (progressInterval) clearInterval(progressInterval);
+      
       heroTabs.forEach((t, n) => {
         t.classList.toggle('active', n === i);
         const bar = t.querySelector('.progress-bar');
         if (!bar) return;
         bar.style.transition = 'none';
         bar.style.width = '0%';
-        void bar.offsetWidth;
-        if (n === i && durationMs > 0){
-          bar.style.transition = `width ${durationMs}ms linear`;
-          bar.style.width = '100%';
-        }
       });
+      
+      // Get the active video to track playback
+      let activeVideo = null;
+      if (i === IMS_IDX){
+        activeVideo = imsV1; // Start with first IMS video
+      } else {
+        activeVideo = getVideo(heroSlides[i]);
+      }
+      
+      // Update progress bar based on actual video playback time
+      if (activeVideo && durationMs > 0){
+        progressInterval = setInterval(() => {
+          if (!activeVideo || !activeVideo.duration || isNaN(activeVideo.duration)){
+            return;
+          }
+          const percent = (activeVideo.currentTime / activeVideo.duration) * 100;
+          const bar = heroTabs[i].querySelector('.progress-bar');
+          if (bar){
+            bar.style.width = Math.min(percent, 100) + '%';
+          }
+        }, 50);
+      }
     }
 
     // Advance to next slide
@@ -1512,6 +1532,7 @@
 
     // Clean up current slide's video listeners
     function cleanupCurrent(){
+      if (progressInterval) clearInterval(progressInterval);
       if (current === IMS_IDX){
         if (imsV1){ imsV1.pause(); imsV1.onended = null; }
         if (imsV2){ imsV2.pause(); imsV2.onended = null; }
