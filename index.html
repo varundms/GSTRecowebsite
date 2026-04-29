@@ -62,12 +62,17 @@
     background: var(--cta-blue);
     color: var(--cta-text);
     font-weight: 600;
-    padding: .9rem 1.6rem;
+    padding: .65rem 1.2rem;
     border-radius: 9999px;
     transition: all .2s ease;
     display: inline-flex; align-items: center; justify-content: center;
     border: 1px solid rgba(74,107,201,0.15);
     animation: glowPulse 2s ease-in-out infinite;
+  }
+  @media (min-width: 768px) {
+    .btn-signup {
+      padding: .9rem 1.6rem;
+    }
   }
   .btn-signup:hover{ background: var(--cta-blue-dark); transform: translateY(-1px); }
 
@@ -440,7 +445,7 @@
 
 <!-- NAV -->
 <header class="fixed top-4 inset-x-0 z-50 px-4">
-  <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between">
+  <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between gap-3 md:gap-4">
     <a href="#" class="flex items-center pl-2">
       <img src="heyxia-logo.png" alt="Heyxia" class="h-8 md:h-10 w-auto" />
     </a>
