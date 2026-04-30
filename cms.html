@@ -1157,7 +1157,18 @@ function pasteStyle() {
 
 function insertTOC() {
   const editor = document.getElementById('post-content');
-  // Step 1: Auto-assign IDs to ALL h2/h3 headings
+
+  // Remove any existing TOC first to prevent duplication
+  editor.querySelectorAll('.toc-block').forEach(el => {
+    const parent = el.parentElement;
+    el.remove();
+    // Also remove the trailing <p><br></p> after old TOC if present
+    if (parent && parent.firstChild && parent.firstChild.innerHTML === '<br>') {
+      parent.firstChild.remove();
+    }
+  });
+
+  // Auto-assign IDs to all h2/h3 headings
   editor.querySelectorAll('h2, h3').forEach(h => {
     const id = h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     h.id = id;
@@ -1166,21 +1177,35 @@ function insertTOC() {
   const headings = editor.querySelectorAll('h2[id], h3[id]');
   if (!headings.length) { showToast('No headings found in your post.', 'error'); return; }
 
-  // Step 2: Build TOC — use name attribute on <a> tags (preserved by browsers)
-  // and attach handlers after insertion
+  // Build TOC items — force body font style explicitly so it never inherits heading styles
   let items = '';
   headings.forEach(h => {
     const indent = h.tagName === 'H3' ? 'margin-left:16px;' : '';
-    items += `<li style="${indent}margin-bottom:6px;list-style:none;"><a class="toc-link" name="toc-${h.id}" style="color:#4A6BC9;text-decoration:none;cursor:pointer;">${h.textContent.trim()}</a></li>`;
+    items += `<li style="${indent}margin-bottom:6px;list-style:none;font-size:15px;font-weight:400;font-style:normal;font-family:'Lora',Georgia,serif;line-height:1.6;"><a class="toc-link" name="toc-${h.id}" style="color:#4A6BC9;text-decoration:none;cursor:pointer;font-size:15px;font-weight:400;font-style:normal;">${h.textContent.trim()}</a></li>`;
   });
-  const tocHtml = `<div class="toc-block"><p style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#8A8A8A;margin-bottom:8px;">IN THIS ARTICLE</p><ul style="list-style:none;padding-left:0;margin:0 0 8px 0;">${items}</ul></div><p><br></p>`;
 
-  editor.focus();
-  document.execCommand('insertHTML', false, tocHtml);
+  // Build TOC block with fully explicit inline styles (no inheritance from headings)
+  const tocBlock = document.createElement('div');
+  tocBlock.className = 'toc-block';
+  tocBlock.style.cssText = 'border:1px solid #e0e0e0;border-radius:10px;padding:18px 22px;margin:0 0 28px 0;background:#f9fafb;display:block;';
+  tocBlock.innerHTML = `
+    <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#8A8A8A;margin:0 0 12px 0;font-family:'DM Sans',sans-serif;font-style:normal;">IN THIS ARTICLE</p>
+    <ul style="list-style:none;padding-left:0;margin:0;">${items}</ul>
+  `;
 
-  // Step 3: Attach click handlers immediately after insertion
+  // Always insert TOC at the very top of the editor
+  editor.insertBefore(tocBlock, editor.firstChild);
+
+  // Add a paragraph spacer after TOC if not already there
+  const nextEl = tocBlock.nextSibling;
+  if (!nextEl || (nextEl.tagName !== 'P' && nextEl.innerHTML !== '<br>')) {
+    const spacer = document.createElement('p');
+    spacer.innerHTML = '<br>';
+    editor.insertBefore(spacer, tocBlock.nextSibling);
+  }
+
   attachTOCHandlers();
-  showToast('Table of Contents inserted! Headings auto-linked.', 'success');
+  showToast('Table of Contents inserted!', 'success');
 }
 
 function attachTOCHandlers() {
