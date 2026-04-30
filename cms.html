@@ -1160,12 +1160,9 @@ function insertTOC() {
 
   // Remove any existing TOC first to prevent duplication
   editor.querySelectorAll('.toc-block').forEach(el => {
-    const parent = el.parentElement;
+    const next = el.nextSibling;
     el.remove();
-    // Also remove the trailing <p><br></p> after old TOC if present
-    if (parent && parent.firstChild && parent.firstChild.innerHTML === '<br>') {
-      parent.firstChild.remove();
-    }
+    if (next && next.tagName === 'P' && next.innerHTML === '<br>') next.remove();
   });
 
   // Auto-assign IDs to all h2/h3 headings
@@ -1177,14 +1174,14 @@ function insertTOC() {
   const headings = editor.querySelectorAll('h2[id], h3[id]');
   if (!headings.length) { showToast('No headings found in your post.', 'error'); return; }
 
-  // Build TOC items — force body font style explicitly so it never inherits heading styles
+  // Build TOC items with explicit body font styles
   let items = '';
   headings.forEach(h => {
     const indent = h.tagName === 'H3' ? 'margin-left:16px;' : '';
     items += `<li style="${indent}margin-bottom:6px;list-style:none;font-size:15px;font-weight:400;font-style:normal;font-family:'Lora',Georgia,serif;line-height:1.6;"><a class="toc-link" name="toc-${h.id}" style="color:#4A6BC9;text-decoration:none;cursor:pointer;font-size:15px;font-weight:400;font-style:normal;">${h.textContent.trim()}</a></li>`;
   });
 
-  // Build TOC block with fully explicit inline styles (no inheritance from headings)
+  // Build TOC block
   const tocBlock = document.createElement('div');
   tocBlock.className = 'toc-block';
   tocBlock.style.cssText = 'border:1px solid #e0e0e0;border-radius:10px;padding:18px 22px;margin:0 0 28px 0;background:#f9fafb;display:block;';
@@ -1193,15 +1190,30 @@ function insertTOC() {
     <ul style="list-style:none;padding-left:0;margin:0;">${items}</ul>
   `;
 
-  // Always insert TOC at the very top of the editor
-  editor.insertBefore(tocBlock, editor.firstChild);
-
-  // Add a paragraph spacer after TOC if not already there
-  const nextEl = tocBlock.nextSibling;
-  if (!nextEl || (nextEl.tagName !== 'P' && nextEl.innerHTML !== '<br>')) {
-    const spacer = document.createElement('p');
-    spacer.innerHTML = '<br>';
-    editor.insertBefore(spacer, tocBlock.nextSibling);
+  // Insert at cursor position
+  const sel = window.getSelection();
+  if (sel && sel.rangeCount) {
+    const range = sel.getRangeAt(0);
+    // Make sure cursor is inside the editor
+    if (editor.contains(range.commonAncestorContainer)) {
+      // Insert spacer paragraph after TOC
+      const spacer = document.createElement('p');
+      spacer.innerHTML = '<br>';
+      range.collapse(true);
+      range.insertNode(spacer);
+      range.insertNode(tocBlock);
+      // Move cursor after the spacer
+      const newRange = document.createRange();
+      newRange.setStartAfter(spacer);
+      newRange.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(newRange);
+    } else {
+      // Fallback: insert at top if cursor isn't in editor
+      editor.insertBefore(tocBlock, editor.firstChild);
+    }
+  } else {
+    editor.insertBefore(tocBlock, editor.firstChild);
   }
 
   attachTOCHandlers();
