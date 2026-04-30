@@ -188,62 +188,8 @@
   <!-- CMS posts render here -->
   <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="cms-posts-grid"></div>
 
-  <!-- Static fallback posts (shown when no CMS posts exist) -->
-  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="static-posts-grid">
-    <a href="blog-reader.html" class="blog-card reveal">
-      <div class="img-placeholder" style="background: linear-gradient(135deg,#F0E2D4,#F5EAE0);">📊</div>
-      <div class="p-6">
-        <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-itc">ITC & Blocked Credit</span></div>
-        <h3 class="text-lg font-bold leading-snug mb-2">Section 17(5): Complete List of Blocked ITC Under GST</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed mb-5">Motor vehicles, food, club memberships — here's every category of input tax credit you cannot claim, and how to auto-detect them.</p>
-        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>April 15, 2026</span><span>6 min read</span></div>
-      </div>
-    </a>
-    <a href="blog-reader.html" class="blog-card reveal">
-      <div class="img-placeholder" style="background: linear-gradient(135deg,#E4EDF8,#D4E4F5);">🔄</div>
-      <div class="p-6">
-        <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-compliance">Compliance</span></div>
-        <h3 class="text-lg font-bold leading-snug mb-2">How to Reconcile GSTR-1 with Your Books: A Step-by-Step Guide</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed mb-5">Mismatches between your sales register and GSTR-1 can trigger notices. Here's how to catch and fix them before filing.</p>
-        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>April 10, 2026</span><span>7 min read</span></div>
-      </div>
-    </a>
-    <a href="blog-reader.html" class="blog-card reveal">
-      <div class="img-placeholder" style="background: linear-gradient(135deg,#EDE4F5,#E0D8F0);">⚡</div>
-      <div class="p-6">
-        <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-tally">Tally Tips</span></div>
-        <h3 class="text-lg font-bold leading-snug mb-2">Connecting Tally to the GST Portal: Best Practices for FY 2026-27</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed mb-5">Automate your purchase data fetch from Tally and eliminate manual Excel uploads — a practical setup guide for accountants.</p>
-        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>April 5, 2026</span><span>5 min read</span></div>
-      </div>
-    </a>
-    <a href="blog-reader.html" class="blog-card reveal">
-      <div class="img-placeholder" style="background: linear-gradient(135deg,#F5EAD4,#F0E0C4);">📋</div>
-      <div class="p-6">
-        <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-gst">GST Basics</span></div>
-        <h3 class="text-lg font-bold leading-snug mb-2">GSTR-3B Filing Checklist: 10 Things to Verify Before You Submit</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed mb-5">A simple checklist that every accounts team should run through before hitting Submit on their monthly 3B.</p>
-        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>March 28, 2026</span><span>4 min read</span></div>
-      </div>
-    </a>
-    <a href="blog-reader.html" class="blog-card reveal">
-      <div class="img-placeholder" style="background: linear-gradient(135deg,#D4ECE0,#C4E4D4);">✅</div>
-      <div class="p-6">
-        <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-finance">Finance</span></div>
-        <h3 class="text-lg font-bold leading-snug mb-2">How CAs Can Handle 3× More Clients Without Hiring More Staff</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed mb-5">Automation is reshaping CA firms. Here's how leading practices are scaling GST work without growing their headcount.</p>
-        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>March 22, 2026</span><span>6 min read</span></div>
-      </div>
-    </a>
-    <a href="blog-reader.html" class="blog-card reveal">
-      <div class="img-placeholder" style="background: linear-gradient(135deg,#F5D8E0,#F0CCD8);">🔍</div>
-      <div class="p-6">
-        <div class="flex items-center gap-2 mb-3"><span class="cat-pill cat-itc">ITC & Blocked Credit</span></div>
-        <h3 class="text-lg font-bold leading-snug mb-2">Why Your ITC Claims Keep Getting Rejected — And How to Fix It</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed mb-5">Portal mismatches, supplier non-filing, and wrong GSTINs are the top three reasons ITC gets denied.</p>
-        <div class="flex items-center justify-between text-xs text-[var(--text-muted)]"><span>March 15, 2026</span><span>7 min read</span></div>
-      </div>
-    </a>
+  <!-- Dynamic posts from CMS (populated via JavaScript) -->
+  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="posts-grid">
   </div>
 
   <div class="text-center mt-14" id="load-more-btn" style="display:none;">
