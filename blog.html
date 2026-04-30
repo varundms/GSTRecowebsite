@@ -188,10 +188,6 @@
   <!-- CMS posts render here -->
   <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="cms-posts-grid"></div>
 
-  <!-- Dynamic posts from CMS (populated via JavaScript) -->
-  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="posts-grid">
-  </div>
-
   <div class="text-center mt-14" id="load-more-btn" style="display:none;">
     <button class="btn-primary" onclick="loadMorePosts()">Load More Articles</button>
   </div>
@@ -319,19 +315,15 @@
     if (filterCat) filtered = filtered.filter(p => p.category === filterCat);
 
     const grid = document.getElementById('cms-posts-grid');
-    const staticGrid = document.getElementById('static-posts-grid');
     const loadMoreBtn = document.getElementById('load-more-btn');
 
     if (filtered.length === 0) {
-      grid.innerHTML = '';
-      staticGrid.style.display = '';
+      grid.innerHTML = '<p style="color:var(--text-dim);font-size:15px;padding:40px 0;">No posts found.</p>';
       loadMoreBtn.style.display = 'none';
     } else {
-      staticGrid.style.display = 'none';
       const toShow = filtered.slice(0, visibleCount);
       grid.innerHTML = toShow.map(buildPostCard).join('');
       loadMoreBtn.style.display = filtered.length > visibleCount ? '' : 'none';
-      // Re-observe new cards
       grid.querySelectorAll('.reveal').forEach(el => observer.observe(el));
       lucide.createIcons();
     }
