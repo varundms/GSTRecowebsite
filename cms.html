@@ -7,7 +7,7 @@
 <title>Heyxia Blog CMS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -200,24 +200,45 @@ tr:hover td { background: var(--surface-2); }
 
 /* Rich text toolbar */
 .toolbar {
-  display: flex; gap: 4px; padding: 10px; background: #f5f5f5;
-  border-bottom: 1px solid #e0e0e0; flex-wrap: wrap; align-items: center;
+  display: flex; gap: 2px; padding: 6px 10px; background: #f3f4f6;
+  border-bottom: 1px solid #d0d5dd; flex-wrap: wrap; align-items: center;
   position: sticky; top: 57px; z-index: 20; min-height: 44px;
 }
+.toolbar-group { display: inline-flex; align-items: center; gap: 1px; }
 .toolbar-btn {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 30px; height: 30px; border-radius: 6px; background: none; border: none;
-  color: #444; cursor: pointer; font-family: inherit; font-size: 13px;
+  min-width: 28px; height: 28px; padding: 0 5px; border-radius: 4px;
+  background: transparent; border: 1px solid transparent;
+  color: #333; cursor: pointer; font-family: inherit; font-size: 13px;
   font-weight: 600; transition: all .1s;
 }
-.toolbar-btn:hover { background: #e0e0e0; color: #111; }
-.toolbar-btn.active { background: var(--accent); color: var(--accent-dark); }
-.toolbar-sep { width: 1px; height: 20px; background: #ddd; margin: 0 4px; }
-.content-editor {
-  min-height: 420px; padding: 18px; outline: none; font-size: 15px; line-height: 1.8;
-  color: #1A1A1A; font-family: inherit; background: #ffffff; border-radius: 0 0 14px 14px;
+.toolbar-btn:hover { background: #e0e3e8; border-color: #c8cdd5; color: #111; }
+.toolbar-btn.active { background: #c7d9f5; border-color: #4A6BC9; color: #1a2a5e; }
+.toolbar-sep { width: 1px; height: 22px; background: #d0d5dd; margin: 0 5px; flex-shrink: 0; }
+.toolbar-select {
+  height: 28px; padding: 0 6px; border: 1px solid #d0d5dd; border-radius: 4px;
+  font-size: 13px; background: #fff; color: #1A1A1A; cursor: pointer;
+  font-family: inherit; outline: none; transition: border-color .15s; font-weight: 500;
 }
-.content-editor:empty::before { content: 'Start writing your blog post here...'; color: #999; pointer-events: none; }
+.toolbar-select:hover, .toolbar-select:focus { border-color: #4A6BC9; }
+#font-family-select { min-width: 140px; }
+#font-size-select { width: 58px; text-align: center; }
+.copy-style-btn.active { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
+.content-editor {
+  min-height: 500px; padding: 28px 32px; outline: none; font-size: 17px; line-height: 1.8;
+  color: #1A1A1A; font-family: 'Lora', Georgia, serif; background: #ffffff; border-radius: 0 0 14px 14px;
+}
+.content-editor:empty::before { content: 'Start writing your blog post here...'; color: #999; pointer-events: none; font-family: 'DM Sans', sans-serif; }
+.content-editor h1 { font-size: 36px; font-weight: 800; margin: 2.5rem 0 1.25rem; line-height: 1.2; letter-spacing: -0.01em; font-family: 'DM Sans', sans-serif; color: #1A1A1A; }
+.content-editor h2 { font-size: 28px; font-weight: 700; margin: 2.25rem 0 1rem; line-height: 1.25; letter-spacing: -0.01em; font-family: 'DM Sans', sans-serif; color: #1A1A1A; }
+.content-editor h3 { font-size: 22px; font-weight: 700; margin: 1.75rem 0 .75rem; letter-spacing: -0.005em; font-family: 'DM Sans', sans-serif; color: #1A1A1A; }
+.content-editor p { margin-bottom: 1.5rem; }
+.content-editor ul, .content-editor ol { padding-left: 2rem; margin-bottom: 1.5rem; }
+.content-editor li { margin-bottom: .65rem; }
+.content-editor blockquote { border-left: 4px solid #A8C8F0; padding: 1.25rem 1.75rem; margin: 2rem 0; background: rgba(168,200,240,0.08); border-radius: 0 12px 12px 0; font-style: italic; color: #5C5C5C; font-size: 16px; line-height: 1.75; }
+.content-editor strong { font-weight: 700; color: #1A1A1A; }
+.content-editor a { color: #4A6BC9; text-decoration: underline; }
+
 .content-editor h1 { font-size: 28px; font-weight: 700; margin: 20px 0 10px; font-family: 'DM Serif Display', serif; }
 .content-editor h2 { font-size: 22px; font-weight: 700; margin: 18px 0 8px; }
 .content-editor h3 { font-size: 18px; font-weight: 600; margin: 14px 0 6px; }
@@ -446,10 +467,9 @@ tr:hover td { background: var(--surface-2); }
               <div class="editor-card-body" style="padding:0;">
                 <input type="text" class="field input title-input" id="post-title" placeholder="Post title..." style="border:none;border-bottom:1px solid var(--border);border-radius:0;background:#ffffff;padding:18px 20px;font-size:24px;font-weight:700;color:#1A1A1A;width:100%;outline:none;font-family:inherit;">
                 <div class="toolbar" id="editor-toolbar">
-                  <!-- Row 1: Font & Size -->
-                  <div style="display:flex;gap:8px;align-items:center;padding:0 8px;">
-                    <select id="font-family" style="padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:12px;max-width:160px;" onchange="changeFontFamily(this.value)">
-                      <option value="">Font Family</option>
+                  <!-- Font Family -->
+                  <div class="toolbar-group">
+                    <select id="font-family-select" class="toolbar-select" onchange="changeFontFamily(this.value)" title="Font Family">
                       <option value="'Inter',sans-serif">Inter</option>
                       <option value="'Arial',sans-serif">Arial</option>
                       <option value="'Helvetica',sans-serif">Helvetica</option>
@@ -460,91 +480,103 @@ tr:hover td { background: var(--surface-2); }
                       <option value="'Lora',serif">Lora</option>
                       <option value="'Times New Roman',serif">Times New Roman</option>
                       <option value="'Garamond',serif">Garamond</option>
-                      <option value="'Palatino',serif">Palatino</option>
                       <option value="'Courier New',monospace">Courier New</option>
-                      <option value="'Lucida Console',monospace">Lucida Console</option>
-                      <option value="'Comic Sans MS',cursive">Comic Sans</option>
-                      <option value="'Impact',fantasy">Impact</option>
-                    </select>
-                    <select id="font-size" style="padding:6px 8px;border:1px solid #ddd;border-radius:4px;font-size:12px;width:75px;" onchange="changeFontSize(this.value)">
-                      <option value="">Size</option>
-                      <option value="10px">10px</option>
-                      <option value="11px">11px</option>
-                      <option value="12px">12px</option>
-                      <option value="13px">13px</option>
-                      <option value="14px">14px</option>
-                      <option value="16px">16px</option>
-                      <option value="18px">18px</option>
-                      <option value="20px">20px</option>
-                      <option value="22px">22px</option>
-                      <option value="24px">24px</option>
-                      <option value="28px">28px</option>
-                      <option value="32px">32px</option>
-                      <option value="36px">36px</option>
-                      <option value="42px">42px</option>
-                      <option value="48px">48px</option>
-                      <option value="60px">60px</option>
-                      <option value="72px">72px</option>
                     </select>
                   </div>
                   <div class="toolbar-sep"></div>
-
-                  <!-- Row 2: Text Formatting -->
-                  <button class="toolbar-btn" onclick="fmt('bold')" title="Bold (Cmd+B)"><b>B</b></button>
-                  <button class="toolbar-btn" onclick="fmt('italic')" title="Italic (Cmd+I)"><i>I</i></button>
-                  <button class="toolbar-btn" onclick="fmt('underline')" title="Underline (Cmd+U)"><u>U</u></button>
-                  <button class="toolbar-btn" onclick="fmt('strikethrough')" title="Strikethrough"><s>S</s></button>
-                  <div class="toolbar-sep"></div>
-
-                  <!-- Row 3: Structure -->
-                  <button class="toolbar-btn" onclick="fmtBlock('h2')" title="Heading 2" style="font-weight:700;font-size:11px;">H2</button>
-                  <button class="toolbar-btn" onclick="fmtBlock('h3')" title="Heading 3" style="font-weight:700;font-size:11px;">H3</button>
-                  <div class="toolbar-sep"></div>
-
-                  <!-- Row 4: Lists -->
-                  <button class="toolbar-btn" onclick="fmt('insertUnorderedList')" title="Bullet list">
-                    <i data-lucide="list" style="width:14px;height:14px;pointer-events:none;"></i>
-                  </button>
-                  <button class="toolbar-btn" onclick="fmt('insertOrderedList')" title="Numbered list">
-                    <i data-lucide="list-ordered" style="width:14px;height:14px;pointer-events:none;"></i>
-                  </button>
-                  <div class="toolbar-sep"></div>
-
-                  <!-- Row 5: Special -->
-                  <button class="toolbar-btn" onclick="fmtBlock('blockquote')" title="Quote">❝</button>
-                  <button class="toolbar-btn" onclick="insertLink()" title="Link">🔗</button>
-                  <div class="toolbar-sep"></div>
-
-                  <!-- Row 6: Colors -->
-                  <div style="position:relative;display:inline-flex;align-items:center;" title="Text Color">
-                    <button class="toolbar-btn" onclick="document.getElementById('text-color-picker').click()" title="Text Color" style="position:relative;">
-                      <span style="font-weight:700;font-size:13px;">A</span>
-                      <span id="text-color-bar" style="position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:14px;height:3px;background:#000;border-radius:2px;"></span>
-                    </button>
-                    <input type="color" id="text-color-picker" value="#000000"
-                      style="position:absolute;opacity:0;width:0;height:0;pointer-events:none;"
-                      onchange="applyTextColor(this.value)">
-                  </div>
-                  <div style="position:relative;display:inline-flex;align-items:center;" title="Highlight Color">
-                    <button class="toolbar-btn" onclick="document.getElementById('highlight-color-picker').click()" title="Highlight">
-                      <span style="font-size:13px;">🖊</span>
-                      <span id="highlight-color-bar" style="position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:14px;height:3px;background:#FFD700;border-radius:2px;"></span>
-                    </button>
-                    <input type="color" id="highlight-color-picker" value="#FFD700"
-                      style="position:absolute;opacity:0;width:0;height:0;pointer-events:none;"
-                      onchange="applyHighlight(this.value)">
+                  <!-- Font Size -->
+                  <div class="toolbar-group">
+                    <select id="font-size-select" class="toolbar-select" onchange="changeFontSize(this.value)" title="Font Size">
+                      <option value="10px">10</option>
+                      <option value="11px">11</option>
+                      <option value="12px">12</option>
+                      <option value="13px">13</option>
+                      <option value="14px">14</option>
+                      <option value="16px" selected>16</option>
+                      <option value="18px">18</option>
+                      <option value="20px">20</option>
+                      <option value="22px">22</option>
+                      <option value="24px">24</option>
+                      <option value="28px">28</option>
+                      <option value="32px">32</option>
+                      <option value="36px">36</option>
+                      <option value="42px">42</option>
+                      <option value="48px">48</option>
+                      <option value="60px">60</option>
+                      <option value="72px">72</option>
+                    </select>
                   </div>
                   <div class="toolbar-sep"></div>
-
-                  <!-- Row 7: Alignment -->
-                  <button class="toolbar-btn" onclick="fmt('justifyLeft')" title="Align left">⬅️</button>
-                  <button class="toolbar-btn" onclick="fmt('justifyCenter')" title="Align center">↔️</button>
-                  <button class="toolbar-btn" onclick="fmt('justifyRight')" title="Align right">➡️</button>
+                  <!-- Basic Formatting -->
+                  <div class="toolbar-group">
+                    <button class="toolbar-btn" id="btn-bold" onclick="fmt('bold')" title="Bold (Ctrl+B)"><b>B</b></button>
+                    <button class="toolbar-btn" id="btn-italic" onclick="fmt('italic')" title="Italic (Ctrl+I)"><i>I</i></button>
+                    <button class="toolbar-btn" id="btn-underline" onclick="fmt('underline')" title="Underline (Ctrl+U)"><u>U</u></button>
+                    <button class="toolbar-btn" id="btn-strikethrough" onclick="fmt('strikethrough')" title="Strikethrough"><s>S</s></button>
+                  </div>
                   <div class="toolbar-sep"></div>
-
-                  <!-- Row 8: Tools -->
-                  <button class="toolbar-btn" onclick="insertTOC()" title="Insert Table of Contents (auto-links all headings)" style="font-size:11px;font-weight:700;">TOC</button>
-                  <button class="toolbar-btn" onclick="fmt('removeFormat')" title="Clear all formatting" style="font-size:11px;">Clear</button>
+                  <!-- Headings -->
+                  <div class="toolbar-group">
+                    <button class="toolbar-btn" id="btn-h2" onclick="fmtBlock('h2')" title="Heading 2" style="font-size:11px;font-weight:800;">H2</button>
+                    <button class="toolbar-btn" id="btn-h3" onclick="fmtBlock('h3')" title="Heading 3" style="font-size:11px;font-weight:800;">H3</button>
+                  </div>
+                  <div class="toolbar-sep"></div>
+                  <!-- Lists -->
+                  <div class="toolbar-group">
+                    <button class="toolbar-btn" onclick="fmt('insertUnorderedList')" title="Bullet list">
+                      <i data-lucide="list" style="width:14px;height:14px;pointer-events:none;"></i>
+                    </button>
+                    <button class="toolbar-btn" onclick="fmt('insertOrderedList')" title="Numbered list">
+                      <i data-lucide="list-ordered" style="width:14px;height:14px;pointer-events:none;"></i>
+                    </button>
+                  </div>
+                  <div class="toolbar-sep"></div>
+                  <!-- Alignment -->
+                  <div class="toolbar-group">
+                    <button class="toolbar-btn" onclick="fmt('justifyLeft')" title="Align left"><i data-lucide="align-left" style="width:14px;height:14px;pointer-events:none;"></i></button>
+                    <button class="toolbar-btn" onclick="fmt('justifyCenter')" title="Align center"><i data-lucide="align-center" style="width:14px;height:14px;pointer-events:none;"></i></button>
+                    <button class="toolbar-btn" onclick="fmt('justifyRight')" title="Align right"><i data-lucide="align-right" style="width:14px;height:14px;pointer-events:none;"></i></button>
+                  </div>
+                  <div class="toolbar-sep"></div>
+                  <!-- Colors -->
+                  <div class="toolbar-group">
+                    <div style="position:relative;display:inline-flex;align-items:center;" title="Text Color">
+                      <button class="toolbar-btn" onclick="document.getElementById('text-color-picker').click()" title="Text Color" style="position:relative;">
+                        <span style="font-weight:800;font-size:13px;">A</span>
+                        <span id="text-color-bar" style="position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:14px;height:3px;background:#000;border-radius:2px;"></span>
+                      </button>
+                      <input type="color" id="text-color-picker" value="#000000" style="position:absolute;opacity:0;width:0;height:0;pointer-events:none;" onchange="applyTextColor(this.value)">
+                    </div>
+                    <div style="position:relative;display:inline-flex;align-items:center;" title="Highlight">
+                      <button class="toolbar-btn" onclick="document.getElementById('highlight-color-picker').click()" title="Highlight">
+                        <i data-lucide="highlighter" style="width:14px;height:14px;pointer-events:none;"></i>
+                        <span id="highlight-color-bar" style="position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:14px;height:3px;background:#FFD700;border-radius:2px;"></span>
+                      </button>
+                      <input type="color" id="highlight-color-picker" value="#FFD700" style="position:absolute;opacity:0;width:0;height:0;pointer-events:none;" onchange="applyHighlight(this.value)">
+                    </div>
+                  </div>
+                  <div class="toolbar-sep"></div>
+                  <!-- Link & Quote -->
+                  <div class="toolbar-group">
+                    <button class="toolbar-btn" onclick="fmtBlock('blockquote')" title="Blockquote"><i data-lucide="quote" style="width:14px;height:14px;pointer-events:none;"></i></button>
+                    <button class="toolbar-btn" onclick="insertLink()" title="Insert Link"><i data-lucide="link" style="width:14px;height:14px;pointer-events:none;"></i></button>
+                  </div>
+                  <div class="toolbar-sep"></div>
+                  <!-- Copy/Paste Style -->
+                  <div class="toolbar-group">
+                    <button class="toolbar-btn copy-style-btn" id="btn-copy-style" onclick="copyStyle()" title="Copy Style — click then select text to apply">
+                      <i data-lucide="paintbrush" style="width:14px;height:14px;pointer-events:none;"></i>
+                    </button>
+                    <button class="toolbar-btn" id="btn-paste-style" onclick="pasteStyle()" title="Paste Style — applies copied style to selected text" style="opacity:0.4;" disabled>
+                      <i data-lucide="paint-bucket" style="width:14px;height:14px;pointer-events:none;"></i>
+                    </button>
+                  </div>
+                  <div class="toolbar-sep"></div>
+                  <!-- TOC & Clear -->
+                  <div class="toolbar-group">
+                    <button class="toolbar-btn" onclick="insertTOC()" title="Insert Table of Contents" style="font-size:11px;font-weight:700;padding:0 7px;">TOC</button>
+                    <button class="toolbar-btn" onclick="fmt('removeFormat')" title="Clear Formatting" style="font-size:11px;padding:0 7px;">Clear</button>
+                  </div>
                 </div>
                 <div class="content-editor" id="post-content" contenteditable="true"></div>
               </div>
@@ -1002,17 +1034,19 @@ function applyHighlight(color) {
 }
 
 function changeFontFamily(font) {
-  document.getElementById('post-content').focus();
+  const editor = document.getElementById('post-content');
+  editor.focus();
   const sel = window.getSelection();
   if (!sel.rangeCount || sel.isCollapsed) return;
   const range = sel.getRangeAt(0);
   const span = document.createElement('span');
   span.style.fontFamily = font;
-  range.surroundContents(span);
+  try { range.surroundContents(span); } catch(e) { document.execCommand('fontName', false, font); }
 }
 
 function changeFontSize(size) {
-  document.getElementById('post-content').focus();
+  const editor = document.getElementById('post-content');
+  editor.focus();
   const sel = window.getSelection();
   if (!sel.rangeCount || sel.isCollapsed) return;
   const range = sel.getRangeAt(0);
@@ -1021,14 +1055,106 @@ function changeFontSize(size) {
     span.style.fontSize = size;
     range.surroundContents(span);
   } catch(e) {
-    // If surroundContents fails (selection crosses elements), use execCommand fallback
     document.execCommand('fontSize', false, '7');
     document.querySelectorAll('#post-content font[size="7"]').forEach(el => {
-      el.removeAttribute('size');
-      el.style.fontSize = size;
+      el.removeAttribute('size'); el.style.fontSize = size;
     });
   }
 }
+
+// Update toolbar to reflect current cursor position (like Word)
+function updateToolbar() {
+  try {
+    const sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return;
+    const node = sel.anchorNode;
+    if (!node) return;
+    const el = node.nodeType === 3 ? node.parentElement : node;
+
+    // Font family
+    const ff = window.getComputedStyle(el).fontFamily;
+    const ffSelect = document.getElementById('font-family-select');
+    if (ffSelect && ff) {
+      const opts = Array.from(ffSelect.options);
+      const match = opts.find(o => ff.toLowerCase().includes(o.value.replace(/'/g,'').split(',')[0].toLowerCase().trim()));
+      if (match) ffSelect.value = match.value;
+    }
+
+    // Font size
+    const fs = window.getComputedStyle(el).fontSize;
+    const fsSelect = document.getElementById('font-size-select');
+    if (fsSelect && fs) {
+      const opts = Array.from(fsSelect.options);
+      const match = opts.find(o => o.value === fs);
+      if (match) fsSelect.value = match.value;
+      else {
+        // Find closest
+        const px = parseFloat(fs);
+        let closest = opts.reduce((a, b) => Math.abs(parseFloat(b.value) - px) < Math.abs(parseFloat(a.value) - px) ? b : a);
+        fsSelect.value = closest.value;
+      }
+    }
+
+    // Bold / italic / underline active state
+    document.getElementById('btn-bold')?.classList.toggle('active', document.queryCommandState('bold'));
+    document.getElementById('btn-italic')?.classList.toggle('active', document.queryCommandState('italic'));
+    document.getElementById('btn-underline')?.classList.toggle('active', document.queryCommandState('underline'));
+    document.getElementById('btn-strikethrough')?.classList.toggle('active', document.queryCommandState('strikethrough'));
+
+    // Heading active state
+    let block = el;
+    while (block && block.id !== 'post-content') {
+      if (block.tagName === 'H2') { document.getElementById('btn-h2')?.classList.add('active'); document.getElementById('btn-h3')?.classList.remove('active'); break; }
+      if (block.tagName === 'H3') { document.getElementById('btn-h3')?.classList.add('active'); document.getElementById('btn-h2')?.classList.remove('active'); break; }
+      block = block.parentElement;
+    }
+    if (!block || block.id === 'post-content') {
+      document.getElementById('btn-h2')?.classList.remove('active');
+      document.getElementById('btn-h3')?.classList.remove('active');
+    }
+  } catch(e) {}
+}
+
+// Copy / Paste style (like Word Format Painter)
+let _copiedStyle = null;
+function copyStyle() {
+  const sel = window.getSelection();
+  if (!sel || !sel.rangeCount) return;
+  const node = sel.anchorNode;
+  const el = node.nodeType === 3 ? node.parentElement : node;
+  const cs = window.getComputedStyle(el);
+  _copiedStyle = {
+    fontFamily: el.style.fontFamily || cs.fontFamily,
+    fontSize: el.style.fontSize || cs.fontSize,
+    fontWeight: cs.fontWeight,
+    fontStyle: cs.fontStyle,
+    textDecoration: cs.textDecoration,
+    color: el.style.color || cs.color,
+    backgroundColor: el.style.backgroundColor || cs.backgroundColor,
+  };
+  const btn = document.getElementById('btn-copy-style');
+  const pasteBtn = document.getElementById('btn-paste-style');
+  btn.classList.add('active');
+  btn.title = 'Style copied! Select text and click Paste Style';
+  pasteBtn.removeAttribute('disabled');
+  pasteBtn.style.opacity = '1';
+  showToast('Style copied! Select text and click Paste Style.', 'success');
+}
+
+function pasteStyle() {
+  if (!_copiedStyle) { showToast('No style copied yet. Use Copy Style first.', 'error'); return; }
+  const sel = window.getSelection();
+  if (!sel || !sel.rangeCount || sel.isCollapsed) { showToast('Select some text first, then click Paste Style.', 'error'); return; }
+  const range = sel.getRangeAt(0);
+  const span = document.createElement('span');
+  if (_copiedStyle.fontFamily) span.style.fontFamily = _copiedStyle.fontFamily;
+  if (_copiedStyle.fontSize) span.style.fontSize = _copiedStyle.fontSize;
+  if (_copiedStyle.fontWeight && _copiedStyle.fontWeight !== 'normal') span.style.fontWeight = _copiedStyle.fontWeight;
+  if (_copiedStyle.fontStyle && _copiedStyle.fontStyle !== 'normal') span.style.fontStyle = _copiedStyle.fontStyle;
+  if (_copiedStyle.color) span.style.color = _copiedStyle.color;
+  try { range.surroundContents(span); showToast('Style applied!', 'success'); } catch(e) { showToast('Could not apply style — try selecting a simpler range.', 'error'); }
+}
+
 function insertTOC() {
   const editor = document.getElementById('post-content');
   // Step 1: Auto-assign IDs to ALL h2/h3 headings
@@ -1302,6 +1428,15 @@ document.getElementById('post-content').addEventListener('click', function(e) {
   const target = document.getElementById(targetId);
   if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
+
+// Update toolbar on every cursor move / key press (like Word)
+document.addEventListener('selectionchange', () => {
+  const editor = document.getElementById('post-content');
+  if (!editor || !document.activeElement) return;
+  if (editor.contains(document.getSelection()?.anchorNode)) updateToolbar();
+});
+document.getElementById('post-content').addEventListener('keyup', updateToolbar);
+document.getElementById('post-content').addEventListener('mouseup', updateToolbar);
 
 loadPosts().then(() => { renderDashboard(); setupAutosave(); });
 </script>
