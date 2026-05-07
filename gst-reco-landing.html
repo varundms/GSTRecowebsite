@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="icon" type="image/png" href="favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Heyxia GST Reco — GST Reconciliation in Minutes, Not Days</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +14,7 @@
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
   :root{
-    --bg: #ffffff;
+    --bg: #FBF5EE;
     --bg-blue: #DCE7F7;
     --bg-stat: #C9DCF1;
     --card: #F2EAE0;
@@ -62,17 +64,12 @@
     background: var(--cta-blue);
     color: var(--cta-text);
     font-weight: 600;
-    padding: .65rem 1.2rem;
+    padding: .9rem 1.6rem;
     border-radius: 9999px;
     transition: all .2s ease;
     display: inline-flex; align-items: center; justify-content: center;
     border: 1px solid rgba(74,107,201,0.15);
     animation: glowPulse 2s ease-in-out infinite;
-  }
-  @media (min-width: 768px) {
-    .btn-signup {
-      padding: .9rem 1.6rem;
-    }
   }
   .btn-signup:hover{ background: var(--cta-blue-dark); transform: translateY(-1px); }
 
@@ -184,12 +181,11 @@
   /* Full-width video card */
   .video-card-full{
     position: relative;
-    z-index: 1;
     width: 100%;
     background: #C8D9F0;
     border-radius: 20px;
     padding: 16px;
-    box-shadow: 0 20px 40px -10px rgba(26,26,26,0.12);
+    box-shadow: 0 30px 80px -20px rgba(26,26,26,0.14);
   }
   .video-card-full video{
     width: 100%;
@@ -206,65 +202,6 @@
     background: #F8F4EE;
     border-radius: 12px;
     padding: 40px;
-  }
-  .video-pills {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-top: 1.25rem;
-    padding: 0.5rem 0;
-    position: relative;
-    z-index: 2;
-  }
-  @media (max-width: 640px) {
-    .video-pills {
-      display: grid !important;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-      margin-top: 1rem;
-      position: relative;
-      z-index: 10;
-      background: #ffffff;
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
-    .video-pills > div {
-      background: rgba(26,26,26,0.04);
-      border-radius: 8px;
-      padding: 0.45rem 0.6rem;
-      font-size: 0.72rem;
-      justify-content: flex-start;
-      gap: 0.4rem !important;
-    }
-    .video-pills > div i {
-      width: 14px !important;
-      height: 14px !important;
-      flex-shrink: 0;
-    }
-    .video-card-full .video-placeholder {
-      min-height: 220px !important;
-      padding: 20px !important;
-    }
-    .video-card-full {
-      padding: 10px !important;
-      overflow: visible !important;
-      z-index: 1 !important;
-    }
-    #solutions h2 {
-      font-size: 1.75rem !important;
-      margin-bottom: 2rem !important;
-    }
-    #solutions .text-center.mb-10 {
-      margin-bottom: 1rem !important;
-    }
-    #solutions h3 {
-      font-size: 1.4rem !important;
-      margin-bottom: 0.5rem !important;
-    }
-    #solutions .text-lg {
-      font-size: 0.9rem !important;
-    }
   }
 
   /* Small side video card (kept for hero) */
@@ -367,34 +304,6 @@
   }
   #hero-tabs .hero-tab{ width: 100%; text-align: center; }
 
-  @media (max-width: 480px) {
-    #hero-tabs{
-      grid-template-columns: repeat(3, 1fr);
-      gap: .4rem;
-      margin: 1rem auto 0;
-    }
-    .hero-tab{
-      padding: .45rem .5rem;
-      font-size: .72rem;
-      border-radius: 8px;
-    }
-    /* Stat cards — smaller numbers and text on mobile */
-    .stat-num-large {
-      font-size: 1.6rem !important;
-      line-height: 1.1 !important;
-    }
-    .stat-card-text {
-      font-size: 0.75rem !important;
-      line-height: 1.4 !important;
-    }
-    .stat-grid-3 {
-      gap: 0.5rem !important;
-    }
-    .stat-grid-3 .card {
-      padding: 0.875rem 0.5rem !important;
-    }
-  }
-
   /* Video card */
   .video-card{
     position: relative;
@@ -453,9 +362,9 @@
 
 <!-- NAV -->
 <header class="fixed top-4 inset-x-0 z-50 px-4">
-  <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between gap-3 md:gap-4">
+  <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between">
     <a href="#" class="flex items-center pl-2">
-      <img src="heyxia-logo.png" alt="Heyxia" class="h-8 md:h-10 w-auto" />
+      <img src="heyxia-logo.jpg" alt="Heyxia" class="h-10 w-auto" style="mix-blend-mode:multiply;" />
     </a>
     <nav class="hidden md:flex items-center gap-10 text-[15px] text-[var(--text-soft)]">
       <a href="#features" class="hover:text-black transition">Features</a>
@@ -464,65 +373,11 @@
       <a href="blog.html" class="hover:text-black transition">Blogs</a>
     </nav>
     <div class="flex items-center gap-2">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[13px] md:text-[15px]">Sign Up for 14 Day Trial</a>
-      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[13px] md:text-[15px] hidden md:inline-flex">Login</a>
-      <!-- Hamburger button — mobile only -->
-      <button id="nav-hamburger" class="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-full hover:bg-gray-100 transition ml-1" aria-label="Open menu">
-        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
-        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300 my-[4px]"></span>
-        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
-      </button>
-    </div>
-  </div>
-
-  <!-- Mobile dropdown menu -->
-  <div id="mobile-menu" class="md:hidden hidden mt-2 mx-auto max-w-6xl px-4">
-    <div class="bg-white border border-gray-200 rounded-lg px-6 py-5 flex flex-col gap-4 text-[15px] text-[var(--text-soft)]">
-      <a href="#features" class="hover:text-black transition" onclick="closeMobileMenu()">Features</a>
-      <a href="#solutions" class="hover:text-black transition" onclick="closeMobileMenu()">Solutions</a>
-      <a href="#pricing" class="hover:text-black transition" onclick="closeMobileMenu()">Pricing</a>
-      <a href="blog.html" class="hover:text-black transition" onclick="closeMobileMenu()">Blogs</a>
-      <hr class="border-gray-200">
-      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px] text-center">Login</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[15px] hidden sm:inline-flex">Sign Up for 14 Day Trial</a>
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px]">Login</a>
     </div>
   </div>
 </header>
-
-<script>
-  const hamburger = document.getElementById('nav-hamburger');
-  const mobileMenu = document.getElementById('mobile-menu');
-
-  hamburger.addEventListener('click', () => {
-    const isOpen = !mobileMenu.classList.contains('hidden');
-    mobileMenu.classList.toggle('hidden', isOpen);
-    // Animate lines to X when open
-    const lines = hamburger.querySelectorAll('.ham-line');
-    if (!isOpen) {
-      lines[0].style.transform = 'translateY(6px) rotate(45deg)';
-      lines[1].style.opacity = '0';
-      lines[2].style.transform = 'translateY(-6px) rotate(-45deg)';
-    } else {
-      lines[0].style.transform = '';
-      lines[1].style.opacity = '';
-      lines[2].style.transform = '';
-    }
-  });
-
-  function closeMobileMenu() {
-    mobileMenu.classList.add('hidden');
-    const lines = hamburger.querySelectorAll('.ham-line');
-    lines[0].style.transform = '';
-    lines[1].style.opacity = '';
-    lines[2].style.transform = '';
-  }
-
-  // Close menu on outside click
-  document.addEventListener('click', (e) => {
-    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
-      closeMobileMenu();
-    }
-  });
-</script>
 
 <!-- HERO -->
 <section class="bg-section-cream pt-36 pb-20 relative overflow-hidden">
@@ -531,10 +386,10 @@
       GST Reconciliation in<br>Minutes, Not Days
     </h1>
     <p class="mt-10 text-lg md:text-xl text-[var(--text-dim)] font-medium">
-      AI-Powered Reconciliation &nbsp;|&nbsp; IMS Reconciliation &nbsp;|&nbsp; 100% Accuracy &nbsp;|&nbsp; Blocked Credit Detection
+      AI-Powered Reconciliation &nbsp;|&nbsp; 100% Accuracy &nbsp;|&nbsp; Blocked Credit Detection
     </p>
     <p class="mt-6 max-w-2xl mx-auto text-[var(--text-dim)] leading-relaxed">
-      Eliminate manual effort with seamlessly integrated GST and IMS reconciliation. Our intelligent matching and discrepancy detection work in tandem to ensure 100% accuracy and audit-ready filings.
+      Automate GST Reco with intelligent matching, discrepancy detection, to ensure accurate, compliant, and audit-ready filings.
     </p>
     <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
       <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Sign Up for 14-Day Trial</a>
@@ -552,7 +407,7 @@
           <!-- Slide 1: Upload & Fetch -->
           <div class="hero-slide active" data-slide="0">
             <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
-              <video src="VIDEO_UPLOAD_FETCH.mp4" autoplay muted playsinline class="w-full h-full object-cover"></video>
+              <video src="VIDEO_UPLOAD_FETCH.mp4" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
               <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
                 <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
                 <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_UPLOAD_FETCH.mp4</span>
@@ -563,7 +418,7 @@
           <!-- Slide 2: Analytics Dashboard -->
           <div class="hero-slide" data-slide="1">
             <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
-              <video src="VIDEO_ANALYTICS.mp4" autoplay muted playsinline class="w-full h-full object-cover"></video>
+              <video src="VIDEO_ANALYTICS.mp4" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
               <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
                 <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
                 <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_ANALYTICS.mp4</span>
@@ -574,7 +429,7 @@
           <!-- Slide 3: Party-Wise Summary -->
           <div class="hero-slide" data-slide="2">
             <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
-              <video src="VIDEO_PARTYWISE.mp4" autoplay muted playsinline class="w-full h-full object-cover"></video>
+              <video src="VIDEO_PARTYWISE.mp4" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
               <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
                 <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
                 <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_PARTYWISE.mp4</span>
@@ -585,7 +440,7 @@
           <!-- Slide 4: Detailed Entries -->
           <div class="hero-slide" data-slide="3">
             <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
-              <video src="VIDEO_DETAILED.mp4" autoplay muted playsinline class="w-full h-full object-cover"></video>
+              <video src="VIDEO_DETAILED.mp4" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
               <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
                 <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
                 <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_DETAILED.mp4</span>
@@ -623,7 +478,7 @@
           <!-- Slide 6: Blocked Credit Detection -->
           <div class="hero-slide" data-slide="5">
             <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
-              <video src="VIDEO_BLOCKED.mp4" autoplay muted playsinline class="w-full h-full object-cover"></video>
+              <video src="VIDEO_BLOCKED.mp4" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
               <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
                 <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
                 <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_BLOCKED.mp4</span>
@@ -698,361 +553,97 @@
         <span class="gradient-text">Everything your finance team</span><br>
         <span class="gradient-text">needs to close GST in seconds</span>
       </h2>
-      <p class="mt-6 text-[2rem] md:text-[2.75rem] font-bold">Why Heyxia GST Reco?</p>
-      <p class="mt-4 text-lg text-[var(--text-dim)] max-w-2xl mx-auto">See how we compare against Excel/Manual methods</p>
-      <p class="mt-2 text-xs text-[var(--text-muted)] md:hidden">Scroll horizontally to view full table</p>
+      <p class="mt-6 text-[2rem] md:text-[2.75rem] font-bold">Tailored Solutions for Corporates</p>
     </div>
 
-    <!-- Comparison Table -->
-    <div class="reveal" style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
-      <style>
-        .comp-table { font-size:12px !important; min-width:560px !important; }
-        .comp-table td, .comp-table th { padding: 10px 10px !important; line-height:1.4 !important; }
-        /* Freeze first column */
-        .comp-table th:first-child,
-        .comp-table td:first-child {
-          position: sticky;
-          left: 0;
-          z-index: 3;
-          background: #ffffff;
-          border-right: 1px solid rgba(26,26,26,0.08);
-        }
-        .comp-table tr:hover td:first-child {
-          background: #f9f9f9;
-        }
-        /* Section header rows span all cols — also sticky */
-        .comp-table td[colspan] {
-          position: sticky;
-          left: 0;
-          z-index: 3;
-          background: rgba(26,26,26,0.025);
-          width: 100% !important;
-        }
-      </style>
-      <table class="comp-table" style="width:100%;border-collapse:collapse;font-size:15px;table-layout:fixed;min-width:0;font-weight:500;">
-        <thead>
-          <tr>
-            <th style="width:30%;padding:14px 16px;font-weight:700;font-size:14px;color:var(--text);text-align:left;border-bottom:2px solid rgba(26,26,26,0.08);background:#ffffff;text-transform:uppercase;letter-spacing:.06em;">Feature</th>
-            <th style="width:35%;padding:14px 16px;font-weight:700;font-size:13px;text-align:left;border-bottom:2px solid rgba(26,26,26,0.08);background:transparent;color:var(--text-dim);">
-              Excel / Manual
-            </th>
-            <th style="width:35%;padding:14px 16px;font-weight:700;font-size:13px;text-align:left;border-bottom:2px solid #1D9E75;background:rgba(29,158,117,0.06);color:#085041;border-radius:12px 12px 0 0;">
-              <div style="display:flex;align-items:center;gap:8px;">
-                ✦ Heyxia GST Reco
-                <span style="font-size:10px;padding:2px 8px;background:#1D9E75;color:#fff;border-radius:4px;font-weight:600;">You</span>
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Section: Data Ingestion -->
-          <tr>
-            <td colspan="3" style="padding:10px 16px;background:rgba(26,26,26,0.03);font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid rgba(26,26,26,0.06);">Data Ingestion &amp; Integration</td>
-          </tr>
-          <tr style="border-bottom:1px solid rgba(26,26,26,0.06);">
-            <td style="padding:14px 16px;font-weight:600;font-size:13px;color:var(--text);">Accounting software integration</td>
-            <td style="padding:14px 16px;color:var(--text-dim);font-size:14px;font-weight:500;line-height:1.6;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#FCEBEB;color:#A32D2D;margin-bottom:6px;">✗ Manual</span><br>Export/import from Tally every cycle; no live sync</td>
-            <td style="padding:14px 16px;font-size:14px;font-weight:500;line-height:1.6;background:rgba(29,158,117,0.04);border-left:2px solid #1D9E75;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#EAF3DE;color:#3B6D11;margin-bottom:6px;">✓ Pro</span><br>Two-way live sync with Tally — no manual file handling</td>
-          </tr>
-          <tr style="border-bottom:1px solid rgba(26,26,26,0.06);">
-            <td style="padding:14px 16px;font-weight:600;font-size:13px;color:var(--text);">GST portal connection</td>
-            <td style="padding:14px 16px;color:var(--text-dim);font-size:14px;font-weight:500;line-height:1.6;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#FCEBEB;color:#A32D2D;margin-bottom:6px;">✗ Manual</span><br>Manual download of GSTR-2A/2B every month</td>
-            <td style="padding:14px 16px;font-size:14px;font-weight:500;line-height:1.6;background:rgba(29,158,117,0.04);border-left:2px solid #1D9E75;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#EAF3DE;color:#3B6D11;margin-bottom:6px;">✓ Pro</span><br>Secure direct API to GSTR-2A/2B, 3B, GSTR-1 — no Password dependency, Only OTP required</td>
-          </tr>
-          <!-- Section: Matching -->
-          <tr>
-            <td colspan="3" style="padding:10px 16px;background:rgba(26,26,26,0.03);font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid rgba(26,26,26,0.06);">Matching &amp; Reconciliation Accuracy</td>
-          </tr>
-          <tr style="border-bottom:1px solid rgba(26,26,26,0.06);">
-            <td style="padding:14px 16px;font-weight:600;font-size:13px;color:var(--text);">Invoice matching logic</td>
-            <td style="padding:14px 16px;color:var(--text-dim);font-size:14px;font-weight:500;line-height:1.6;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#FCEBEB;color:#A32D2D;margin-bottom:6px;">✗ Manual</span><br>VLOOKUP only; any typo or variance causes missed match</td>
-            <td style="padding:14px 16px;font-size:14px;font-weight:500;line-height:1.6;background:rgba(29,158,117,0.04);border-left:2px solid #1D9E75;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#EAF3DE;color:#3B6D11;margin-bottom:6px;">✓ Pro</span><br>AI-powered matching handles typos &amp; partial data — built for messy real-world books</td>
-          </tr>
-          <tr style="border-bottom:1px solid rgba(26,26,26,0.06);">
-            <td style="padding:14px 16px;font-weight:600;font-size:13px;color:var(--text);">Blocked ITC detection</td>
-            <td style="padding:14px 16px;color:var(--text-dim);font-size:14px;font-weight:500;line-height:1.6;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#FCEBEB;color:#A32D2D;margin-bottom:6px;">✗ None</span><br>Relies entirely on analyst's knowledge of Sec 17(5)</td>
-            <td style="padding:14px 16px;font-size:14px;font-weight:500;line-height:1.6;background:rgba(29,158,117,0.04);border-left:2px solid #1D9E75;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#EAF3DE;color:#3B6D11;margin-bottom:6px;">✓ Pro</span><br>AI detects blocked credits proactively before filing</td>
-          </tr>
-          <tr style="border-bottom:1px solid rgba(26,26,26,0.06);">
-            <td style="padding:14px 16px;font-weight:600;font-size:13px;color:var(--text);">High invoice volume handling</td>
-            <td style="padding:14px 16px;color:var(--text-dim);font-size:14px;font-weight:500;line-height:1.6;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#FCEBEB;color:#A32D2D;margin-bottom:6px;">✗ Crashes</span><br>Excel crashes beyond ~50K rows</td>
-            <td style="padding:14px 16px;font-size:14px;font-weight:500;line-height:1.6;background:rgba(29,158,117,0.04);border-left:2px solid #1D9E75;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#EAF3DE;color:#3B6D11;margin-bottom:6px;">✓ Pro</span><br>Cloud-native, built for high volumes — no file size limits</td>
-          </tr>
-          <!-- Section: Compliance -->
-          <tr>
-            <td colspan="3" style="padding:10px 16px;background:rgba(26,26,26,0.03);font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid rgba(26,26,26,0.06);">Compliance &amp; Reporting</td>
-          </tr>
-          <tr style="border-bottom:1px solid rgba(26,26,26,0.06);">
-            <td style="padding:14px 16px;font-weight:600;font-size:13px;color:var(--text);">IMS support</td>
-            <td style="padding:14px 16px;color:var(--text-dim);font-size:14px;font-weight:500;line-height:1.6;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#FCEBEB;color:#A32D2D;margin-bottom:6px;">✗ None</span><br>Manual IMS actions on GST portal</td>
-            <td style="padding:14px 16px;font-size:14px;font-weight:500;line-height:1.6;background:rgba(29,158,117,0.04);border-left:2px solid #1D9E75;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#EAF3DE;color:#3B6D11;margin-bottom:6px;">✓ Pro</span><br>Live portal connection keeps IMS data current automatically</td>
-          </tr>
-          <tr style="border-bottom:1px solid rgba(26,26,26,0.06);">
-            <td style="padding:14px 16px;font-weight:600;font-size:13px;color:var(--text);">Vendor follow-up</td>
-            <td style="padding:14px 16px;color:var(--text-dim);font-size:14px;font-weight:500;line-height:1.6;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#FCEBEB;color:#A32D2D;margin-bottom:6px;">✗ Manual</span><br>Manually drafted emails; no tracking</td>
-            <td style="padding:14px 16px;font-size:14px;font-weight:500;line-height:1.6;background:rgba(29,158,117,0.04);border-left:2px solid #1D9E75;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#EAF3DE;color:#3B6D11;margin-bottom:6px;">✓ Pro</span><br>AI supplier search and smart targeted vendor + inter departmental follow-ups using Kanban Board</td>
-          </tr>
-          <!-- Section: Security -->
-          <tr>
-            <td colspan="3" style="padding:10px 16px;background:rgba(26,26,26,0.03);font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid rgba(26,26,26,0.06);">Security, Access &amp; Suitability</td>
-          </tr>
-          <tr style="border-bottom:1px solid rgba(26,26,26,0.06);">
-            <td style="padding:14px 16px;font-weight:600;font-size:13px;color:var(--text);">Data security</td>
-            <td style="padding:14px 16px;color:var(--text-dim);font-size:14px;font-weight:500;line-height:1.6;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#FCEBEB;color:#A32D2D;margin-bottom:6px;">✗ High Risk</span><br>Files on shared drives; version conflicts</td>
-            <td style="padding:14px 16px;font-size:14px;font-weight:500;line-height:1.6;background:rgba(29,158,117,0.04);border-left:2px solid #1D9E75;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#EAF3DE;color:#3B6D11;margin-bottom:6px;">✓ Secure</span><br>No GST credentials stored — secure API, no OTP to third parties</td>
-          </tr>
-          <tr style="border-bottom:1px solid rgba(26,26,26,0.06);">
-            <td style="padding:14px 16px;font-weight:600;font-size:13px;color:var(--text);">Corporate / multi-GSTIN</td>
-            <td style="padding:14px 16px;color:var(--text-dim);font-size:14px;font-weight:500;line-height:1.6;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#FCEBEB;color:#A32D2D;margin-bottom:6px;">✗ None</span><br>One sheet per GSTIN; no consolidated view</td>
-            <td style="padding:14px 16px;font-size:14px;font-weight:500;line-height:1.6;background:rgba(29,158,117,0.04);border-left:2px solid #1D9E75;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#EAF3DE;color:#3B6D11;margin-bottom:6px;">✓ Built for it</span><br>Purpose-built for corporate finance teams and CA firms</td>
-          </tr>
-          <tr>
-            <td style="padding:14px 16px;font-weight:600;font-size:13px;color:var(--text);">Speed to close</td>
-            <td style="padding:14px 16px;color:var(--text-dim);font-size:14px;font-weight:500;line-height:1.6;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#FCEBEB;color:#A32D2D;margin-bottom:6px;">✗ Days/Weeks</span><br>Days to weeks of manual effort per cycle</td>
-            <td style="padding:14px 16px;font-size:14px;font-weight:500;line-height:1.6;background:rgba(29,158,117,0.04);border-left:2px solid #1D9E75;"><span style="display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#EAF3DE;color:#3B6D11;margin-bottom:6px;">✓ Seconds</span><br>AI matching + live data + smart detection = close GST in seconds</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<!-- FOR CORPORATES -->
-<section id="corporates" class="bg-section-cream py-28 border-t border-[rgba(26,26,26,0.05)]">
-  <div class="max-w-6xl mx-auto px-6">
-
-    <!-- Header -->
-    <div class="text-center mb-16 reveal">
-      <p class="text-xs font-semibold uppercase tracking-[.18em] text-[#185FA5] mb-3">For Corporates</p>
-      <h2 class="text-[2rem] md:text-[2.75rem] font-bold mb-4">Corporates can close GST faster, recover more ITC</h2>
-      <p class="text-lg text-[var(--text-dim)] max-w-2xl mx-auto">Built for finance teams managing high invoice volumes, multiple GSTINs, and month-end pressure.</p>
-    </div>
-
-    <!-- Stats row -->
-    <div class="grid grid-cols-3 gap-5 mb-16 reveal stat-grid-3">
-      <div class="card p-6 text-center">
-        <div class="text-[2.5rem] font-extrabold text-[#4A6BC9] leading-none mb-2 stat-num-large">100%</div>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">Digitisation and Automatisation of Internal and Vendor Follow-Up</p>
+    <div class="grid md:grid-cols-2 gap-5">
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="repeat-2" class="w-7 h-7 text-[#4A6BC9]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Tally/Other Software Integration</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Two-way data exchange between accounting software and platform.</p>
       </div>
-      <div class="card p-6 text-center">
-        <div class="text-[2.5rem] font-extrabold text-[#F39C3F] leading-none mb-2 stat-num-large">95%</div>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">reduction in manual reco effort for finance teams</p>
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="globe" class="w-7 h-7 text-[#F39C3F]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Live GST Portal Connection</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Secure API Access to GSTR-2A/2B, 3B and GSTR-1 data.</p>
       </div>
-      <div class="card p-6 text-center">
-        <div class="text-[2.5rem] font-extrabold text-[#1D9E75] leading-none mb-2 stat-num-large">Zero</div>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">GST portal credentials shared with any third party</p>
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="brain-circuit" class="w-7 h-7 text-[#9B7FD4]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">AI-Powered Intelligent Matching</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Advanced algorithms for matching invoices despite bad accounting.</p>
+      </div>
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="search-check" class="w-7 h-7 text-[#E891A0]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">AI Supplier Search &amp; Blocked Credit Detection</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">AI Supplier search directly from software entries &amp; smart policy filters detecting blocked credit.</p>
       </div>
     </div>
-
-    <!-- Feature cards grid -->
-    <div class="grid md:grid-cols-3 gap-5 reveal">
-
-      <!-- Highlighted card -->
-      <div class="card p-6 reveal" style="border:1.5px solid #378ADD;background:linear-gradient(135deg,#F0F7FE,#E6F1FB);">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#C8DDF5;">
-          <i data-lucide="layout-dashboard" class="w-5 h-5 text-[#185FA5]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">Multi-GSTIN command center</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">One dashboard across all entities and state registrations. No more logging in and out — see every GSTIN's status at a glance.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#C8DDF5;color:#0C447C;margin-top:10px;">Corp Essential</span>
-      </div>
-
-      <div class="card p-6 reveal">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#E1F5EE;">
-          <i data-lucide="layers" class="w-5 h-5 text-[#0F6E56]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">ERP &amp; Tally two-way sync</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">Push and pull data between your accounting system and Heyxia without exports.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#E6F1FB;color:#0C447C;margin-top:10px;">Corp Essential</span>
-      </div>
-
-      <div class="card p-6 reveal">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#FFF0D6;">
-          <i data-lucide="bar-chart-2" class="w-5 h-5 text-[#854F0B]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">ITC recovery dashboard</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">See exactly how much ITC is recoverable, at-risk, or permanently blocked — broken down by vendor and period.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#FFF0D6;color:#633806;margin-top:10px;">High Value</span>
-      </div>
-
-      <div class="card p-6 reveal">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#E1F5EE;">
-          <i data-lucide="activity" class="w-5 h-5 text-[#0F6E56]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">Health Dashboard</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">Get a real-time pulse on your GST compliance — Books, Portal, and IMS health scores at a glance. Instantly spot mismatches, unfiled invoices, and pending IMS actions before they become costly errors.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#E6F1FB;color:#0C447C;margin-top:10px;">Corp Essential</span>
-      </div>
-
-      <div class="card p-6 reveal">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#EEEDFE;">
-          <i data-lucide="users" class="w-5 h-5 text-[#534AB7]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">Vendor &amp; Inter-Departmental Follow-Up</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">Never let a mismatch slip through the cracks — automatically categorizes pending invoices by department, accounts, supplier, and GST filing status. Know exactly who owes you action, and how much is at stake.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#E1F5EE;color:#085041;margin-top:10px;">Star Feature</span>
-      </div>
-
-      <div class="card p-6 reveal">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#EEEDFE;">
-          <i data-lucide="users" class="w-5 h-5 text-[#534AB7]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">Role-based access for teams</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">Finance executive, CFO, auditor — each role sees only what they need. Entity-level access control with a full activity log.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#E6F1FB;color:#0C447C;margin-top:10px;">Corp Essential</span>
-      </div>
-
-      <div class="card p-6 reveal">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#E1F5EE;">
-          <i data-lucide="users" class="w-5 h-5 text-[#0F6E56]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">Unlimited users in one plan</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">Invite unlimited team members across finance, accounting, and operations to access GST reconciliation without additional per-seat costs.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#E1F5EE;color:#085041;margin-top:10px;">Included</span>
-      </div>
-
-      <div class="card p-6 reveal">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#E6F1FB;">
-          <i data-lucide="monitor" class="w-5 h-5 text-[#185FA5]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">CFO-ready reporting</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">One-click summary reports for leadership — ITC position, reco status, and compliance health across all entities, audit-ready.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#FFF0D6;color:#633806;margin-top:10px;">High Value</span>
-      </div>
-
-      <div class="card p-6 reveal">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#FFF0D6;">
-          <i data-lucide="clock" class="w-5 h-5 text-[#854F0B]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">Month-end close automation</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">Automate the entire GST close cycle — data pull, matching, exception flagging, and report generation — on a set schedule.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#E1F5EE;color:#085041;margin-top:10px;">New</span>
-      </div>
-
-    </div>
-
-    <!-- CTA -->
-    <div class="text-center mt-14 reveal">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Start Free Trial for Your Team</a>
-    </div>
-
   </div>
 </section>
 
 <!-- SOLUTIONS FOR SERVICE PROVIDERS -->
 <section id="platform" class="bg-section-cream py-28 border-t border-[rgba(26,26,26,0.05)]">
   <div class="max-w-6xl mx-auto px-6">
-
-    <!-- Header -->
     <div class="text-center mb-16 reveal">
-      <p class="text-xs font-semibold uppercase tracking-[.18em] text-[#0F6E56] mb-3">For CA Firms</p>
-      <h2 class="text-[2rem] md:text-[2.75rem] font-bold mb-4">Features for CAs/Service Providers</h2>
-      <p class="text-lg text-[var(--text-dim)] max-w-2xl mx-auto">Built for how CA firms actually work — manage clients, maximise ITC, and close GST without the spreadsheet chaos.</p>
+      <h2 class="text-[2rem] md:text-[2.75rem] font-bold">Tailored Solutions for Service Providers</h2>
     </div>
-
-    <!-- Stats row -->
-    <div class="grid grid-cols-3 gap-5 mb-16 reveal stat-grid-3">
-      <div class="card p-6 text-center">
-        <div class="text-[2.5rem] font-extrabold text-[#1D9E75] leading-none mb-2 stat-num-large">80%</div>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">of CA firms still doing reco manually in spreadsheets</p>
+    <div class="grid md:grid-cols-2 gap-5">
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="layers" class="w-7 h-7 text-[#4A6BC9]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Scale Your Practice</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Handle multiple clients efficiently with our multi-tenant platform and automated workflows.</p>
       </div>
-      <div class="card p-6 text-center">
-        <div class="text-[2.5rem] font-extrabold text-[#F39C3F] leading-none mb-2 stat-num-large">100%</div>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">Digitisation and Automatisation of reports to be sent to client</p>
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="user-square-2" class="w-7 h-7 text-[#F39C3F]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Client Portal Access</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Provide secure, branded portals for each client with real-time reconciliation status.</p>
       </div>
-      <div class="card p-6 text-center">
-        <div class="text-[2.5rem] font-extrabold text-[#9B7FD4] leading-none mb-2 stat-num-large">4 hrs</div>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">average time saved per client per month with Heyxia GST Reco</p>
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="file-text" class="w-7 h-7 text-[#9B7FD4]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Professional Reports</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Generate comprehensive, client-ready reports that demonstrate value and expertise.</p>
+      </div>
+      <div class="card p-8 reveal">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 border border-[rgba(26,26,26,0.06)]">
+          <i data-lucide="trending-up" class="w-7 h-7 text-[#E891A0]"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Increase Capacity</h3>
+        <p class="text-[var(--text-dim)] leading-relaxed">Process more clients in less time, increasing your practice revenue without adding staff.</p>
       </div>
     </div>
-
-    <!-- Feature cards grid -->
-    <div class="grid md:grid-cols-3 gap-5 reveal">
-
-      <!-- Highlighted card -->
-      <div class="card p-6 reveal" style="border:1.5px solid #1D9E75;background:linear-gradient(135deg,#F2FCF8,#E8F7F2);">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#C8EDE3;">
-          <i data-lucide="layout-dashboard" class="w-5 h-5 text-[#0F6E56]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">Multi-client dashboard</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">All your clients' GST status in one view — pending, matched, exceptions — without switching logins.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#C8EDE3;color:#085041;margin-top:10px;">CA Essential</span>
-      </div>
-
-      <div class="card p-6 reveal">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#EEEDFE;">
-          <i data-lucide="users" class="w-5 h-5 text-[#534AB7]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">Team-based access control</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">Assign articles, managers, and partners different access per GSTIN — with full audit trail.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#EEEDFE;color:#3C3489;margin-top:10px;">CA Essential</span>
-      </div>
-
-      <div class="card p-6 reveal">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#FFF0D6;">
-          <i data-lucide="bar-chart-2" class="w-5 h-5 text-[#854F0B]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">ITC maximizer report</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">Auto-identifies unclaimed and at-risk ITC for every client. Shows exact recovery potential in ₹.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#FFF0D6;color:#633806;margin-top:10px;">Saves Hours</span>
-      </div>
-
-      <div class="card p-6 reveal">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#E1F5EE;">
-          <i data-lucide="activity" class="w-5 h-5 text-[#0F6E56]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">Health Dashboard</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">Get a real-time pulse on your clients' GST compliance — Books, Portal, and IMS health scores at a glance. Instantly spot mismatches, unfiled invoices, and pending IMS actions before they become costly errors.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#E1F5EE;color:#085041;margin-top:10px;">Included</span>
-      </div>
-
-      <div class="card p-6 reveal">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#E1F5EE;">
-          <i data-lucide="activity" class="w-5 h-5 text-[#0F6E56]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">Vendor compliance tracker</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">Track which vendors are consistently non-filers or late filers — before ITC gets blocked.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#E1F5EE;color:#085041;margin-top:10px;">New</span>
-      </div>
-
-      <div class="card p-6 reveal">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style="background:#E1F5EE;">
-          <i data-lucide="users" class="w-5 h-5 text-[#0F6E56]"></i>
-        </div>
-        <h3 class="text-base font-bold mb-2">Unlimited users in one plan</h3>
-        <p class="text-sm text-[var(--text-dim)] leading-relaxed stat-card-text">Add unlimited articles, managers, and partners to collaborate seamlessly on client reconciliations without additional costs.</p>
-        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:99px;background:#E1F5EE;color:#085041;margin-top:10px;">Included</span>
-      </div>
-
-
-
-
-
-    </div>
-
-    <!-- CTA -->
-    <div class="text-center mt-14 reveal">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Start Free Trial for Your Firm</a>
-    </div>
-
   </div>
 </section>
 
 <!-- SHOWCASE — full-width video stacked layout -->
-<section id="solutions" class=" py-12 md:py-28">
+<section id="solutions" class="bg-section-soft-blue py-28">
   <div class="max-w-6xl mx-auto px-6">
 
-    <h2 class="text-center font-extrabold text-[2.75rem] md:text-[4rem] tracking-[-0.02em] mb-8 md:mb-24 reveal">
+    <h2 class="text-center font-extrabold text-[2.75rem] md:text-[4rem] tracking-[-0.02em] mb-24 reveal">
       <span class="gradient-text">Reconcile, Monitor, Follow-Up — all without leaving the platform</span>
     </h2>
 
     <!-- ── Row 1: IMS ── -->
-    <div class="mb-12 md:mb-28">
-      <div class="text-center mb-4 md:mb-10">
+    <div class="mb-28 reveal">
+      <div class="text-center mb-10">
         <p class="text-sm font-semibold uppercase tracking-[.18em] text-[#4A6BC9] mb-3">Invoice Management System</p>
         <h3 class="text-3xl md:text-4xl font-bold mb-4">Invoice Management System (IMS)</h3>
         <p class="text-lg text-[var(--text-dim)] max-w-2xl mx-auto">Intelligent invoice reconciliation with real-time visibility, automated matching, and compliance control.</p>
       </div>
+      <!-- Full-width video -->
       <div class="video-card-full">
         <video src="VIDEO_IMS.mp4" autoplay muted loop playsinline class="w-full" onloadeddata="this.nextElementSibling.style.display='none';"></video>
         <div class="video-placeholder" style="border-radius:12px;">
@@ -1061,7 +652,8 @@
           <span class="text-xs text-[var(--text-muted)] mt-1">Rename your file to <code class="bg-white/60 px-1 rounded">VIDEO_IMS.mp4</code></span>
         </div>
       </div>
-      <div class="video-pills">
+      <!-- Bullets below -->
+      <div class="flex flex-wrap justify-center gap-6 mt-8">
         <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="check-circle-2" class="w-5 h-5 text-[#4A6BC9]"></i><span>Live Invoice Visibility</span></div>
         <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="check-circle-2" class="w-5 h-5 text-[#4A6BC9]"></i><span>2B Automation</span></div>
         <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="check-circle-2" class="w-5 h-5 text-[#4A6BC9]"></i><span>Discrepancy Identification</span></div>
@@ -1070,8 +662,8 @@
     </div>
 
     <!-- ── Row 2: Health Dashboard ── -->
-    <div class="mb-12 md:mb-28">
-      <div class="text-center mb-4 md:mb-10">
+    <div class="mb-28 reveal">
+      <div class="text-center mb-10">
         <p class="text-sm font-semibold uppercase tracking-[.18em] text-[#9B7FD4] mb-3">Health Dashboard</p>
         <h3 class="text-3xl md:text-4xl font-bold mb-4">Health Dashboard</h3>
         <p class="text-lg text-[var(--text-dim)] max-w-2xl mx-auto">Centralized score dashboard showing accounting &amp; portal/filing gaps.</p>
@@ -1084,7 +676,7 @@
           <span class="text-xs text-[var(--text-muted)] mt-1">Rename your file to <code class="bg-white/60 px-1 rounded">VIDEO_HEALTH.mp4</code></span>
         </div>
       </div>
-      <div class="video-pills">
+      <div class="flex flex-wrap justify-center gap-6 mt-8">
         <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="activity" class="w-5 h-5 text-[#9B7FD4]"></i><span>Real Time Health Visibility</span></div>
         <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="activity" class="w-5 h-5 text-[#9B7FD4]"></i><span>Overall Health Detection</span></div>
         <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="activity" class="w-5 h-5 text-[#9B7FD4]"></i><span>Actionable Insights</span></div>
@@ -1094,7 +686,7 @@
 
     <!-- ── Row 3: Automated Follow-Up ── -->
     <div class="reveal">
-      <div class="text-center mb-4 md:mb-10">
+      <div class="text-center mb-10">
         <p class="text-sm font-semibold uppercase tracking-[.18em] text-[#F39C3F] mb-3">Automated Follow-Up</p>
         <h3 class="text-3xl md:text-4xl font-bold mb-4">Automated Follow-Up</h3>
         <p class="text-lg text-[var(--text-dim)] max-w-2xl mx-auto">Email/WhatsApp reminders to suppliers for missing filings &amp; internal departments' coordination for missing data.</p>
@@ -1107,7 +699,7 @@
           <span class="text-xs text-[var(--text-muted)] mt-1">Rename your file to <code class="bg-white/60 px-1 rounded">VIDEO_FOLLOWUP.mp4</code></span>
         </div>
       </div>
-      <div class="video-pills">
+      <div class="flex flex-wrap justify-center gap-6 mt-8">
         <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="zap" class="w-5 h-5 text-[#F39C3F]"></i><span>No Missing Invoices</span></div>
         <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="zap" class="w-5 h-5 text-[#F39C3F]"></i><span>Overall Error Detection</span></div>
         <div class="flex items-center gap-2 text-[var(--text-soft)]"><i data-lucide="zap" class="w-5 h-5 text-[#F39C3F]"></i><span>No Manual Chasing</span></div>
@@ -1125,27 +717,30 @@
       Efficiency you can quantify
     </h2>
 
-    <div class="grid md:grid-cols-3 gap-10 items-end">
+    <div class="grid md:grid-cols-3 gap-10">
+      <p class="text-lg md:text-xl font-semibold text-[var(--text-dim)] leading-tight text-center reveal">
+        Reconciliation Time<br>reduced from <span class="text-[var(--text)] font-bold">MINUTES</span><br>to <span class="text-[var(--text)] font-bold">SECONDS</span>
+      </p>
+      <p class="text-lg md:text-xl font-semibold text-[var(--text-dim)] leading-tight text-center reveal">
+        Accuracy<br>Achieved
+      </p>
+      <p class="text-lg md:text-xl font-semibold text-[var(--text-dim)] leading-tight text-center reveal">
+        Invoice Accounting<br>Completeness
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-10 mt-8 items-end">
       <div class="text-center reveal">
-        <p class="text-lg md:text-xl font-semibold text-[var(--text-dim)] leading-tight mb-4">
-          Reconciliation Time<br>reduced from <span class="text-[var(--text)] font-bold">MINUTES</span><br>to <span class="text-[var(--text)] font-bold">SECONDS</span>
-        </p>
         <span class="font-extrabold text-[clamp(2rem,5vw,3.5rem)] leading-none">
           <span data-counter-from="5760" data-counter-to="2" class="counter">5,760</span>
         </span>
       </div>
       <div class="text-center reveal">
-        <p class="text-lg md:text-xl font-semibold text-[var(--text-dim)] leading-tight mb-4">
-          Accuracy<br>Achieved
-        </p>
         <span class="font-extrabold text-[clamp(2rem,5vw,3.5rem)] leading-none">
           <span data-counter-from="0" data-counter-to="96" class="counter">0</span><span>%</span>
         </span>
       </div>
       <div class="text-center reveal">
-        <p class="text-lg md:text-xl font-semibold text-[var(--text-dim)] leading-tight mb-4">
-          Invoice Accounting<br>Completeness
-        </p>
         <span class="font-extrabold text-[clamp(2rem,5vw,3.5rem)] leading-none">
           <span data-counter-from="0" data-counter-to="92" class="counter">0</span><span>%</span>
         </span>
@@ -1227,7 +822,7 @@
         <h3 class="text-xl font-bold">Essential</h3>
         <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">Ideal for small businesses &amp; startups</p>
         <div class="flex items-baseline gap-1">
-          <span class="text-4xl font-extrabold" data-monthly="5,000" data-annual="4,000" class="text-4xl font-extrabold">₹5,000</span>
+          <span class="text-4xl font-extrabold" data-monthly="6,000" data-annual="5,000" class="text-4xl font-extrabold">₹6,000</span>
           <span class="text-[var(--text-dim)]">/month</span>
         </div>
         <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
@@ -1245,7 +840,7 @@
         <h3 class="text-xl font-bold">Advanced</h3>
         <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">AI-Powered for growing businesses</p>
         <div class="flex items-baseline gap-1">
-          <span class="text-4xl font-extrabold" data-monthly="10,000" data-annual="9,000" class="text-4xl font-extrabold">₹10,000</span>
+          <span class="text-4xl font-extrabold" data-monthly="12,000" data-annual="10,000" class="text-4xl font-extrabold">₹12,000</span>
           <span class="text-[var(--text-dim)]">/month</span>
         </div>
         <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
@@ -1263,7 +858,7 @@
         <h3 class="text-xl font-bold">Premium</h3>
         <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">Enterprise-grade full suite solution</p>
         <div class="flex items-baseline gap-1">
-          <span class="text-4xl font-extrabold" data-monthly="15,000" data-annual="12,500" class="text-4xl font-extrabold">₹15,000</span>
+          <span class="text-4xl font-extrabold" data-monthly="18,000" data-annual="15,000" class="text-4xl font-extrabold">₹18,000</span>
           <span class="text-[var(--text-dim)]">/month</span>
         </div>
         <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
@@ -1284,7 +879,7 @@
       <div class="card-soft p-6 reveal">
         <h3 class="text-xl font-bold">Essential</h3>
         <div class="flex items-baseline gap-1 mt-8">
-          <span class="text-4xl font-extrabold">₹25,000</span>
+          <span class="text-5xl font-extrabold">₹25,000</span>
           <span class="text-[var(--text-dim)]">/yr</span>
         </div>
         <p class="text-sm text-[var(--text-dim)] mt-4">Vol: Up to 75 GSTINs/yr</p>
@@ -1299,7 +894,7 @@
       <div class="pop p-6 rounded-3xl reveal">
         <h3 class="text-xl font-bold">Advanced</h3>
         <div class="flex items-baseline gap-1 mt-8">
-          <span class="text-4xl font-extrabold">₹40,000</span>
+          <span class="text-5xl font-extrabold">₹40,000</span>
           <span class="text-[var(--text-dim)]">/yr</span>
         </div>
         <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 75 to 150 GSTINs/yr</p>
@@ -1315,8 +910,8 @@
         <h3 class="text-xl font-bold">Premium</h3>
         <div class="mt-8">
           <div class="flex items-baseline gap-2 flex-wrap">
-            <span class="text-4xl font-extrabold">₹40,000</span>
-            <span class="text-xl font-bold text-[var(--text-dim)]">+₹10,000/25 GSTINs/yr</span>
+            <span class="text-5xl font-extrabold">₹40,000</span>
+            <span class="text-xl font-bold text-[var(--text-dim)]">+ ₹10,000/GSTIN/yr</span>
           </div>
         </div>
         <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 150+ GSTIN Unlimited/yr</p>
@@ -1407,7 +1002,7 @@
     <div class="grid md:grid-cols-4 gap-10">
       <div class="md:col-span-2">
         <div class="flex items-center gap-2 mb-4">
-          <img src="heyxia-logo.png" alt="Heyxia" class="h-10 w-auto" />
+          <img src="heyxia-logo.jpg" alt="Heyxia" class="h-10 w-auto" style="mix-blend-mode:multiply;" />
         </div>
         <p class="text-[var(--text-dim)] max-w-sm leading-relaxed">AI-powered GST reconciliation for finance teams, corporates, and chartered accountants across India.</p>
       </div>
@@ -1427,7 +1022,6 @@
           <li><a href="mailto:varun.d@heyxia.io" class="hover:text-black">Contact Us</a></li>
           <li><a href="privacy-policy.html" class="hover:text-black">Privacy Policy</a></li>
           <li><a href="terms-of-use.html" class="hover:text-black">Terms of Use</a></li>
-          <li><a href="important-links.html" class="hover:text-black">Important Links</a></li>
         </ul>
       </div>
     </div>
@@ -1473,12 +1067,7 @@
     const newMode = tog.dataset.state === 'monthly' ? 'annual' : 'monthly';
     tog.dataset.state = newMode;
     document.querySelectorAll('[data-monthly]').forEach(el => {
-      if (newMode === 'monthly') {
-        el.textContent = '₹' + el.dataset.monthly;
-      } else {
-        // For annual, show hardcoded annual price
-        el.textContent = '₹' + el.dataset.annual;
-      }
+      el.textContent = '₹' + (newMode === 'monthly' ? el.dataset.monthly : el.dataset.annual);
     });
   }
 
@@ -1510,39 +1099,19 @@
     }
 
     // Update tab highlight + animate progress bar for the duration of the video
-    let progressInterval = null;
     function setTabActive(i, durationMs){
-      if (progressInterval) clearInterval(progressInterval);
-      
       heroTabs.forEach((t, n) => {
         t.classList.toggle('active', n === i);
         const bar = t.querySelector('.progress-bar');
         if (!bar) return;
         bar.style.transition = 'none';
         bar.style.width = '0%';
+        void bar.offsetWidth;
+        if (n === i && durationMs > 0){
+          bar.style.transition = `width ${durationMs}ms linear`;
+          bar.style.width = '100%';
+        }
       });
-      
-      // Get the active video to track playback
-      let activeVideo = null;
-      if (i === IMS_IDX){
-        activeVideo = imsV1; // Start with first IMS video
-      } else {
-        activeVideo = getVideo(heroSlides[i]);
-      }
-      
-      // Update progress bar based on actual video playback time
-      if (activeVideo && durationMs > 0){
-        progressInterval = setInterval(() => {
-          if (!activeVideo || !activeVideo.duration || isNaN(activeVideo.duration)){
-            return;
-          }
-          const percent = (activeVideo.currentTime / activeVideo.duration) * 100;
-          const bar = heroTabs[i].querySelector('.progress-bar');
-          if (bar){
-            bar.style.width = Math.min(percent, 100) + '%';
-          }
-        }, 50);
-      }
     }
 
     // Advance to next slide
@@ -1550,7 +1119,6 @@
 
     // Clean up current slide's video listeners
     function cleanupCurrent(){
-      if (progressInterval) clearInterval(progressInterval);
       if (current === IMS_IDX){
         if (imsV1){ imsV1.pause(); imsV1.onended = null; }
         if (imsV2){ imsV2.pause(); imsV2.onended = null; }

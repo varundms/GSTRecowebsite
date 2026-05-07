@@ -47,6 +47,14 @@
 
   .not-found{ text-align:center; padding:80px 20px; }
 </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LG5P9YBX0E"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-LG5P9YBX0E", { send_page_view: true });
+  </script>
 </head>
 <body>
 
@@ -259,5 +267,46 @@
 
   loadPost();
 </script>
+  <!-- GA4 Section & CTA Tracking -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Track section views
+      var sections = document.querySelectorAll("section[id]");
+      if (sections.length > 0 && "IntersectionObserver" in window) {
+        var sectionObserver = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              gtag("event", "section_view", {
+                section_id: entry.target.id,
+                page_path: window.location.pathname
+              });
+            }
+          });
+        }, { threshold: 0.3 });
+        sections.forEach(function(sec) { sectionObserver.observe(sec); });
+      }
+
+      // Track all CTA / link clicks
+      document.querySelectorAll("a[href]").forEach(function(link) {
+        link.addEventListener("click", function() {
+          gtag("event", "link_click", {
+            link_text: this.innerText.trim().substring(0, 100),
+            link_url: this.href,
+            page_path: window.location.pathname
+          });
+        });
+      });
+
+      // Track video plays
+      document.querySelectorAll("video").forEach(function(video) {
+        video.addEventListener("play", function() {
+          gtag("event", "video_play", {
+            video_src: this.src || this.currentSrc || this.querySelector("source") && this.querySelector("source").src,
+            page_path: window.location.pathname
+          });
+        });
+      });
+    });
+  </script>
 </body>
 </html>
