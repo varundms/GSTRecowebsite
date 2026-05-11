@@ -6,7 +6,7 @@
     "build": "node scripts/build-site.mjs",
     "upload:media": "node scripts/upload-media.mjs",
     "deploy": "vercel deploy --prod --yes --non-interactive --scope saas-dev",
-    "vercel:git": "vercel git connect https://github.com/HeyxiaWebsites/GSTRecowebsite.git --yes --scope saas-dev"
+    "vercel:git": "vercel git connect https://github.com/varundms/GSTRecowebsite.git --yes --scope saas-dev"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
