@@ -7,21 +7,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const outDir = path.join(root, "out");
 
-const MEDIA_EXT = new Set([
-  ".jpg",
-  ".jpeg",
-  ".png",
-  ".webp",
-  ".gif",
-  ".svg",
-  ".mp4",
-  ".webm",
-  ".ico",
-  ".JPG",
-  ".JPEG",
-  ".PNG",
-]);
-
 function resolveMediaBase() {
   const explicit = process.env.PUBLIC_SITE_MEDIA_BASE?.trim();
   if (explicit) {
@@ -36,25 +21,30 @@ function resolveMediaBase() {
   return null;
 }
 
-function listRootMediaFiles() {
-  const names = [];
-  for (const name of fs.readdirSync(root)) {
-    const full = path.join(root, name);
-    if (!fs.statSync(full).isFile()) continue;
-    if (MEDIA_EXT.has(path.extname(name))) names.push(name);
-  }
-  return names;
+/** Bare root-level media filename (matches what we upload to Storage). */
+const ROOT_MEDIA_FILE = /^[-A-Za-z0-9_.]+\.(?:png|jpe?g|webp|gif|svg|ico|mp4|webm)$/i;
+
+function isRootMediaRef(value) {
+  const v = String(value).trim();
+  if (!v || v.includes("/") || v.includes("\\")) return false;
+  if (/^(https?:|data:|mailto:|#|javascript:)/i.test(v)) return false;
+  return ROOT_MEDIA_FILE.test(v);
 }
 
+/**
+ * Rewrite src= / href= pointing at root media files to the Storage CDN.
+ * Does not rely on media files being present on disk (Vercel applies .vercelignore).
+ */
 function rewriteHtml(html, base) {
-  let out = html;
-  for (const name of listRootMediaFiles()) {
-    const esc = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    out = out.replace(new RegExp(`src="${esc}"`, "g"), `src="${base}${name}"`);
-    out = out.replace(new RegExp(`src='${esc}'`, "g"), `src='${base}${name}'`);
-    out = out.replace(new RegExp(`href="${esc}"`, "g"), `href="${base}${name}"`);
-    out = out.replace(new RegExp(`href='${esc}'`, "g"), `href='${base}${name}'`);
+  function rewriteAttr(h, attr) {
+    const re = new RegExp(`\\b${attr}=(["'])([^"']*)\\1`, "g");
+    return h.replace(re, (full, quote, val) => {
+      if (!isRootMediaRef(val)) return full;
+      return `${attr}=${quote}${base}${val}${quote}`;
+    });
   }
+  let out = rewriteAttr(html, "src");
+  out = rewriteAttr(out, "href");
   return out;
 }
 
