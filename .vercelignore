@@ -1,0 +1,9 @@
+# Large binaries live in Supabase Storage; HTML is rewritten at build time.
+*.mp4
+*.webm
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.svg

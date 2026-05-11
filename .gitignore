@@ -1,0 +1,14 @@
+.env
+out/
+node_modules/
+.vercel
+
+# Static media (canonical copy in Supabase Storage bucket gst-reco-site-images)
+/*.png
+/*.jpg
+/*.jpeg
+/*.webp
+/*.gif
+/*.mp4
+/*.webm
+/*.svg

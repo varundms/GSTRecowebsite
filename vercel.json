@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "build": {
+    "env": {
+      "SUPABASE_MEDIA_URL": "https://qfeuxyuyxjkmqjpiknes.supabase.co",
+      "STORAGE_PUBLIC_BUCKET": "gst-reco-site-images"
+    }
+  },
+  "buildCommand": "npm run build",
+  "outputDirectory": "out",
+  "installCommand": "npm install"
+}

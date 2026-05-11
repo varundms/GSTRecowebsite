@@ -757,10 +757,14 @@ tr:hover td { background: var(--surface-2); }
 </div>
 
 <script>
-// ===== SUPABASE CONFIG — PASTE YOUR VALUES BELOW =====
-const SUPABASE_URL = 'https://qkswqnyucjqtcoptxyjz.supabase.co';
-const SUPABASE_ANON_KEY = ' eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFrc3dxbnl1Y2pxdGNvcHR4eWp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzA4MzQsImV4cCI6MjA5Mjg0NjgzNH0.1RrH6ZTg4AuPndco4d_j-yYHRbGbQFCJRKD6N38Pz-A';
-// =====================================================
+// ===== SUPABASE CONFIG (injected at build from env / Vercel) =====
+const SUPABASE_URL = '__SUPABASE_URL__';
+const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY__';
+// ================================================================
+
+function encodeFilterValue(value) {
+  return encodeURIComponent(String(value));
+}
 
 const SB = {
   async query(method, path, body) {
@@ -780,8 +784,8 @@ const SB = {
   },
   async getAll()       { return this.query('GET', 'posts?order=created_at.desc'); },
   async insert(data)   { return this.query('POST', 'posts', data); },
-  async update(id, data){ return this.query('PATCH', `posts?id=eq.${id}`, data); },
-  async remove(id)     { return this.query('DELETE', `posts?id=eq.${id}`); },
+  async update(id, data){ return this.query('PATCH', `posts?id=eq.${encodeFilterValue(id)}`, data); },
+  async remove(id)     { return this.query('DELETE', `posts?id=eq.${encodeFilterValue(id)}`); },
 };
 
 // ===== STATE =====
