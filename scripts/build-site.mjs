@@ -7,6 +7,25 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const outDir = path.join(root, "out");
 
+/** Apply vercel.json build.env when vars are not set (local builds without .env). */
+function applyVercelBuildEnv() {
+  try {
+    const vercelPath = path.join(root, "vercel.json");
+    const { build } = JSON.parse(fs.readFileSync(vercelPath, "utf8"));
+    const env = build?.env;
+    if (!env || typeof env !== "object") return;
+    for (const [key, value] of Object.entries(env)) {
+      if (!process.env[key]?.trim() && value != null) {
+        process.env[key] = String(value);
+      }
+    }
+  } catch {
+    /* vercel.json optional */
+  }
+}
+
+applyVercelBuildEnv();
+
 function resolveMediaBase() {
   const explicit = process.env.PUBLIC_SITE_MEDIA_BASE?.trim();
   if (explicit) {
@@ -49,19 +68,16 @@ function rewriteHtml(html, base) {
 }
 
 const base = resolveMediaBase();
-const supabaseUrl = process.env.SUPABASE_URL?.trim() || "";
+const supabaseUrl = (
+  process.env.SUPABASE_URL ||
+  process.env.SUPABASE_MEDIA_URL ||
+  ""
+).replace(/\/$/, "");
 const supabaseAnon = process.env.SUPABASE_ANON_KEY?.trim() || "";
 
 if (!base) {
   console.error(
     "Missing media CDN base. Set SUPABASE_MEDIA_URL + STORAGE_PUBLIC_BUCKET (see vercel.json build.env), or PUBLIC_SITE_MEDIA_BASE."
-  );
-  process.exit(1);
-}
-
-if (!supabaseUrl || !supabaseAnon) {
-  console.error(
-    "Missing SUPABASE_URL or SUPABASE_ANON_KEY (for blog/cms PostgREST). Vercel: add under Project → Environment variables; local: .env from .env.example."
   );
   process.exit(1);
 }
@@ -72,6 +88,19 @@ fs.mkdirSync(outDir, { recursive: true });
 const htmlFiles = fs
   .readdirSync(root)
   .filter((f) => f.endsWith(".html") && fs.statSync(path.join(root, f)).isFile());
+
+const supabaseHtmlFiles = htmlFiles.filter((f) =>
+  fs.readFileSync(path.join(root, f), "utf8").includes("__SUPABASE")
+);
+
+if (supabaseHtmlFiles.length && (!supabaseUrl || !supabaseAnon)) {
+  console.error(
+    "Missing SUPABASE_URL (or SUPABASE_MEDIA_URL) and/or SUPABASE_ANON_KEY for blog/cms pages:",
+    supabaseHtmlFiles.join(", ")
+  );
+  console.error("Local: copy .env.example to .env and set keys. Vercel: Project → Environment variables.");
+  process.exit(1);
+}
 
 for (const file of htmlFiles) {
   const srcPath = path.join(root, file);

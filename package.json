@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "node scripts/build-site.mjs && npx serve -l 3000 out",
     "build": "node scripts/build-site.mjs",
     "upload:media": "node scripts/upload-media.mjs",
     "deploy": "vercel deploy --prod --yes --non-interactive --scope saas-dev",
