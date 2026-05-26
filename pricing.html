@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pricing — Heyxia GST Reco</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --bg: #ffffff;
+    --bg-blue: #DCE7F7;
+    --bg-stat: #C9DCF1;
+    --card: #F2EAE0;
+    --card-2: #EFE6DA;
+    --text: #1A1A1A;
+    --text-soft: #2B2B2B;
+    --text-dim: #5C5C5C;
+    --text-muted: #8A8A8A;
+    --border: rgba(26,26,26,0.08);
+    --border-strong: rgba(26,26,26,0.14);
+    --cta-blue: #A8C8F0;
+    --cta-blue-dark: #8AB1E5;
+    --cta-text: #1A2A4A;
+    --brand-orange: #F5A86E;
+    --brand-coral: #E891A0;
+    --brand-pink: #D49AC4;
+    --brand-lavender: #B89FE0;
+    --brand-violet: #9B7FD4;
+    --brand-gradient: linear-gradient(90deg,#F5A86E 0%,#E891A0 35%,#C99BCE 65%,#9B7FD4 100%);
+  }
+  *{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+  html,body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .gradient-text{
+    background: var(--brand-gradient);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .btn-primary{
+    background: var(--cta-blue);
+    color: var(--cta-text);
+    font-weight: 600;
+    padding: .9rem 1.6rem;
+    border-radius: 9999px;
+    transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(74,107,201,0.15);
+  }
+  .btn-primary:hover{ background: var(--cta-blue-dark); transform: translateY(-1px); }
+  .btn-signup {
+    background: var(--cta-blue);
+    color: var(--cta-text);
+    font-weight: 600;
+    padding: .65rem 1.2rem;
+    border-radius: 9999px;
+    transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(74,107,201,0.15);
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+  @media (min-width: 768px) {
+    .btn-signup { padding: .9rem 1.6rem; }
+  }
+  .btn-signup:hover{ background: var(--cta-blue-dark); transform: translateY(-1px); }
+  @keyframes glowPulse {
+    0%   { box-shadow: 0 0 6px 2px rgba(100,160,255,0.2); }
+    50%  { box-shadow: 0 0 16px 5px rgba(100,160,255,0.45), 0 0 30px 10px rgba(100,160,255,0.2); }
+    100% { box-shadow: 0 0 6px 2px rgba(100,160,255,0.2); }
+  }
+  .btn-demo {
+    background: transparent;
+    color: var(--cta-text);
+    font-weight: 600;
+    padding: .9rem 1.6rem;
+    border-radius: 9999px;
+    transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+    position: relative;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  .btn-demo::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 9999px;
+    padding: 2px;
+    background: conic-gradient(from var(--angle, 0deg), #A8C8F0, #7B6FE8, #F5A86E, #A8C8F0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: rotateBorder 2s linear infinite;
+  }
+  .btn-demo:hover{ transform: translateY(-1px); box-shadow: 0 0 30px 8px rgba(168,200,240,0.6); }
+  @property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+  @keyframes rotateBorder {
+    from { --angle: 0deg; }
+    to   { --angle: 360deg; }
+  }
+  .btn-dark{
+    background: #111;
+    color: #fff;
+    font-weight: 600;
+    padding: .9rem 1.6rem;
+    border-radius: 9999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all .2s ease;
+  }
+  .btn-dark:hover{ background:#000; transform: translateY(-1px); }
+  .btn-ghost{
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    padding: .85rem 1.5rem;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.5);
+    transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .btn-ghost:hover{ background: rgba(255,255,255,0.9); border-color: var(--text-dim); }
+  .card-soft{
+    background: rgba(255,255,255,0.4);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+  }
+  .nav-pill{
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(26,26,26,0.06);
+    border-radius: 9999px;
+    box-shadow: 0 4px 20px -8px rgba(26,26,26,0.08);
+  }
+  .pop{
+    background: linear-gradient(160deg, #C8D9F0 0%, #D5DEEC 50%, #F0E2D4 100%);
+    border: 1px solid rgba(74,107,201,0.18);
+    box-shadow: 0 30px 60px -30px rgba(74,107,201,0.25);
+  }
+  .toggle-pill{ position: relative; display:inline-flex; align-items:center; gap: 1rem; }
+  .toggle-track{
+    position: relative; width: 64px; height: 32px;
+    background: #7C9BFF; border-radius: 9999px; cursor: pointer;
+    transition: background .25s ease;
+  }
+  .toggle-knob{
+    position:absolute; top:3px; left:3px; width:26px; height:26px;
+    background: #fff; border-radius:50%;
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .toggle-pill[data-state="annual"] .toggle-knob{ transform: translateX(32px); }
+  .reveal{ opacity:0; transform: translateY(20px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+  .bg-section-pricing{ background: linear-gradient(180deg, #E5EDF8 0%, #DCE7F7 100%); }
+  .bg-section-soft-blue{ background: linear-gradient(180deg, #FBF5EE 0%, #E8EFF9 100%); }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display:none; }
+  details[open] .accordion-icon { transform: rotate(45deg); }
+  .accordion-icon { transition: transform .25s ease; }
+</style>
+
+<!-- Google Ads Tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18164929821"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "AW-18164929821");
+</script>
+<!-- Google Analytics GA4 Tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-982KPPE5W9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-982KPPE5W9");
+</script>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="fixed top-4 inset-x-0 z-50 px-4">
+  <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between gap-3 md:gap-4">
+    <a href="index.html" class="flex items-center pl-2">
+      <img src="heyxia-logo.png" alt="Heyxia" class="h-8 md:h-10 w-auto" />
+    </a>
+    <nav class="hidden md:flex items-center gap-10 text-[15px] text-[var(--text-soft)]">
+      <a href="index.html#features" class="hover:text-black transition">Features</a>
+      <a href="index.html#solutions" class="hover:text-black transition">Solutions</a>
+      <a href="pricing.html" class="text-black font-semibold transition">Pricing</a>
+      <a href="blog.html" class="hover:text-black transition">Blogs</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[13px] md:text-[15px]">Sign Up for 14 Day Trial</a>
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[13px] md:text-[15px] hidden md:inline-flex">Login</a>
+      <button id="nav-hamburger" class="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-full hover:bg-gray-100 transition ml-1" aria-label="Open menu">
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300 my-[4px]"></span>
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile dropdown menu -->
+  <div id="mobile-menu" class="md:hidden hidden mt-2 mx-auto max-w-6xl px-4">
+    <div class="bg-white border border-gray-200 rounded-lg px-6 py-5 flex flex-col gap-4 text-[15px] text-[var(--text-soft)]">
+      <a href="index.html#features" class="hover:text-black transition" onclick="closeMobileMenu()">Features</a>
+      <a href="index.html#solutions" class="hover:text-black transition" onclick="closeMobileMenu()">Solutions</a>
+      <a href="pricing.html" class="text-black font-semibold" onclick="closeMobileMenu()">Pricing</a>
+      <a href="blog.html" class="hover:text-black transition" onclick="closeMobileMenu()">Blogs</a>
+      <hr class="border-gray-200">
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px] text-center">Login</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hamburger = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    const isOpen = !mobileMenu.classList.contains('hidden');
+    mobileMenu.classList.toggle('hidden', isOpen);
+    const lines = hamburger.querySelectorAll('.ham-line');
+    if (!isOpen) {
+      lines[0].style.transform = 'translateY(6px) rotate(45deg)';
+      lines[1].style.opacity = '0';
+      lines[2].style.transform = 'translateY(-6px) rotate(-45deg)';
+    } else {
+      lines[0].style.transform = '';
+      lines[1].style.opacity = '';
+      lines[2].style.transform = '';
+    }
+  });
+  function closeMobileMenu() {
+    mobileMenu.classList.add('hidden');
+    const lines = hamburger.querySelectorAll('.ham-line');
+    lines[0].style.transform = '';
+    lines[1].style.opacity = '';
+    lines[2].style.transform = '';
+  }
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) closeMobileMenu();
+  });
+</script>
+
+<!-- PAGE HERO -->
+<section class="bg-section-pricing pt-36 pb-16">
+  <div class="max-w-3xl mx-auto px-6 text-center">
+    <p class="text-xs uppercase tracking-[.25em] text-[var(--text-muted)] mb-3">Pricing</p>
+    <h1 class="font-extrabold text-[2.5rem] md:text-[3.5rem] tracking-[-0.03em] leading-[1.05]">
+      Simple, Transparent Pricing
+    </h1>
+    <p class="mt-5 text-lg text-[var(--text-dim)] leading-relaxed">
+      No hidden fees. Full access from day one. Start free for 14 days — no credit card required.
+    </p>
+  </div>
+</section>
+
+<!-- PRICING — CORPORATES -->
+<section class="bg-section-pricing py-16">
+  <div class="max-w-6xl mx-auto px-6">
+    <h2 class="text-center font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em] mb-8 reveal">
+      Flexible Pricing Plans — Corporates
+    </h2>
+
+    <div class="flex justify-center mb-10">
+      <div class="toggle-pill" id="price-toggle" data-state="monthly">
+        <span class="text-base font-medium">Monthly</span>
+        <div class="toggle-track" onclick="togglePrice()">
+          <div class="toggle-knob"></div>
+        </div>
+        <span class="text-lg font-medium leading-tight">Annually<br><span class="text-xs font-normal text-[var(--text-dim)]">(2 Months Free)</span></span>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="card-soft p-6 reveal">
+        <h3 class="text-xl font-bold">Essential</h3>
+        <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">Ideal for small businesses &amp; startups</p>
+        <div class="flex items-baseline gap-1">
+          <span class="text-4xl font-extrabold" data-monthly="5,000" data-annual="4,000">₹5,000</span>
+          <span class="text-[var(--text-dim)]">/month</span>
+        </div>
+        <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
+        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: Up to 4,000/yr</p>
+        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>AI Powered Recognition for mismatches</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Sales-only E-invoice Sync</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Manual blocked credit detection</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Email Support</li>
+        </ul>
+        <a href="https://gstreco.heyxia.app/signup" class="btn-signup w-full mt-6">Sign Up</a>
+      </div>
+
+      <div class="pop p-6 rounded-3xl reveal">
+        <h3 class="text-xl font-bold">Advanced</h3>
+        <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">AI-Powered for growing businesses</p>
+        <div class="flex items-baseline gap-1">
+          <span class="text-4xl font-extrabold" data-monthly="10,000" data-annual="9,000">₹10,000</span>
+          <span class="text-[var(--text-dim)]">/month</span>
+        </div>
+        <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
+        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 4,000 to 8,000/yr</p>
+        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Everything in Essential</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Auto-detection of Blocked Credit</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Health dashboard</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Priority Chat Support</li>
+        </ul>
+        <a href="https://gstreco.heyxia.app/signup" class="btn-dark w-full mt-6">Sign Up</a>
+      </div>
+
+      <div class="card-soft p-6 reveal">
+        <h3 class="text-xl font-bold">Premium</h3>
+        <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">Enterprise-grade full suite solution</p>
+        <div class="flex items-baseline gap-1">
+          <span class="text-4xl font-extrabold" data-monthly="15,000" data-annual="12,500">₹15,000</span>
+          <span class="text-[var(--text-dim)]">/month</span>
+        </div>
+        <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
+        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 8,000+ Unlimited</p>
+        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Everything in Advanced</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Dedicated Account Manager</li>
+        </ul>
+        <a href="mailto:varun.d@heyxia.io" class="btn-ghost w-full mt-6">Contact Sales</a>
+      </div>
+    </div>
+
+    <!-- CAs & Service Providers -->
+    <h2 class="text-center font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em] mt-20 mb-8 reveal">
+      Flexible Pricing Plans — CAs &amp; Service Providers
+    </h2>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="card-soft p-6 reveal">
+        <h3 class="text-xl font-bold">Essential</h3>
+        <div class="flex items-baseline gap-1 mt-8">
+          <span class="text-4xl font-extrabold">₹25,000</span>
+          <span class="text-[var(--text-dim)]">/yr</span>
+        </div>
+        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: Up to 75 GSTINs/yr</p>
+        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>AI Powered Recognition for mismatches</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Sales-only E-invoice Sync</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Manual blocked credit detection</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Email Support</li>
+        </ul>
+        <a href="https://gstreco.heyxia.app/signup" class="btn-signup w-full mt-6">Sign Up</a>
+      </div>
+      <div class="pop p-6 rounded-3xl reveal">
+        <h3 class="text-xl font-bold">Advanced</h3>
+        <div class="flex items-baseline gap-1 mt-8">
+          <span class="text-4xl font-extrabold">₹40,000</span>
+          <span class="text-[var(--text-dim)]">/yr</span>
+        </div>
+        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 75 to 150 GSTINs/yr</p>
+        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Everything in Essential</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Auto-detection of Blocked Credit</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Health dashboard</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Priority Chat Support</li>
+        </ul>
+        <a href="https://gstreco.heyxia.app/signup" class="btn-dark w-full mt-6">Sign Up</a>
+      </div>
+      <div class="card-soft p-6 reveal">
+        <h3 class="text-xl font-bold">Premium</h3>
+        <div class="mt-8">
+          <div class="flex items-baseline gap-2 flex-wrap">
+            <span class="text-4xl font-extrabold">₹40,000</span>
+            <span class="text-xl font-bold text-[var(--text-dim)]">+₹10,000/25 GSTINs/yr</span>
+          </div>
+        </div>
+        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 150+ GSTIN Unlimited/yr</p>
+        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Everything in Advanced</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Dedicated Account Manager</li>
+        </ul>
+        <a href="mailto:varun.d@heyxia.io" class="btn-ghost w-full mt-6">Contact Sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="bg-section-soft-blue py-28">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    <h2 class="font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em]">14 Days. Full Access. Zero Risk</h2>
+    <p class="mt-6 text-lg text-[var(--text-dim)]">Try GST Reco for free and experience the power of automation.</p>
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Sign Up for 14-Day Trial</a>
+      <a href="mailto:varun.d@heyxia.io" class="btn-demo text-base">Book a Demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-[var(--bg)] pt-16 pb-10 border-t border-[rgba(26,26,26,0.05)]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-10">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <img src="heyxia-logo.png" alt="Heyxia" class="h-10 w-auto" />
+        </div>
+        <p class="text-[var(--text-dim)] max-w-sm leading-relaxed">AI-powered GST reconciliation for finance teams, corporates, and chartered accountants across India.</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Pages</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="index.html" class="hover:text-black">Home</a></li>
+          <li><a href="index.html#features" class="hover:text-black">Features</a></li>
+          <li><a href="index.html#solutions" class="hover:text-black">Solutions</a></li>
+          <li><a href="pricing.html" class="hover:text-black">Pricing</a></li>
+          <li><a href="blog.html" class="hover:text-black">Blogs</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Information</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="mailto:varun.d@heyxia.io" class="hover:text-black">Contact Us</a></li>
+          <li><a href="privacy-policy.html" class="hover:text-black">Privacy Policy</a></li>
+          <li><a href="terms-of-use.html" class="hover:text-black">Terms of Use</a></li>
+          <li><a href="important-links.html" class="hover:text-black">Important Links</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-[rgba(26,26,26,0.06)] flex flex-col md:flex-row justify-between gap-2 text-xs text-[var(--text-muted)]">
+      <p>© 2026 GST Reco. All Rights Reserved.</p>
+      <p>Made with care for Indian finance teams.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  function togglePrice(){
+    const tog = document.getElementById('price-toggle');
+    const newMode = tog.dataset.state === 'monthly' ? 'annual' : 'monthly';
+    tog.dataset.state = newMode;
+    document.querySelectorAll('[data-monthly]').forEach(el => {
+      el.textContent = '₹' + (newMode === 'monthly' ? el.dataset.monthly : el.dataset.annual);
+    });
+  }
+</script>
+
+<!-- LinkedIn Insight Tag -->
+<script type="text/javascript">
+_linkedin_partner_id = "10109033";
+window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+</script>
+<script type="text/javascript">
+(function(l) {
+if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+window.lintrk.q=[]}
+var s = document.getElementsByTagName("script")[0];
+var b = document.createElement("script");
+b.type = "text/javascript";b.async = true;
+b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+s.parentNode.insertBefore(b, s);})(window.lintrk);
+</script>
+<noscript>
+<img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=10109033&fmt=gif" />
+</noscript>
+</body>
+</html>

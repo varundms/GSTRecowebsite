@@ -419,9 +419,13 @@
   /* Hero slide video — hide placeholder when video loads */
   .hero-slide-frame video{ display:block; }
   .hero-slide-frame video + .video-placeholder{ display:none !important; }
+  /* No src yet → hide video, show placeholder */
   .hero-slide-frame video:not([src]), .hero-slide-frame video[src=""]{ display:none !important; }
   .hero-slide-frame video:not([src]) + .video-placeholder,
   .hero-slide-frame video[src=""] + .video-placeholder{ display:flex !important; }
+  /* data-src present but src not yet assigned → also show placeholder */
+  .hero-slide-frame video[data-src]:not([src]) + .video-placeholder,
+  .hero-slide-frame video[data-src][src=""] + .video-placeholder{ display:flex !important; }
 
   /* Donut for blocked credit */
   .donut{
@@ -463,6 +467,53 @@
 </head>
 <body>
 
+<!-- STICKY SIDE CTA -->
+<div id="sticky-cta" style="
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) translateX(100%);
+  z-index: 49;
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+">
+  <a href="https://gstreco.heyxia.app/signup" class="btn-signup" onclick="gtag('event','cta_click',{button_text:'Start 14 Day Free Trial',button_location:'sticky_side'})" style="
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    padding: 1.25rem .75rem;
+    border-radius: 12px 0 0 12px;
+    font-size: .85rem;
+    letter-spacing: 0.02em;
+    box-shadow: -4px 4px 24px -4px rgba(74,107,201,0.4);
+    white-space: nowrap;
+  ">
+    Start 14 Day Free Trial →
+  </a>
+</div>
+<script>
+  (function(){
+    const bar = document.getElementById('sticky-cta');
+    let shown = false;
+    window.addEventListener('scroll', function(){
+      const heroBottom = document.querySelector('section').getBoundingClientRect().bottom;
+      if (!shown && heroBottom < 0) {
+        shown = true;
+        bar.style.transform = 'translateY(-50%) translateX(0)';
+        bar.style.pointerEvents = 'auto';
+      } else if (shown && heroBottom >= 0) {
+        shown = false;
+        bar.style.transform = 'translateY(-50%) translateX(100%)';
+        bar.style.pointerEvents = 'none';
+      }
+    }, { passive: true });
+  })();
+</script>
+
 <!-- NAV -->
 <header class="fixed top-4 inset-x-0 z-50 px-4">
   <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between gap-3 md:gap-4">
@@ -472,12 +523,12 @@
     <nav class="hidden md:flex items-center gap-10 text-[15px] text-[var(--text-soft)]">
       <a href="#features" class="hover:text-black transition">Features</a>
       <a href="#solutions" class="hover:text-black transition">Solutions</a>
-      <a href="#pricing" class="hover:text-black transition">Pricing</a>
+      <a href="pricing.html" class="hover:text-black transition">Pricing</a>
       <a href="blog.html" class="hover:text-black transition">Blogs</a>
     </nav>
     <div class="flex items-center gap-2">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[13px] md:text-[15px]">Sign Up for 14 Day Trial</a>
-      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[13px] md:text-[15px] hidden md:inline-flex">Login</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[13px] md:text-[15px]" onclick="gtag('event','cta_click',{button_text:'Sign Up for 14 Day Trial',button_location:'nav'})">Sign Up for 14 Day Trial</a>
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[13px] md:text-[15px] hidden md:inline-flex" onclick="gtag('event','cta_click',{button_text:'Login',button_location:'nav'})">Login</a>
       <!-- Hamburger button — mobile only -->
       <button id="nav-hamburger" class="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-full hover:bg-gray-100 transition ml-1" aria-label="Open menu">
         <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
@@ -492,10 +543,10 @@
     <div class="bg-white border border-gray-200 rounded-lg px-6 py-5 flex flex-col gap-4 text-[15px] text-[var(--text-soft)]">
       <a href="#features" class="hover:text-black transition" onclick="closeMobileMenu()">Features</a>
       <a href="#solutions" class="hover:text-black transition" onclick="closeMobileMenu()">Solutions</a>
-      <a href="#pricing" class="hover:text-black transition" onclick="closeMobileMenu()">Pricing</a>
+      <a href="pricing.html" class="hover:text-black transition" onclick="closeMobileMenu()">Pricing</a>
       <a href="blog.html" class="hover:text-black transition" onclick="closeMobileMenu()">Blogs</a>
       <hr class="border-gray-200">
-      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px] text-center">Login</a>
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px] text-center" onclick="gtag('event','cta_click',{button_text:'Login',button_location:'mobile_menu'})">Login</a>
     </div>
   </div>
 </header>
@@ -549,9 +600,44 @@
       Eliminate manual effort with seamlessly integrated GST and IMS reconciliation. Our intelligent matching and discrepancy detection work in tandem to ensure 100% accuracy and audit-ready filings.
     </p>
     <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Sign Up for 14-Day Trial</a>
-      <a href="mailto:varun.d@heyxia.io" class="btn-demo text-base">Book a Demo</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base" onclick="gtag('event','cta_click',{button_text:'Sign Up for 14-Day Trial',button_location:'hero'})">Sign Up for 14-Day Trial</a>
+      <a href="mailto:varun.d@heyxia.io" class="btn-demo text-base" onclick="gtag('event','cta_click',{button_text:'Book a Demo',button_location:'hero'})">Book a Demo</a>
     </div>
+
+    <!-- Trust strip -->
+    <div class="mt-5 flex flex-wrap items-center justify-center gap-2 md:gap-4">
+      <span class="trust-pill">🔒 No credit card required</span>
+      <span class="trust-sep hidden md:inline">·</span>
+      <span class="trust-pill">✅ Full access, 14 days free</span>
+      <span class="trust-sep hidden md:inline">·</span>
+      <span class="trust-pill">⏱ Setup in 2 minutes</span>
+    </div>
+    <style>
+      .trust-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: #1A2A4A;
+        background: linear-gradient(135deg, rgba(168,200,240,0.28) 0%, rgba(155,127,212,0.18) 100%);
+        border: 1px solid rgba(74,107,201,0.22);
+        border-radius: 9999px;
+        padding: 5px 13px;
+        backdrop-filter: blur(4px);
+        box-shadow: 0 2px 10px -2px rgba(74,107,201,0.18), inset 0 1px 0 rgba(255,255,255,0.7);
+        letter-spacing: 0.01em;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .trust-pill:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px -2px rgba(74,107,201,0.28), inset 0 1px 0 rgba(255,255,255,0.7);
+      }
+      .trust-sep {
+        color: rgba(26,26,26,0.2);
+        font-size: 13px;
+      }
+    </style>
 
     <!-- Hero product slideshow -->
     <div class="mt-20 reveal max-w-5xl mx-auto">
@@ -561,10 +647,10 @@
       <div class="hero-stage mock-window text-left">
         <div class="hero-slides h-full">
 
-          <!-- Slide 1: Upload & Fetch -->
+          <!-- Slide 1: Upload & Fetch — src set immediately, preload auto so it buffers first -->
           <div class="hero-slide active" data-slide="0">
             <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
-              <video src="VIDEO_UPLOAD_FETCH.mp4" autoplay muted playsinline class="w-full h-full object-cover"></video>
+              <video data-src="VIDEO_UPLOAD_FETCH.mp4" muted playsinline preload="auto" class="w-full h-full object-cover"></video>
               <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
                 <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
                 <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_UPLOAD_FETCH.mp4</span>
@@ -572,10 +658,10 @@
             </div>
           </div>
 
-          <!-- Slide 2: Analytics Dashboard -->
+          <!-- Slide 2: Analytics Dashboard — preload auto so it's ready when slide 1 ends -->
           <div class="hero-slide" data-slide="1">
             <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
-              <video src="VIDEO_ANALYTICS.mp4" autoplay muted playsinline class="w-full h-full object-cover"></video>
+              <video data-src="VIDEO_ANALYTICS.mp4" muted playsinline preload="auto" class="w-full h-full object-cover"></video>
               <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
                 <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
                 <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_ANALYTICS.mp4</span>
@@ -583,10 +669,10 @@
             </div>
           </div>
 
-          <!-- Slide 3: Party-Wise Summary -->
+          <!-- Slide 3: Party-Wise Summary — lazy, src set only when navigated to -->
           <div class="hero-slide" data-slide="2">
             <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
-              <video src="VIDEO_PARTYWISE.mp4" autoplay muted playsinline class="w-full h-full object-cover"></video>
+              <video data-src="VIDEO_PARTYWISE.mp4" muted playsinline preload="none" class="w-full h-full object-cover"></video>
               <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
                 <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
                 <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_PARTYWISE.mp4</span>
@@ -594,10 +680,10 @@
             </div>
           </div>
 
-          <!-- Slide 4: Detailed Entries -->
+          <!-- Slide 4: Detailed Entries — lazy -->
           <div class="hero-slide" data-slide="3">
             <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
-              <video src="VIDEO_DETAILED.mp4" autoplay muted playsinline class="w-full h-full object-cover"></video>
+              <video data-src="VIDEO_DETAILED.mp4" muted playsinline preload="none" class="w-full h-full object-cover"></video>
               <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
                 <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
                 <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_DETAILED.mp4</span>
@@ -605,16 +691,16 @@
             </div>
           </div>
 
-          <!-- Slide 5: IMS (2 videos play sequentially) -->
+          <!-- Slide 5: IMS (2 videos play sequentially) — lazy -->
           <div class="hero-slide" data-slide="4" id="ims-slide">
             <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
               <!-- Video 1 -->
-              <video id="ims-video-1" src="VIDEO_IMS_1.mp4" muted playsinline
+              <video id="ims-video-1" data-src="VIDEO_IMS_1.mp4" muted playsinline preload="none"
                 class="w-full h-full object-cover absolute inset-0"
                 style="opacity:1; transition: opacity .4s ease;"
                 onerror="this.style.display='none';"></video>
               <!-- Video 2 -->
-              <video id="ims-video-2" src="VIDEO_IMS_2.mp4" muted playsinline
+              <video id="ims-video-2" data-src="VIDEO_IMS_2.mp4" muted playsinline preload="none"
                 class="w-full h-full object-cover absolute inset-0"
                 style="opacity:0; transition: opacity .4s ease;"
                 onerror="this.style.display='none';"></video>
@@ -632,10 +718,10 @@
             </div>
           </div>
 
-          <!-- Slide 6: Blocked Credit Detection -->
+          <!-- Slide 6: Blocked Credit Detection — lazy -->
           <div class="hero-slide" data-slide="5">
             <div class="hero-slide-frame relative overflow-hidden" style="padding:0;">
-              <video src="VIDEO_BLOCKED.mp4" autoplay muted playsinline class="w-full h-full object-cover"></video>
+              <video data-src="VIDEO_BLOCKED.mp4" muted playsinline preload="none" class="w-full h-full object-cover"></video>
               <div class="video-placeholder" style="position:absolute;inset:0;display:flex;">
                 <i data-lucide="play-circle" class="w-14 h-14 text-[rgba(26,26,26,0.18)] mb-3"></i>
                 <span class="text-sm text-[var(--text-muted)] font-medium">Add: VIDEO_BLOCKED.mp4</span>
@@ -674,28 +760,29 @@
         </button>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- LOGO TICKER -->
-<section class="bg-section-cream py-14 border-y border-[rgba(26,26,26,0.05)]">
-  <p class="text-center text-xs text-[var(--text-muted)] uppercase tracking-[.25em] mb-10">Trusted by finance teams across India</p>
-  <div style="overflow:hidden; mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);">
-    <div style="display:flex; align-items:center; gap:80px; width:max-content; animation:ticker 18s linear infinite; padding:0 40px;">
-      <img src="logo-newpower.png"  alt="New Power"          style="height:44px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
-      <img src="logo-Kundlik.png"   alt="Kundlik Automation" style="height:36px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
-      <img src="logo-hts.svg"       alt="HTS Switchgears"    style="height:40px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
-      <img src="logo-ftg.webp"      alt="FTG Fluorotech"     style="height:44px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
-      <img src="logo-dahotre.jpeg"  alt="Dahotre & Dahotre"  style="height:40px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
-      <img src="logo-bathija.png"   alt="Bathija Enterprises" style="height:36px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
-      <!-- Duplicate for seamless loop -->
-      <img src="logo-newpower.png"  alt="New Power"          style="height:44px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
-      <img src="logo-Kundlik.png"   alt="Kundlik Automation" style="height:36px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
-      <img src="logo-hts.svg"       alt="HTS Switchgears"    style="height:40px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
-      <img src="logo-ftg.webp"      alt="FTG Fluorotech"     style="height:44px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
-      <img src="logo-dahotre.jpeg"  alt="Dahotre & Dahotre"  style="height:40px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
-      <img src="logo-bathija.png"   alt="Bathija Enterprises" style="height:36px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+    <!-- Logo ticker — moved into hero, directly below slideshow -->
+    <div class="mt-16 max-w-5xl mx-auto">
+      <p class="text-center text-xs text-[var(--text-muted)] uppercase tracking-[.25em] mb-8">Trusted by finance teams across India</p>
+      <div style="overflow:hidden; mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);">
+        <div style="display:flex; align-items:center; gap:80px; width:max-content; animation:ticker 18s linear infinite; padding:0 40px;">
+          <img src="logo-newpower.png"  alt="New Power"          style="height:44px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+          <img src="logo-Kundlik.png"   alt="Kundlik Automation" style="height:36px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+          <img src="logo-hts.svg"       alt="HTS Switchgears"    style="height:40px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+          <img src="logo-ftg.webp"      alt="FTG Fluorotech"     style="height:44px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+          <img src="logo-dahotre.jpeg"  alt="Dahotre & Dahotre"  style="height:40px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+          <img src="logo-bathija.png"   alt="Bathija Enterprises" style="height:36px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+          <!-- Duplicate for seamless loop -->
+          <img src="logo-newpower.png"  alt="New Power"          style="height:44px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+          <img src="logo-Kundlik.png"   alt="Kundlik Automation" style="height:36px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+          <img src="logo-hts.svg"       alt="HTS Switchgears"    style="height:40px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+          <img src="logo-ftg.webp"      alt="FTG Fluorotech"     style="height:44px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+          <img src="logo-dahotre.jpeg"  alt="Dahotre & Dahotre"  style="height:40px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+          <img src="logo-bathija.png"   alt="Bathija Enterprises" style="height:36px;width:auto;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply;opacity:0.85;">
+        </div>
+      </div>
     </div>
+
   </div>
 </section>
 <style>
@@ -945,7 +1032,7 @@
 
     <!-- CTA -->
     <div class="text-center mt-14 reveal">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Start Free Trial for Your Team</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base" onclick="gtag('event','cta_click',{button_text:'Start Free Trial for Your Team',button_location:'solutions'})">Start Free Trial for Your Team</a>
     </div>
 
   </div>
@@ -1044,7 +1131,7 @@
 
     <!-- CTA -->
     <div class="text-center mt-14 reveal">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Start Free Trial for Your Firm</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base" onclick="gtag('event','cta_click',{button_text:'Start Free Trial for Your Firm',button_location:'solutions_ca'})">Start Free Trial for Your Firm</a>
     </div>
 
   </div>
@@ -1112,7 +1199,7 @@
         <p class="text-lg text-[var(--text-dim)] max-w-2xl mx-auto">Email/WhatsApp reminders to suppliers for missing filings &amp; internal departments' coordination for missing data.</p>
       </div>
       <div class="video-card-full">
-        <video src="VIDEO_FOLLOWUP.mp4" autoplay muted loop playsinline class="w-full" onloadeddata="this.nextElementSibling.style.display='none';"></video>
+        <video src="VIDEO_FOLLOWUP.mp4" autoplay muted loop playsinline class="w-full" style="object-fit:contain; background:#f0f4fb;" onloadeddata="this.nextElementSibling.style.display='none';"></video>
         <div class="video-placeholder" style="border-radius:12px;">
           <i data-lucide="play-circle" class="w-16 h-16 text-[rgba(26,26,26,0.18)] mb-3"></i>
           <span class="text-sm text-[var(--text-muted)] font-medium">Automated Follow-Up — Drop in your video</span>
@@ -1129,6 +1216,7 @@
 
   </div>
 </section>
+
 
 <!-- STATS -->
 <section class="bg-section-stats py-28">
@@ -1217,130 +1305,6 @@
   </div>
 </section>
 
-<!-- PRICING -->
-<section id="pricing" class="bg-section-pricing py-16">
-  <div class="max-w-6xl mx-auto px-6">
-    <h2 class="text-center font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em] mb-8 reveal">
-      Flexible Pricing Plans - Corporates
-    </h2>
-
-    <div class="flex justify-center mb-10">
-      <div class="toggle-pill" id="price-toggle" data-state="monthly">
-        <span class="text-base font-medium">Monthly</span>
-        <div class="toggle-track" onclick="togglePrice()">
-          <div class="toggle-knob"></div>
-        </div>
-        <span class="text-lg font-medium leading-tight">Annually<br><span class="text-xs font-normal text-[var(--text-dim)]">(2 Months Free)</span></span>
-      </div>
-    </div>
-
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="card-soft p-6 reveal">
-        <h3 class="text-xl font-bold">Essential</h3>
-        <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">Ideal for small businesses &amp; startups</p>
-        <div class="flex items-baseline gap-1">
-          <span class="text-4xl font-extrabold" data-monthly="5,000" data-annual="4,000" class="text-4xl font-extrabold">₹5,000</span>
-          <span class="text-[var(--text-dim)]">/month</span>
-        </div>
-        <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
-        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: Up to 4,000/yr</p>
-        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>AI Powered Recognition for mismatches</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Sales-only E-invoice Sync</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Manual blocked credit detection</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Email Support</li>
-        </ul>
-        <a href="https://gstreco.heyxia.app/signup" class="btn-signup w-full mt-6">Sign Up</a>
-      </div>
-
-      <div class="pop p-6 rounded-3xl reveal">
-        <h3 class="text-xl font-bold">Advanced</h3>
-        <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">AI-Powered for growing businesses</p>
-        <div class="flex items-baseline gap-1">
-          <span class="text-4xl font-extrabold" data-monthly="10,000" data-annual="9,000" class="text-4xl font-extrabold">₹10,000</span>
-          <span class="text-[var(--text-dim)]">/month</span>
-        </div>
-        <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
-        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 4,000 to 8,000/yr</p>
-        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Everything in Essential</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Auto-detection of Blocked Credit</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Health dashboard</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Priority Chat Support</li>
-        </ul>
-        <a href="https://gstreco.heyxia.app/signup" class="btn-dark w-full mt-6">Sign Up</a>
-      </div>
-
-      <div class="card-soft p-6 reveal">
-        <h3 class="text-xl font-bold">Premium</h3>
-        <p class="text-[var(--text-dim)] text-sm mt-1 mb-4">Enterprise-grade full suite solution</p>
-        <div class="flex items-baseline gap-1">
-          <span class="text-4xl font-extrabold" data-monthly="15,000" data-annual="12,500" class="text-4xl font-extrabold">₹15,000</span>
-          <span class="text-[var(--text-dim)]">/month</span>
-        </div>
-        <p class="text-sm text-[var(--text-dim)] mt-1">/GSTIN</p>
-        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 8,000+ Unlimited</p>
-        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Everything in Advanced</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Dedicated Account Manager</li>
-        </ul>
-        <a href="mailto:varun.d@heyxia.io" class="btn-ghost w-full mt-6">Contact Sales</a>
-      </div>
-    </div>
-
-    <h2 class="text-center font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em] mt-16 mb-8 reveal">
-      Flexible Pricing Plans - CAs &amp; Service Providers
-    </h2>
-
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="card-soft p-6 reveal">
-        <h3 class="text-xl font-bold">Essential</h3>
-        <div class="flex items-baseline gap-1 mt-8">
-          <span class="text-4xl font-extrabold">₹25,000</span>
-          <span class="text-[var(--text-dim)]">/yr</span>
-        </div>
-        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: Up to 75 GSTINs/yr</p>
-        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>AI Powered Recognition for mismatches</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Sales-only E-invoice Sync</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Manual blocked credit detection</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Email Support</li>
-        </ul>
-        <a href="https://gstreco.heyxia.app/signup" class="btn-signup w-full mt-6">Sign Up</a>
-      </div>
-      <div class="pop p-6 rounded-3xl reveal">
-        <h3 class="text-xl font-bold">Advanced</h3>
-        <div class="flex items-baseline gap-1 mt-8">
-          <span class="text-4xl font-extrabold">₹40,000</span>
-          <span class="text-[var(--text-dim)]">/yr</span>
-        </div>
-        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 75 to 150 GSTINs/yr</p>
-        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Everything in Essential</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Auto-detection of Blocked Credit</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Health dashboard</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Priority Chat Support</li>
-        </ul>
-        <a href="https://gstreco.heyxia.app/signup" class="btn-dark w-full mt-6">Sign Up</a>
-      </div>
-      <div class="card-soft p-6 reveal">
-        <h3 class="text-xl font-bold">Premium</h3>
-        <div class="mt-8">
-          <div class="flex items-baseline gap-2 flex-wrap">
-            <span class="text-4xl font-extrabold">₹40,000</span>
-            <span class="text-xl font-bold text-[var(--text-dim)]">+₹10,000/25 GSTINs/yr</span>
-          </div>
-        </div>
-        <p class="text-sm text-[var(--text-dim)] mt-4">Vol: 150+ GSTIN Unlimited/yr</p>
-        <ul class="mt-4 space-y-2 text-sm text-[var(--text-dim)]">
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Everything in Advanced</li>
-          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 text-emerald-700 mt-1 flex-shrink-0"></i>Dedicated Account Manager</li>
-        </ul>
-        <a href="mailto:varun.d@heyxia.io" class="btn-ghost w-full mt-6">Contact Sales</a>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- FAQ -->
 <section id="faq" class="bg-section-cream py-28">
@@ -1408,7 +1372,7 @@
     <h2 class="font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em]">14 Days. Full Access. Zero Risk</h2>
     <p class="mt-6 text-lg text-[var(--text-dim)]">Try GST Reco for free and experience the power of automation.</p>
     <div class="mt-10">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Sign Up for 14-Day Trial</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base" onclick="gtag('event','cta_click',{button_text:'Sign Up for 14-Day Trial',button_location:'footer_cta'})">Sign Up for 14-Day Trial</a>
     </div>
   </div>
 </section>
@@ -1429,7 +1393,7 @@
           <li><a href="#" class="hover:text-black">Home</a></li>
           <li><a href="#features" class="hover:text-black">Features</a></li>
           <li><a href="#platform" class="hover:text-black">Solutions</a></li>
-          <li><a href="#pricing" class="hover:text-black">Pricing</a></li>
+          <li><a href="pricing.html" class="hover:text-black">Pricing</a></li>
           <li><a href="blog.html" class="hover:text-black">Blogs</a></li>
         </ul>
       </div>
@@ -1480,20 +1444,6 @@
   }, { threshold: 0.5 });
   document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
 
-  function togglePrice(){
-    const tog = document.getElementById('price-toggle');
-    const newMode = tog.dataset.state === 'monthly' ? 'annual' : 'monthly';
-    tog.dataset.state = newMode;
-    document.querySelectorAll('[data-monthly]').forEach(el => {
-      if (newMode === 'monthly') {
-        el.textContent = '₹' + el.dataset.monthly;
-      } else {
-        // For annual, show hardcoded annual price
-        el.textContent = '₹' + el.dataset.annual;
-      }
-    });
-  }
-
   const slides = document.getElementById('testimonial-slides');
   let idx = 0;
   const total = slides.children.length;
@@ -1521,6 +1471,27 @@
       return slideEl.querySelector('video:not(#ims-video-1):not(#ims-video-2)');
     }
 
+    // Lazily assign src from data-src so the video actually starts loading
+    function ensureSrc(v){
+      if (!v) return;
+      if (!v.src || v.src === window.location.href) {
+        const ds = v.dataset.src;
+        if (ds) { v.src = ds; v.load(); }
+      }
+    }
+
+    // Pre-load the next slide's video quietly in the background
+    function preloadNext(i){
+      const nextIdx = i + 1;
+      if (nextIdx >= total) return; // don't wrap — slide 0 is already loaded
+      if (nextIdx === IMS_IDX){
+        ensureSrc(imsV1); ensureSrc(imsV2);
+      } else {
+        const v = getVideo(heroSlides[nextIdx]);
+        ensureSrc(v);
+      }
+    }
+
     // Update tab highlight + animate progress bar for the duration of the video
     let progressInterval = null;
     function setTabActive(i, durationMs){
@@ -1537,7 +1508,7 @@
       // Get the active video to track playback
       let activeVideo = null;
       if (i === IMS_IDX){
-        activeVideo = imsV1; // Start with first IMS video
+        activeVideo = imsV1;
       } else {
         activeVideo = getVideo(heroSlides[i]);
       }
@@ -1580,15 +1551,22 @@
       current = i;
 
       if (i === IMS_IDX){
-        // Reset both IMS videos
+        ensureSrc(imsV1); ensureSrc(imsV2);
         if (imsV1 && imsV2){
           imsV1.currentTime = 0; imsV2.currentTime = 0;
           imsV1.style.opacity = '1'; imsV2.style.opacity = '0';
           if (imsDot1){ imsDot1.style.opacity='1'; imsDot2.style.opacity='0.4'; }
 
-          // Estimate total duration for the progress bar (v1 + v2)
-          const totalDur = ((imsV1.duration||0) + (imsV2.duration||0)) * 1000 || 10000;
-          setTabActive(i, totalDur);
+          // Wait for metadata on both before calculating total duration
+          const setImsTabActive = () => {
+            const totalDur = ((imsV1.duration||0) + (imsV2.duration||0)) * 1000 || 10000;
+            setTabActive(i, totalDur);
+          };
+          if (imsV1.readyState >= 1 && imsV2.readyState >= 1) {
+            setImsTabActive();
+          } else {
+            imsV1.addEventListener('loadedmetadata', setImsTabActive, { once: true });
+          }
 
           imsV1.play().catch(()=>{});
           imsV1.onended = () => {
@@ -1598,33 +1576,43 @@
             imsV2.onended = () => next();
           };
         } else {
-          // No IMS videos — fallback after 5s
           setTabActive(i, 5000);
           setTimeout(next, 5000);
         }
       } else {
         const v = getVideo(heroSlides[i]);
         if (v){
-          v.currentTime = 0;
-          const dur = (v.duration && !isNaN(v.duration)) ? v.duration * 1000 : 0;
-          // If duration already known, set bar immediately; otherwise wait for metadata
-          if (dur > 0){
-            setTabActive(i, dur);
-          } else {
-            setTabActive(i, 0);
-            v.addEventListener('loadedmetadata', function onMeta(){
-              setTabActive(i, v.duration * 1000);
-              v.removeEventListener('loadedmetadata', onMeta);
-            });
-          }
-          v.play().catch(()=>{});
-          v.onended = () => next();
+          // Ensure src is loaded before playing
+          ensureSrc(v);
+          const startPlay = () => {
+            v.currentTime = 0;
+            const dur = (v.duration && !isNaN(v.duration)) ? v.duration * 1000 : 0;
+            if (dur > 0){
+              setTabActive(i, dur);
+            } else {
+              setTabActive(i, 0);
+              v.addEventListener('loadedmetadata', function onMeta(){
+                setTabActive(i, v.duration * 1000);
+                v.removeEventListener('loadedmetadata', onMeta);
+              });
+            }
+            v.play().catch(()=>{});
+            v.onended = () => next();
+          };
+          // Always wait for canplay — avoids stutter on slow connections
+          v.addEventListener('canplay', function onCanPlay(){
+            v.removeEventListener('canplay', onCanPlay);
+            startPlay();
+          });
+          v.load();
         } else {
-          // No video element — fallback 5s
           setTabActive(i, 5000);
           setTimeout(next, 5000);
         }
       }
+
+      // Quietly preload the next slide
+      preloadNext(i);
     }
 
     // Tab click — jump to that slide
@@ -1634,9 +1622,12 @@
       });
     });
 
-    // Start
+    // Start — initialise src for slide 0 then go
+    ensureSrc(getVideo(heroSlides[0]));
     goTo(0);
   })();
+
+
 </script>
 
 <!-- LinkedIn Insight Tag -->
