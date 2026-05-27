@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HSN Code GST Rate Finder — Heyxia GST Reco</title>
+<meta name="description" content="Free HSN code GST rate lookup tool. Search by HSN code or product keyword to instantly find the applicable GST rate, CGST, SGST, and IGST — updated for GST 2.0 (Sept 2025)." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<!-- Google Analytics GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-982KPPE5W9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date()); gtag("config", "G-982KPPE5W9");
+</script>
+
+<style>
+  :root {
+    --bg:#ffffff; --bg-blue:#DCE7F7; --card:#F2EAE0; --card-2:#EFE6DA;
+    --text:#1A1A1A; --text-soft:#2B2B2B; --text-dim:#5C5C5C; --text-muted:#8A8A8A;
+    --border:rgba(26,26,26,0.08); --border-strong:rgba(26,26,26,0.14);
+    --cta-blue:#A8C8F0; --cta-blue-dark:#8AB1E5; --cta-text:#1A2A4A;
+    --brand-gradient:linear-gradient(90deg,#F5A86E 0%,#E891A0 35%,#C99BCE 65%,#9B7FD4 100%);
+    --r0:#6b7280; --r0-bg:#f3f4f6; --r0-border:#d1d5db;
+    --r5:#0369a1; --r5-bg:#e0f2fe; --r5-border:#7dd3fc;
+    --r12:#065f46; --r12-bg:#d1fae5; --r12-border:#6ee7b7;
+    --r18:#1d4ed8; --r18-bg:#dbeafe; --r18-border:#93c5fd;
+    --r28:#7c2d12; --r28-bg:#fee2e2; --r28-border:#fca5a5;
+    --r40:#581c87; --r40-bg:#f3e8ff; --r40-border:#d8b4fe;
+  }
+  *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+  html,body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;margin:0;}
+
+  .bg-section-cream { background: var(--bg); }
+
+  .gradient-text{background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .nav-pill{background:rgba(255,255,255,0.7);backdrop-filter:blur(14px);border:1px solid rgba(26,26,26,0.06);border-radius:9999px;box-shadow:0 4px 20px -8px rgba(26,26,26,0.08);}
+  .btn-primary{
+    background: var(--cta-blue);
+    color: var(--cta-text);
+    font-weight: 600;
+    padding: .9rem 1.6rem;
+    border-radius: 9999px;
+    transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(74,107,201,0.15);
+    text-decoration: none;
+  }
+  .btn-primary:hover{background:var(--cta-blue-dark);transform:translateY(-1px);}
+
+  .btn-signup{background:var(--cta-blue);color:var(--cta-text);font-weight:600;padding:.65rem 1.2rem;border-radius:9999px;transition:all .2s ease;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(74,107,201,0.15);text-decoration:none;}
+  @media(min-width:768px){.btn-signup{padding:.9rem 1.6rem;}}
+  .btn-signup:hover{background:var(--cta-blue-dark);transform:translateY(-1px);}
+
+  /* Tabs */
+  .tab-bar{display:flex;gap:.5rem;background:rgba(26,26,26,0.04);border:1px solid var(--border);border-radius:9999px;padding:4px;width:fit-content;margin:0 auto;}
+  .tab-btn{padding:.5rem 1.25rem;border-radius:9999px;font-size:.875rem;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text-dim);transition:all .2s ease;}
+  .tab-btn.active{background:#fff;color:var(--cta-text);box-shadow:0 2px 8px -2px rgba(26,26,26,0.12);}
+
+  /* Search */
+  .search-wrap{position:relative;width:100%;max-width:640px;margin:0 auto;}
+  .search-input{width:100%;padding:1.1rem 1.5rem;padding-right:140px;font-size:1rem;font-weight:500;font-family:'Inter',sans-serif;border:2px solid var(--border-strong);border-radius:9999px;background:#fff;color:var(--text);outline:none;transition:border-color .2s ease,box-shadow .2s ease;}
+  .search-input#code-input{letter-spacing:.04em;font-variant-numeric:tabular-nums;}
+  .search-input::placeholder{color:var(--text-muted);font-weight:400;}
+  .search-input:focus{border-color:#A8C8F0;box-shadow:0 0 0 4px rgba(168,200,240,0.2);}
+  .search-btn{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:var(--cta-blue);color:var(--cta-text);font-weight:700;font-size:.9rem;padding:.7rem 1.3rem;border-radius:9999px;border:none;cursor:pointer;transition:all .2s ease;display:flex;align-items:center;gap:.4rem;white-space:nowrap;}
+  .search-btn:hover{background:var(--cta-blue-dark);transform:translateY(-50%) translateY(-1px);}
+
+  /* Rate badge */
+  .rate-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.8rem;font-weight:800;padding:.3rem .8rem;border-radius:9999px;border:1.5px solid;letter-spacing:.02em;}
+  .rate-0  {color:var(--r0); background:var(--r0-bg); border-color:var(--r0-border);}
+  .rate-5  {color:var(--r5); background:var(--r5-bg); border-color:var(--r5-border);}
+  .rate-12 {color:var(--r12);background:var(--r12-bg);border-color:var(--r12-border);}
+  .rate-18 {color:var(--r18);background:var(--r18-bg);border-color:var(--r18-border);}
+  .rate-28 {color:var(--r28);background:var(--r28-bg);border-color:var(--r28-border);}
+  .rate-40 {color:var(--r40);background:var(--r40-bg);border-color:var(--r40-border);}
+
+  /* Result card */
+  .result-card{background:#fff;border:1px solid var(--border-strong);border-radius:20px;overflow:hidden;box-shadow:0 20px 40px -16px rgba(26,26,26,0.1);animation:slideUp .35s ease both;}
+  .result-header{padding:1.25rem 1.75rem;background:linear-gradient(135deg,#DCE7F7 0%,#EFE6DA 100%);border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+  .result-body{padding:1.25rem 1.75rem;}
+  .result-hsn{font-size:1.5rem;font-weight:900;letter-spacing:.06em;color:var(--cta-text);font-variant-numeric:tabular-nums;}
+  .field-label{font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem;}
+  .field-value{font-size:.92rem;font-weight:600;color:var(--text);line-height:1.45;}
+  .result-divider{height:1px;background:var(--border);margin:1rem 0;}
+
+  /* Rate breakdown grid */
+  .rate-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;}
+  @media(max-width:480px){.rate-grid{grid-template-columns:repeat(3,1fr);gap:.5rem;}}
+  .rate-cell{background:rgba(26,26,26,0.03);border:1px solid var(--border);border-radius:12px;padding:.75rem;text-align:center;}
+  .rate-cell-value{font-size:1.4rem;font-weight:900;color:var(--cta-text);}
+  .rate-cell-label{font-size:.65rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-top:.15rem;}
+
+  /* Multiple results list */
+  .results-list{display:flex;flex-direction:column;gap:.75rem;}
+  .result-row{background:#fff;border:1px solid var(--border-strong);border-radius:16px;padding:1rem 1.25rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;cursor:pointer;transition:all .2s ease;animation:slideUp .3s ease both;}
+  .result-row:hover{border-color:#A8C8F0;box-shadow:0 4px 16px -4px rgba(168,200,240,0.4);}
+  .result-row-hsn{font-size:1rem;font-weight:800;color:var(--cta-text);letter-spacing:.04em;}
+  .result-row-desc{font-size:.83rem;color:var(--text-dim);margin-top:.2rem;line-height:1.4;}
+  .result-row-chapter{font-size:.7rem;font-weight:600;color:var(--text-muted);margin-top:.15rem;}
+
+  /* Chapter badge */
+  .chapter-pill{display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;font-weight:700;color:var(--text-dim);background:rgba(26,26,26,0.04);border:1px solid var(--border);border-radius:9999px;padding:.2rem .6rem;}
+
+  /* No results */
+  .no-results{text-align:center;padding:3rem 1rem;}
+
+  /* Hint pills */
+  .hint-pill{font-size:11px;font-weight:600;color:var(--text-dim);background:rgba(26,26,26,0.04);border:1px solid var(--border);border-radius:9999px;padding:3px 10px;letter-spacing:.02em;}
+
+  /* CTA banner */
+  .cta-banner{background:linear-gradient(135deg,#DCE7F7 0%,#EFE6DA 100%);border:1px solid rgba(168,200,240,0.4);border-radius:16px;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;}
+
+  /* Spinner */
+  .spinner{width:16px;height:16px;border:2.5px solid rgba(26,42,74,0.2);border-top-color:var(--cta-text);border-radius:50%;animation:spin .6s linear infinite;display:inline-block;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @keyframes slideUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;}
+  .reveal.in{opacity:1;transform:none;}
+
+  /* Popular chips */
+  .popular-chip{display:inline-flex;align-items:center;gap:.35rem;font-size:.78rem;font-weight:600;color:var(--text-dim);background:rgba(26,26,26,0.04);border:1px solid var(--border);border-radius:9999px;padding:.28rem .75rem;cursor:pointer;transition:all .15s ease;}
+  .popular-chip:hover{background:rgba(168,200,240,0.2);border-color:rgba(168,200,240,0.5);color:var(--cta-text);}
+
+  /* GST 2.0 notice */
+  .gst2-notice{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:.75rem 1rem;font-size:.8rem;color:#15803d;display:flex;align-items:center;gap:.5rem;max-width:640px;margin:.75rem auto 0;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="fixed top-4 inset-x-0 z-50 px-4">
+  <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between gap-3 md:gap-4">
+    <a href="index.html" class="flex items-center pl-2">
+      <img src="heyxia-logo.png" alt="Heyxia" class="h-8 md:h-10 w-auto" style="max-width:160px;" />
+    </a>
+    <nav class="hidden md:flex items-center gap-10 text-[15px] text-[var(--text-soft)]">
+      <a href="index.html#features" class="hover:text-black transition">Features</a>
+      <a href="index.html#solutions" class="hover:text-black transition">Solutions</a>
+      <a href="pricing.html" class="hover:text-black transition">Pricing</a>
+      <a href="blog.html" class="hover:text-black transition">Blogs</a>
+      <!-- Tools dropdown -->
+      <div class="relative" id="tools-menu-wrap">
+        <button id="tools-btn" onclick="toggleToolsMenu()" class="flex items-center gap-1 font-semibold text-[var(--cta-text)] focus:outline-none" aria-haspopup="true" aria-expanded="false">
+          Tools
+          <svg id="tools-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s ease;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div id="tools-dropdown" class="hidden absolute left-0 top-[calc(100%+10px)] bg-white border border-[rgba(26,26,26,0.1)] rounded-2xl shadow-[0_12px_40px_-8px_rgba(26,26,26,0.15)] py-2 min-w-[210px] z-50">
+          <a href="gstin-search.html" class="flex items-center gap-3 px-4 py-2.5 hover:bg-[rgba(26,26,26,0.04)] transition text-[14px] text-[var(--text-soft)] hover:text-black rounded-xl mx-1">
+            <span class="w-7 h-7 rounded-lg bg-[#DCE7F7] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </span>
+            <div>
+              <div class="font-semibold">GSTIN Search</div>
+              <div class="text-[11px] text-[var(--text-muted)]">Verify taxpayer details</div>
+            </div>
+          </a>
+          <a href="hsn-lookup.html" class="flex items-center gap-3 px-4 py-2.5 hover:bg-[rgba(26,26,26,0.04)] transition text-[14px] text-[var(--text-soft)] hover:text-black rounded-xl mx-1 bg-[rgba(168,200,240,0.12)]">
+            <span class="w-7 h-7 rounded-lg bg-[#F2EAE0] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            </span>
+            <div>
+              <div class="font-semibold text-[var(--cta-text)]">HSN Rate Lookup</div>
+              <div class="text-[11px] text-[var(--text-muted)]">Find GST rates by code</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[13px] md:text-[15px]" onclick="gtag('event','cta_click',{button_text:'Sign Up for 14 Day Trial',button_location:'hsn_tool_nav'})">Sign Up for 14 Day Trial</a>
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[13px] md:text-[15px] hidden md:inline-flex" onclick="gtag('event','cta_click',{button_text:'Login',button_location:'hsn_tool_nav'})">Login</a>
+      <!-- Hamburger — mobile only -->
+      <button id="nav-hamburger" class="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-full hover:bg-gray-100 transition ml-1" aria-label="Open menu">
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300 my-[4px]"></span>
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="md:hidden hidden mt-2 mx-auto max-w-6xl px-4">
+    <div class="bg-white border border-gray-200 rounded-lg px-6 py-5 flex flex-col gap-4 text-[15px] text-[var(--text-soft)]">
+      <a href="index.html#features" class="hover:text-black transition" onclick="closeMobileMenu()">Features</a>
+      <a href="index.html#solutions" class="hover:text-black transition" onclick="closeMobileMenu()">Solutions</a>
+      <a href="pricing.html" class="hover:text-black transition" onclick="closeMobileMenu()">Pricing</a>
+      <a href="blog.html" class="hover:text-black transition" onclick="closeMobileMenu()">Blogs</a>
+      <div class="border-t border-gray-100 pt-1 mt-1">
+        <p class="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-2">Tools</p>
+        <a href="gstin-search.html" class="flex items-center gap-2 py-1.5 hover:text-black transition" onclick="closeMobileMenu()">
+          <span class="w-6 h-6 rounded-lg bg-[#DCE7F7] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
+          GSTIN Search
+        </a>
+        <a href="hsn-lookup.html" class="flex items-center gap-2 py-1.5 font-semibold text-[var(--cta-text)]" onclick="closeMobileMenu()">
+          <span class="w-6 h-6 rounded-lg bg-[#F2EAE0] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          </span>
+          HSN Rate Lookup
+        </a>
+      </div>
+      <hr class="border-gray-200">
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px] text-center" onclick="gtag('event','cta_click',{button_text:'Login',button_location:'hsn_mobile_menu'})">Login</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hamburger = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = !mobileMenu.classList.contains('hidden');
+    mobileMenu.classList.toggle('hidden', isOpen);
+    const lines = hamburger.querySelectorAll('.ham-line');
+    if (!isOpen) {
+      lines[0].style.transform = 'translateY(6px) rotate(45deg)';
+      lines[1].style.opacity = '0';
+      lines[2].style.transform = 'translateY(-6px) rotate(-45deg)';
+    } else {
+      lines[0].style.transform = '';
+      lines[1].style.opacity = '';
+      lines[2].style.transform = '';
+    }
+  });
+
+  function closeMobileMenu() {
+    mobileMenu.classList.add('hidden');
+    const lines = hamburger.querySelectorAll('.ham-line');
+    lines[0].style.transform = '';
+    lines[1].style.opacity = '';
+    lines[2].style.transform = '';
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+      closeMobileMenu();
+    }
+  });
+
+  // Tools dropdown
+  function toggleToolsMenu() {
+    const dd = document.getElementById('tools-dropdown');
+    const chevron = document.getElementById('tools-chevron');
+    const btn = document.getElementById('tools-btn');
+    const isOpen = !dd.classList.contains('hidden');
+    dd.classList.toggle('hidden', isOpen);
+    chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  }
+  document.addEventListener('click', (e) => {
+    const wrap = document.getElementById('tools-menu-wrap');
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById('tools-dropdown').classList.add('hidden');
+      document.getElementById('tools-chevron').style.transform = '';
+      document.getElementById('tools-btn').setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>
+
+<!-- HERO -->
+<section class="pt-32 pb-12 px-6" style="background:linear-gradient(180deg,#f8f4ee 0%,#ffffff 100%);">
+  <div class="max-w-3xl mx-auto text-center">
+
+    <div class="inline-flex items-center gap-2 bg-white border border-[var(--border-strong)] rounded-full px-4 py-1.5 text-xs font-semibold text-[var(--text-dim)] mb-5 shadow-sm">
+      <span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span>
+      Updated for GST 2.0 — Effective Sept 22, 2025
+    </div>
+
+    <h1 class="font-extrabold text-4xl md:text-6xl leading-[1.06] tracking-[-0.03em]">
+      HSN Code<br><span class="gradient-text">GST Rate Finder</span>
+    </h1>
+    <p class="mt-5 text-[var(--text-dim)] text-lg max-w-xl mx-auto leading-relaxed">
+      Search by HSN code or product keyword. Get CGST, SGST, IGST rates instantly — no login, no signup.
+    </p>
+
+    <!-- Tab toggle -->
+    <div class="mt-8">
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-code" onclick="switchTab('code')">
+          Search by HSN Code
+        </button>
+        <button class="tab-btn" id="tab-keyword" onclick="switchTab('keyword')">
+          Search by Keyword
+        </button>
+      </div>
+    </div>
+
+    <!-- Search box -->
+    <div class="mt-5">
+      <!-- Code search -->
+      <div id="panel-code" class="search-wrap">
+        <input type="text" id="code-input" class="search-input" placeholder="Enter HSN code  e.g. 1001, 8471, 9403" maxlength="8" autocomplete="off" spellcheck="false" inputmode="numeric" />
+        <button class="search-btn" onclick="searchByCode()">
+          <span>Look Up</span>
+        </button>
+      </div>
+      <!-- Keyword search -->
+      <div id="panel-keyword" class="search-wrap hidden">
+        <input type="text" id="keyword-input" class="search-input" placeholder="Type a product  e.g. rice, mobile phone, cement" autocomplete="off" spellcheck="false" />
+        <button class="search-btn" onclick="searchByKeyword()">
+          <span>Search</span>
+        </button>
+      </div>
+
+      <div class="gst2-notice">
+        <i data-lucide="check-circle-2" style="width:14px;height:14px;flex-shrink:0;"></i>
+        Rates reflect GST 2.0 slabs (0%, 5%, 18%, 40%) per Notification No. 9/2025-CT(Rate)
+      </div>
+
+      <!-- Code hints -->
+      <div id="code-hints" class="flex flex-wrap gap-2 justify-center mt-4">
+        <span class="hint-pill">2-digit = Chapter</span>
+        <span class="hint-pill">4-digit = Heading</span>
+        <span class="hint-pill">6-digit = Sub-heading</span>
+        <span class="hint-pill">8-digit = Tariff item</span>
+      </div>
+
+      <!-- Keyword popular -->
+      <div id="keyword-hints" class="hidden flex-wrap gap-2 justify-center mt-4">
+        <span class="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide w-full mb-1">Popular searches</span>
+        <span class="popular-chip" onclick="quickSearch('rice')">Rice</span>
+        <span class="popular-chip" onclick="quickSearch('mobile phone')">Mobile Phone</span>
+        <span class="popular-chip" onclick="quickSearch('cement')">Cement</span>
+        <span class="popular-chip" onclick="quickSearch('gold')">Gold</span>
+        <span class="popular-chip" onclick="quickSearch('cotton')">Cotton</span>
+        <span class="popular-chip" onclick="quickSearch('shoes')">Shoes / Footwear</span>
+        <span class="popular-chip" onclick="quickSearch('medicine')">Medicine</span>
+        <span class="popular-chip" onclick="quickSearch('furniture')">Furniture</span>
+        <span class="popular-chip" onclick="quickSearch('car')">Car / Automobile</span>
+        <span class="popular-chip" onclick="quickSearch('iron steel')">Iron &amp; Steel</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="pb-20 px-6">
+  <div id="results-area" class="max-w-3xl mx-auto"></div>
+</section>
+
+<!-- RATE SLAB REFERENCE -->
+<section class="py-16 px-6" style="background:linear-gradient(180deg,#ffffff 0%,#DCE7F7 100%);">
+  <div class="max-w-4xl mx-auto reveal">
+    <h2 class="text-center font-extrabold text-2xl md:text-3xl tracking-tight mb-2">GST 2.0 Rate Slabs</h2>
+    <p class="text-center text-sm text-[var(--text-muted)] mb-8">Effective September 22, 2025 — Notification No. 9/2025-CT(Rate)</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-white rounded-2xl p-5 border border-[var(--border)] text-center">
+        <div class="text-3xl font-900 font-black" style="color:var(--r0);">0%</div>
+        <div class="text-xs font-700 font-bold mt-1" style="color:var(--r0);">Exempt / Nil</div>
+        <p class="text-xs text-[var(--text-dim)] mt-2 leading-relaxed">Fresh fruits & vegetables, unbranded grains, printed books, life-saving drugs, education, healthcare</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 border border-[var(--border)] text-center">
+        <div class="text-3xl font-black" style="color:var(--r5);">5%</div>
+        <div class="text-xs font-bold mt-1" style="color:var(--r5);">Essential Goods</div>
+        <p class="text-xs text-[var(--text-dim)] mt-2 leading-relaxed">Branded food items, butter/ghee, most medicines, soap/shampoo, clothing ≤₹2,500, bicycles, tractors</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 border border-[var(--border)] text-center">
+        <div class="text-3xl font-black" style="color:var(--r18);">18%</div>
+        <div class="text-xs font-bold mt-1" style="color:var(--r18);">Standard Rate</div>
+        <p class="text-xs text-[var(--text-dim)] mt-2 leading-relaxed">Mobile phones, computers, AC, cement, small cars, iron/steel, paints, garments >₹2,500, IT/CA/legal services</p>
+      </div>
+      <div class="bg-white rounded-2xl p-5 border border-[var(--border)] text-center">
+        <div class="text-3xl font-black" style="color:var(--r40);">40%</div>
+        <div class="text-xs font-bold mt-1" style="color:var(--r40);">Luxury / Sin</div>
+        <p class="text-xs text-[var(--text-dim)] mt-2 leading-relaxed">Luxury cars, bikes >350cc, aerated drinks, tobacco, pan masala, casino/online gaming</p>
+      </div>
+    </div>
+    <p class="text-center text-xs text-[var(--text-muted)] mt-5">Note: 12% slab was largely merged into 5% or 18% under GST 2.0. Some legacy 12% entries may still apply.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="py-16 px-6 bg-white">
+  <div class="max-w-3xl mx-auto text-center reveal">
+    <h2 class="font-extrabold text-2xl md:text-3xl tracking-tight">Ensure correct HSN codes in your GST returns</h2>
+    <p class="mt-3 text-[var(--text-dim)] max-w-lg mx-auto">Wrong HSN codes in GSTR-1 can trigger mismatches in GSTR-2B, blocking your ITC. GST Reco catches these automatically.</p>
+    <div class="mt-7 flex flex-wrap items-center justify-center gap-4">
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup" style="padding:.9rem 1.8rem;font-size:1rem;" onclick="gtag('event','cta_click',{button_text:'Start 14-Day Free Trial',button_location:'hsn_tool_footer'})">Start 14-Day Free Trial</a>
+      <a href="mailto:varun.d@heyxia.io" style="font-size:.95rem;font-weight:600;color:var(--text-dim);text-decoration:none;" onclick="gtag('event','cta_click',{button_text:'Book a Demo',button_location:'hsn_tool_footer'})">Book a Demo →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-section-cream pt-16 pb-10 border-t border-[rgba(26,26,26,0.05)]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-10">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <img src="heyxia-logo.png" alt="Heyxia" class="h-10 w-auto" />
+        </div>
+        <p class="text-[var(--text-dim)] max-w-sm leading-relaxed">AI-powered GST reconciliation for finance teams, corporates, and chartered accountants across India.</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Pages</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="index.html" class="hover:text-black">Home</a></li>
+          <li><a href="index.html#features" class="hover:text-black">Features</a></li>
+          <li><a href="index.html#solutions" class="hover:text-black">Solutions</a></li>
+          <li><a href="pricing.html" class="hover:text-black">Pricing</a></li>
+          <li><a href="blog.html" class="hover:text-black">Blogs</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Information</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="mailto:varun.d@heyxia.io" class="hover:text-black">Contact Us</a></li>
+          <li><a href="privacy-policy.html" class="hover:text-black">Privacy Policy</a></li>
+          <li><a href="terms-of-use.html" class="hover:text-black">Terms of Use</a></li>
+          <li><a href="important-links.html" class="hover:text-black">Important Links</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-[rgba(26,26,26,0.06)] flex flex-col md:flex-row justify-between gap-2 text-xs text-[var(--text-muted)]">
+      <p>© 2026 GST Reco. All Rights Reserved.</p>
+      <p>Made with care for Indian finance teams.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────
+// HSN DATASET — covers all 99 chapters
+// Format: { hsn, description, rate, cgst, sgst, igst, chapter, chapterName, keywords[] }
+// Rates per GST 2.0 (Notification 9/2025-CT(Rate), effective 22 Sept 2025)
+// ─────────────────────────────────────────────
+const HSN_DATA = [
+  // Chapter 1 — Live Animals
+  {hsn:'0101',desc:'Live horses, asses, mules and hinnies',rate:0,chapter:'01',chapterName:'Live Animals',keywords:['horse','mule','donkey','ass']},
+  {hsn:'0102',desc:'Live bovine animals (cattle, buffalo)',rate:0,chapter:'01',chapterName:'Live Animals',keywords:['cattle','cow','buffalo','bull','bovine']},
+  {hsn:'0103',desc:'Live swine (pigs)',rate:0,chapter:'01',chapterName:'Live Animals',keywords:['pig','swine','hog','pork animal']},
+  {hsn:'0105',desc:'Live poultry — fowls, ducks, geese, turkeys',rate:0,chapter:'01',chapterName:'Live Animals',keywords:['poultry','chicken','duck','turkey','hen','fowl']},
+
+  // Chapter 2 — Meat & Edible Offal
+  {hsn:'0201',desc:'Meat of bovine animals, fresh or chilled',rate:0,chapter:'02',chapterName:'Meat & Edible Offal',keywords:['beef','mutton','meat','bovine fresh']},
+  {hsn:'0202',desc:'Meat of bovine animals, frozen',rate:5,chapter:'02',chapterName:'Meat & Edible Offal',keywords:['frozen beef','frozen meat','frozen mutton']},
+  {hsn:'0207',desc:'Meat and edible offal of poultry, fresh or chilled',rate:0,chapter:'02',chapterName:'Meat & Edible Offal',keywords:['chicken meat','poultry meat','chicken fresh']},
+  {hsn:'0210',desc:'Meat and edible offal, salted, dried or smoked',rate:5,chapter:'02',chapterName:'Meat & Edible Offal',keywords:['dried meat','smoked meat','salted meat']},
+
+  // Chapter 3 — Fish
+  {hsn:'0302',desc:'Fish, fresh or chilled (excluding fish fillets)',rate:0,chapter:'03',chapterName:'Fish & Seafood',keywords:['fish fresh','fresh fish','chilled fish']},
+  {hsn:'0303',desc:'Fish, frozen (excluding fish fillets)',rate:5,chapter:'03',chapterName:'Fish & Seafood',keywords:['frozen fish','fish frozen']},
+  {hsn:'0306',desc:'Crustaceans — shrimps, prawns, lobsters, crabs',rate:5,chapter:'03',chapterName:'Fish & Seafood',keywords:['prawn','shrimp','lobster','crab','crustacean']},
+  {hsn:'0307',desc:'Molluscs — oysters, mussels, squid, octopus',rate:5,chapter:'03',chapterName:'Fish & Seafood',keywords:['squid','octopus','oyster','mussel','mollusc']},
+
+  // Chapter 4 — Dairy
+  {hsn:'0401',desc:'Milk and cream, not concentrated, no added sugar',rate:0,chapter:'04',chapterName:'Dairy Products & Eggs',keywords:['milk','cream','dairy','fresh milk']},
+  {hsn:'0402',desc:'Milk and cream, concentrated or sweetened',rate:5,chapter:'04',chapterName:'Dairy Products & Eggs',keywords:['condensed milk','evaporated milk','milk powder','concentrated milk']},
+  {hsn:'0403',desc:'Buttermilk, curd, yogurt, kephir',rate:0,chapter:'04',chapterName:'Dairy Products & Eggs',keywords:['curd','yogurt','buttermilk','dahi','lassi','chaas']},
+  {hsn:'0405',desc:'Butter and other fats and oils derived from milk',rate:5,chapter:'04',chapterName:'Dairy Products & Eggs',keywords:['butter','ghee','dairy fat','milk fat']},
+  {hsn:'0406',desc:'Cheese and curd',rate:5,chapter:'04',chapterName:'Dairy Products & Eggs',keywords:['cheese','paneer','cottage cheese']},
+  {hsn:'0407',desc:'Birds\' eggs, in shell, fresh or preserved',rate:0,chapter:'04',chapterName:'Dairy Products & Eggs',keywords:['egg','eggs','poultry egg','hen egg']},
+
+  // Chapter 7 — Vegetables
+  {hsn:'0701',desc:'Potatoes, fresh or chilled',rate:0,chapter:'07',chapterName:'Vegetables',keywords:['potato','aloo','potatoes']},
+  {hsn:'0702',desc:'Tomatoes, fresh or chilled',rate:0,chapter:'07',chapterName:'Vegetables',keywords:['tomato','tamatar']},
+  {hsn:'0703',desc:'Onions, shallots, garlic, leeks',rate:0,chapter:'07',chapterName:'Vegetables',keywords:['onion','garlic','leek','shallot','pyaz','lahsun']},
+  {hsn:'0706',desc:'Carrots, turnips, beetroot, radishes',rate:0,chapter:'07',chapterName:'Vegetables',keywords:['carrot','turnip','beetroot','radish','gajar']},
+  {hsn:'0714',desc:'Manioc, arrowroot, sweet potatoes, yams',rate:0,chapter:'07',chapterName:'Vegetables',keywords:['sweet potato','yam','tapioca','arrowroot']},
+
+  // Chapter 8 — Fruit
+  {hsn:'0801',desc:'Coconuts, Brazil nuts, cashew nuts, fresh or dried',rate:0,chapter:'08',chapterName:'Fruit & Nuts',keywords:['coconut','cashew','brazil nut','nariyal']},
+  {hsn:'0803',desc:'Bananas, including plantains, fresh or dried',rate:0,chapter:'08',chapterName:'Fruit & Nuts',keywords:['banana','plantain','kela']},
+  {hsn:'0805',desc:'Citrus fruit — oranges, lemons, limes, grapefruit',rate:0,chapter:'08',chapterName:'Fruit & Nuts',keywords:['orange','lemon','lime','citrus','grapefruit','mosambi']},
+  {hsn:'0806',desc:'Grapes, fresh or dried (raisins)',rate:0,chapter:'08',chapterName:'Fruit & Nuts',keywords:['grapes','raisins','angur','kishmish']},
+  {hsn:'0808',desc:'Apples, pears and quinces',rate:0,chapter:'08',chapterName:'Fruit & Nuts',keywords:['apple','pear','quince','seb']},
+  {hsn:'0813',desc:'Fruit, dried (apricots, prunes, figs, dates, tamarind)',rate:0,chapter:'08',chapterName:'Fruit & Nuts',keywords:['dried fruit','apricot','prune','fig','date','tamarind','imli']},
+
+  // Chapter 9 — Spices
+  {hsn:'0901',desc:'Coffee, whether or not roasted or decaffeinated',rate:5,chapter:'09',chapterName:'Coffee, Tea & Spices',keywords:['coffee','roasted coffee','instant coffee']},
+  {hsn:'0902',desc:'Tea, whether or not flavoured',rate:5,chapter:'09',chapterName:'Coffee, Tea & Spices',keywords:['tea','chai','green tea','black tea','masala chai']},
+  {hsn:'0904',desc:'Pepper of the genus Piper; dried or crushed chillies',rate:5,chapter:'09',chapterName:'Coffee, Tea & Spices',keywords:['pepper','chilli','black pepper','red chilli','mirch','kali mirch']},
+  {hsn:'0910',desc:'Ginger, saffron, turmeric, thyme, bay leaves, curry',rate:5,chapter:'09',chapterName:'Coffee, Tea & Spices',keywords:['ginger','saffron','turmeric','curry','haldi','adrak','kesar']},
+
+  // Chapter 10 — Cereals
+  {hsn:'1001',desc:'Wheat and meslin',rate:0,chapter:'10',chapterName:'Cereals',keywords:['wheat','gehun','atta','flour wheat']},
+  {hsn:'1006',desc:'Rice',rate:0,chapter:'10',chapterName:'Cereals',keywords:['rice','chawal','basmati','brown rice','paddy']},
+  {hsn:'1007',desc:'Grain sorghum',rate:0,chapter:'10',chapterName:'Cereals',keywords:['sorghum','jowar','milo']},
+  {hsn:'1008',desc:'Buckwheat, millet, canary seed and other cereals',rate:0,chapter:'10',chapterName:'Cereals',keywords:['millet','bajra','buckwheat','ragi','canary seed']},
+
+  // Chapter 11 — Milling Products
+  {hsn:'1101',desc:'Wheat or meslin flour',rate:0,chapter:'11',chapterName:'Milling Products',keywords:['wheat flour','atta','maida','flour']},
+  {hsn:'1102',desc:'Cereal flours other than wheat or meslin',rate:0,chapter:'11',chapterName:'Milling Products',keywords:['rice flour','corn flour','maize flour','besan','gram flour']},
+
+  // Chapter 15 — Animal / Vegetable Fats & Oils
+  {hsn:'1507',desc:'Soya-bean oil and its fractions',rate:5,chapter:'15',chapterName:'Fats & Oils',keywords:['soybean oil','soya oil','soy oil']},
+  {hsn:'1511',desc:'Palm oil and its fractions',rate:5,chapter:'15',chapterName:'Fats & Oils',keywords:['palm oil','refined palm oil']},
+  {hsn:'1512',desc:'Sunflower-seed, safflower or cotton-seed oil',rate:5,chapter:'15',chapterName:'Fats & Oils',keywords:['sunflower oil','safflower oil','cottonseed oil','cooking oil']},
+  {hsn:'1516',desc:'Animal or vegetable fats and oils, hydrogenated (vanaspati)',rate:5,chapter:'15',chapterName:'Fats & Oils',keywords:['vanaspati','hydrogenated oil','dalda','vegetable fat']},
+
+  // Chapter 17 — Sugar
+  {hsn:'1701',desc:'Cane or beet sugar and chemically pure sucrose',rate:5,chapter:'17',chapterName:'Sugars & Confectionery',keywords:['sugar','cane sugar','sucrose','cheeni','shakkar']},
+  {hsn:'1704',desc:'Sugar confectionery (including white chocolate)',rate:18,chapter:'17',chapterName:'Sugars & Confectionery',keywords:['candy','toffee','sweets','confectionery','white chocolate']},
+
+  // Chapter 18 — Cocoa & Chocolate
+  {hsn:'1801',desc:'Cocoa beans, whole or broken',rate:0,chapter:'18',chapterName:'Cocoa & Chocolate',keywords:['cocoa bean','cacao']},
+  {hsn:'1806',desc:'Chocolate and other food preparations containing cocoa',rate:18,chapter:'18',chapterName:'Cocoa & Chocolate',keywords:['chocolate','cocoa preparation','dark chocolate','milk chocolate']},
+
+  // Chapter 19 — Preparations of Cereals
+  {hsn:'1902',desc:'Pasta, whether or not cooked (spaghetti, macaroni, noodles)',rate:18,chapter:'19',chapterName:'Cereal Preparations',keywords:['pasta','noodle','macaroni','spaghetti','vermicelli','maggi']},
+  {hsn:'1905',desc:'Bread, pastry, cakes, biscuits and other bakers\' wares',rate:18,chapter:'19',chapterName:'Cereal Preparations',keywords:['bread','biscuit','cake','pastry','cookies','rusk','toast']},
+
+  // Chapter 21 — Miscellaneous Food
+  {hsn:'2101',desc:'Extracts, essences and concentrates of coffee, tea or maté',rate:18,chapter:'21',chapterName:'Miscellaneous Food',keywords:['instant coffee','coffee extract','tea extract','bru','nescafe']},
+  {hsn:'2106',desc:'Food preparations not elsewhere specified (health supplements, etc.)',rate:18,chapter:'21',chapterName:'Miscellaneous Food',keywords:['health supplement','protein powder','nutrition','food supplement']},
+
+  // Chapter 22 — Beverages
+  {hsn:'2201',desc:'Waters, including natural or artificial mineral waters',rate:0,chapter:'22',chapterName:'Beverages',keywords:['water','mineral water','drinking water','packaged water']},
+  {hsn:'2202',desc:'Waters, including mineral waters, flavoured; other non-alcoholic beverages',rate:18,chapter:'22',chapterName:'Beverages',keywords:['soft drink','cola','aerated drink','fruit juice packaged','soda','energy drink']},
+  {hsn:'2203',desc:'Beer made from malt',rate:40,chapter:'22',chapterName:'Beverages',keywords:['beer','malt beer','lager','ale']},
+  {hsn:'2207',desc:'Undenatured ethyl alcohol of ≥80% alcohol',rate:18,chapter:'22',chapterName:'Beverages',keywords:['ethanol','alcohol','spirit','liquor base']},
+  {hsn:'2209',desc:'Vinegar and substitutes for vinegar',rate:0,chapter:'22',chapterName:'Beverages',keywords:['vinegar','sirkha']},
+
+  // Chapter 24 — Tobacco
+  {hsn:'2401',desc:'Unmanufactured tobacco; tobacco refuse',rate:5,chapter:'24',chapterName:'Tobacco',keywords:['tobacco leaf','raw tobacco','unmanufactured tobacco']},
+  {hsn:'2402',desc:'Cigars, cheroots, cigarillos and cigarettes',rate:40,chapter:'24',chapterName:'Tobacco',keywords:['cigarette','cigar','tobacco product','smoking']},
+  {hsn:'2403',desc:'Other manufactured tobacco, pan masala with tobacco',rate:40,chapter:'24',chapterName:'Tobacco',keywords:['pan masala','gutka','chewing tobacco','snuff','hookah']},
+
+  // Chapter 25 — Salt, Sulphur, Earth, Stone
+  {hsn:'2501',desc:'Salt (including table salt and denatured salt)',rate:0,chapter:'25',chapterName:'Salt, Stone & Minerals',keywords:['salt','namak','table salt','rock salt','industrial salt']},
+  {hsn:'2502',desc:'Unroasted iron pyrites',rate:0,chapter:'25',chapterName:'Salt, Stone & Minerals',keywords:['iron pyrite','pyrites']},
+  {hsn:'2523',desc:'Portland cement, aluminous cement, slag cement',rate:18,chapter:'25',chapterName:'Salt, Stone & Minerals',keywords:['cement','portland cement','concrete','opc','ppc','slag cement']},
+
+  // Chapter 27 — Mineral Fuels
+  {hsn:'2701',desc:'Coal; briquettes, ovoids and similar solid fuels from coal',rate:5,chapter:'27',chapterName:'Mineral Fuels',keywords:['coal','lignite','coke','solid fuel']},
+  {hsn:'2710',desc:'Petroleum oils and oils obtained from bituminous minerals',rate:18,chapter:'27',chapterName:'Mineral Fuels',keywords:['petrol','diesel','petroleum','fuel oil','lubricant','ATF','kerosene']},
+  {hsn:'2711',desc:'Petroleum gas and other gaseous hydrocarbons (LPG, CNG)',rate:5,chapter:'27',chapterName:'Mineral Fuels',keywords:['lpg','cng','natural gas','cooking gas','propane','butane','gas cylinder']},
+
+  // Chapter 28 — Inorganic Chemicals
+  {hsn:'2804',desc:'Hydrogen, rare gases and other non-metals (oxygen, nitrogen)',rate:5,chapter:'28',chapterName:'Inorganic Chemicals',keywords:['hydrogen','oxygen','nitrogen','rare gas','industrial gas']},
+  {hsn:'2814',desc:'Ammonia, anhydrous or in aqueous solution',rate:5,chapter:'28',chapterName:'Inorganic Chemicals',keywords:['ammonia','ammonium']},
+
+  // Chapter 29 — Organic Chemicals
+  {hsn:'2905',desc:'Acyclic alcohols and their halogenated derivatives (methanol, ethanol)',rate:18,chapter:'29',chapterName:'Organic Chemicals',keywords:['methanol','ethanol','alcohol chemical','isopropyl']},
+
+  // Chapter 30 — Pharmaceutical Products
+  {hsn:'3003',desc:'Medicaments consisting of two or more constituents, bulk',rate:5,chapter:'30',chapterName:'Pharmaceuticals',keywords:['medicine','drug','medicament','pharmaceutical','bulk drug']},
+  {hsn:'3004',desc:'Medicaments in measured doses — retail (tablets, capsules, injections)',rate:5,chapter:'30',chapterName:'Pharmaceuticals',keywords:['tablet','capsule','injection','medicine retail','prescription drug','paracetamol','antibiotic']},
+  {hsn:'3005',desc:'Wadding, gauze, bandages and similar articles',rate:5,chapter:'30',chapterName:'Pharmaceuticals',keywords:['bandage','gauze','surgical dressing','cotton dressing']},
+  {hsn:'3006',desc:'Pharmaceutical goods — contrast media, dental cement',rate:5,chapter:'30',chapterName:'Pharmaceuticals',keywords:['dental cement','contrast media','surgical glue','pharmaceutical goods']},
+
+  // Chapter 33 — Essential Oils & Cosmetics
+  {hsn:'3301',desc:'Essential oils, resinoids, extracted oleoresins',rate:18,chapter:'33',chapterName:'Cosmetics & Toiletries',keywords:['essential oil','aroma oil','perfume oil','rose oil']},
+  {hsn:'3303',desc:'Perfumes and toilet waters',rate:18,chapter:'33',chapterName:'Cosmetics & Toiletries',keywords:['perfume','cologne','deodorant','body spray','attar']},
+  {hsn:'3304',desc:'Beauty or make-up preparations — skin care',rate:18,chapter:'33',chapterName:'Cosmetics & Toiletries',keywords:['cream','lotion','face cream','moisturizer','skin care','sunscreen','foundation','lipstick','makeup']},
+  {hsn:'3305',desc:'Preparations for use on the hair',rate:18,chapter:'33',chapterName:'Cosmetics & Toiletries',keywords:['shampoo','conditioner','hair oil','hair dye','hair care','head and shoulders']},
+  {hsn:'3306',desc:'Preparations for oral or dental hygiene',rate:5,chapter:'33',chapterName:'Cosmetics & Toiletries',keywords:['toothpaste','mouthwash','dental floss','toothpowder','colgate','oral b']},
+  {hsn:'3307',desc:'Pre-shave, shaving or after-shave preparations; personal deodorants',rate:18,chapter:'33',chapterName:'Cosmetics & Toiletries',keywords:['shaving cream','after shave','deodorant','deo','antiperspirant']},
+
+  // Chapter 34 — Soap & Detergents
+  {hsn:'3401',desc:'Soap; organic surface-active products for use as soap',rate:5,chapter:'34',chapterName:'Soap & Detergents',keywords:['soap','bath soap','washing soap','bar soap','handwash','lifebuoy','dettol']},
+  {hsn:'3402',desc:'Organic surface-active agents; washing preparations (detergents)',rate:18,chapter:'34',chapterName:'Soap & Detergents',keywords:['detergent','washing powder','dishwash','surf','ariel','tide','vim','liquid soap']},
+
+  // Chapter 35 — Adhesives
+  {hsn:'3506',desc:'Prepared glues and other prepared adhesives',rate:18,chapter:'35',chapterName:'Adhesives & Enzymes',keywords:['glue','adhesive','fevicol','epoxy','rubber cement']},
+
+  // Chapter 37 — Photographic Products
+  {hsn:'3701',desc:'Photographic plates and film in the flat',rate:18,chapter:'37',chapterName:'Photographic Products',keywords:['photographic film','photo film','x-ray film']},
+
+  // Chapter 38 — Miscellaneous Chemical Products
+  {hsn:'3808',desc:'Insecticides, rodenticides, fungicides, herbicides',rate:18,chapter:'38',chapterName:'Chemical Products',keywords:['insecticide','pesticide','herbicide','fungicide','mosquito repellent','hit','baygon']},
+  {hsn:'3824',desc:'Prepared binders for foundry moulds; chemical products NEC',rate:18,chapter:'38',chapterName:'Chemical Products',keywords:['chemical product','industrial chemical','prepared binder']},
+
+  // Chapter 39 — Plastics
+  {hsn:'3901',desc:'Polymers of ethylene (LDPE, HDPE, LLDPE)',rate:18,chapter:'39',chapterName:'Plastics',keywords:['plastic','polyethylene','hdpe','ldpe','polymer','plastic granule']},
+  {hsn:'3923',desc:'Articles for conveyance or packing of goods (plastic bags, boxes)',rate:18,chapter:'39',chapterName:'Plastics',keywords:['plastic bag','plastic box','plastic container','plastic packaging','carry bag']},
+  {hsn:'3926',desc:'Other articles of plastics',rate:18,chapter:'39',chapterName:'Plastics',keywords:['plastic article','plastic goods','pvc article','plastic item']},
+
+  // Chapter 40 — Rubber
+  {hsn:'4011',desc:'New pneumatic tyres of rubber (car, truck, motorcycle tyres)',rate:18,chapter:'40',chapterName:'Rubber & Articles',keywords:['tyre','tire','rubber tyre','car tyre','truck tyre','bike tyre','mrf','ceat','apollo']},
+  {hsn:'4016',desc:'Other articles of vulcanised rubber (rubber parts)',rate:18,chapter:'40',chapterName:'Rubber & Articles',keywords:['rubber part','rubber seal','rubber gasket','rubber hose']},
+
+  // Chapter 41 — Raw Hides & Leather
+  {hsn:'4107',desc:'Leather further prepared after tanning or crusting',rate:5,chapter:'41',chapterName:'Leather',keywords:['leather','genuine leather','tanned leather']},
+
+  // Chapter 42 — Leather Articles
+  {hsn:'4202',desc:'Trunks, suitcases, handbags, wallets (leather or plastic)',rate:18,chapter:'42',chapterName:'Leather Goods & Bags',keywords:['bag','handbag','suitcase','wallet','purse','luggage','backpack','briefcase']},
+  {hsn:'4203',desc:'Articles of apparel and clothing accessories of leather',rate:18,chapter:'42',chapterName:'Leather Goods & Bags',keywords:['leather jacket','leather belt','leather glove','leather apparel']},
+
+  // Chapter 44 — Wood & Articles of Wood
+  {hsn:'4407',desc:'Wood sawn or chipped lengthwise, planed or sanded',rate:5,chapter:'44',chapterName:'Wood & Wood Products',keywords:['timber','lumber','sawn wood','plywood','wood plank']},
+  {hsn:'4412',desc:'Plywood, veneered panels and similar laminated wood',rate:18,chapter:'44',chapterName:'Wood & Wood Products',keywords:['plywood','veneer','particle board','mdf','laminated wood']},
+  {hsn:'4418',desc:'Builders\' joinery and carpentry of wood (doors, windows, frames)',rate:18,chapter:'44',chapterName:'Wood & Wood Products',keywords:['wooden door','wooden window','wood frame','wood flooring','carpentry']},
+
+  // Chapter 48 — Paper & Paperboard
+  {hsn:'4802',desc:'Uncoated paper and paperboard, for writing/printing',rate:5,chapter:'48',chapterName:'Paper & Paperboard',keywords:['paper','printing paper','writing paper','copier paper','a4 paper']},
+  {hsn:'4819',desc:'Cartons, boxes, cases, bags and packing containers of paper',rate:18,chapter:'48',chapterName:'Paper & Paperboard',keywords:['cardboard box','carton','paper box','paper bag','packaging']},
+  {hsn:'4901',desc:'Printed books, brochures, leaflets (educational)',rate:0,chapter:'49',chapterName:'Printed Books & Media',keywords:['book','textbook','printed book','novel','magazine','brochure']},
+  {hsn:'4911',desc:'Other printed matter, including printed pictures and photographs',rate:18,chapter:'49',chapterName:'Printed Books & Media',keywords:['printed matter','calendar','print','poster','greeting card']},
+
+  // Chapter 50-63 — Textiles
+  {hsn:'5007',desc:'Woven fabrics of silk or silk waste',rate:5,chapter:'50',chapterName:'Silk',keywords:['silk fabric','silk cloth','banarasi silk','silk saree']},
+  {hsn:'5201',desc:'Cotton, not carded or combed (raw cotton)',rate:0,chapter:'52',chapterName:'Cotton',keywords:['cotton','raw cotton','cotton boll']},
+  {hsn:'5208',desc:'Woven fabrics of cotton (≤200 g/m²)',rate:5,chapter:'52',chapterName:'Cotton',keywords:['cotton fabric','cotton cloth','cotton textile','poplin','muslin','denim']},
+  {hsn:'5407',desc:'Woven fabrics of synthetic filament yarn',rate:5,chapter:'54',chapterName:'Man-made Fibres',keywords:['polyester fabric','nylon fabric','synthetic fabric','polyester cloth']},
+  {hsn:'6101',desc:'Men\'s or boys\' overcoats, windcheaters of wool or fine animal hair',rate:5,chapter:'61',chapterName:'Knitted Clothing',keywords:['jacket','overcoat','windcheater','wool jacket']},
+  {hsn:'6109',desc:'T-shirts, singlets and other vests, knitted or crocheted',rate:5,chapter:'61',chapterName:'Knitted Clothing',keywords:['t-shirt','vest','singlet','tshirt','half sleeve shirt']},
+  {hsn:'6203',desc:'Men\'s or boys\' suits, jackets, trousers (not knitted)',rate:5,chapter:'62',chapterName:'Woven Clothing',keywords:['suit','trouser','trousers','pant','men suit','formal wear','blazer']},
+  {hsn:'6204',desc:'Women\'s or girls\' suits, jackets, dresses, skirts',rate:5,chapter:'62',chapterName:'Woven Clothing',keywords:['women dress','skirt','blouse','salwar','kurta','women clothing']},
+  {hsn:'6301',desc:'Blankets and travelling rugs',rate:5,chapter:'63',chapterName:'Textile Articles',keywords:['blanket','rug','travelling rug','woollen blanket']},
+  {hsn:'6302',desc:'Bed linen, table linen, toilet linen and kitchen linen',rate:5,chapter:'63',chapterName:'Textile Articles',keywords:['bed sheet','bedsheet','pillow cover','table cloth','towel','napkin','bedding']},
+
+  // Chapter 64 — Footwear
+  {hsn:'6401',desc:'Waterproof footwear with outer soles and uppers of rubber',rate:5,chapter:'64',chapterName:'Footwear',keywords:['rubber boot','gumboot','waterproof shoes','rainwear shoes']},
+  {hsn:'6403',desc:'Footwear with outer soles of rubber, plastics, leather',rate:18,chapter:'64',chapterName:'Footwear',keywords:['shoes','leather shoes','formal shoes','sandals','slippers','footwear','chappal','boots','nike','adidas','bata']},
+  {hsn:'6404',desc:'Footwear with outer soles of rubber, uppers of textile',rate:18,chapter:'64',chapterName:'Footwear',keywords:['sports shoes','canvas shoes','sneakers','running shoes','textile upper shoes']},
+
+  // Chapter 68 — Stone, Plaster, Cement Articles
+  {hsn:'6802',desc:'Worked monumental or building stone (granite, marble, sandstone)',rate:18,chapter:'68',chapterName:'Stone & Ceramic',keywords:['granite','marble','stone slab','sandstone','building stone','flooring stone']},
+  {hsn:'6907',desc:'Ceramic flags and paving, hearth or wall tiles',rate:18,chapter:'69',chapterName:'Stone & Ceramic',keywords:['tile','ceramic tile','floor tile','wall tile','vitrified tile','porcelain tile']},
+
+  // Chapter 70 — Glass
+  {hsn:'7003',desc:'Cast glass and rolled glass, in sheets',rate:18,chapter:'70',chapterName:'Glass',keywords:['glass sheet','flat glass','float glass','window glass']},
+  {hsn:'7013',desc:'Glassware for table, kitchen, toilet, office, indoor decoration',rate:18,chapter:'70',chapterName:'Glass',keywords:['glassware','drinking glass','glass bowl','glass jar','glass bottle']},
+
+  // Chapter 71 — Precious Metals & Jewellery
+  {hsn:'7101',desc:'Pearls, natural or cultured',rate:3,chapter:'71',chapterName:'Gems, Jewellery & Metals',keywords:['pearl','cultured pearl','natural pearl']},
+  {hsn:'7102',desc:'Diamonds, whether or not worked',rate:0.25,chapter:'71',chapterName:'Gems, Jewellery & Metals',keywords:['diamond','rough diamond','polished diamond','heera']},
+  {hsn:'7103',desc:'Precious stones — rubies, sapphires, emeralds',rate:0.25,chapter:'71',chapterName:'Gems, Jewellery & Metals',keywords:['ruby','sapphire','emerald','precious stone','gemstone']},
+  {hsn:'7106',desc:'Silver (including silver plated with gold or platinum)',rate:3,chapter:'71',chapterName:'Gems, Jewellery & Metals',keywords:['silver','chandi','silver bar','silver coin','sterling silver']},
+  {hsn:'7108',desc:'Gold (including gold plated with platinum)',rate:3,chapter:'71',chapterName:'Gems, Jewellery & Metals',keywords:['gold','sona','gold bar','gold coin','24k gold','22k gold']},
+  {hsn:'7113',desc:'Articles of jewellery and parts thereof, of precious metal',rate:3,chapter:'71',chapterName:'Gems, Jewellery & Metals',keywords:['jewellery','jewelry','necklace','ring','bracelet','bangle','earring','gold jewellery','silver jewellery']},
+
+  // Chapter 72 — Iron & Steel
+  {hsn:'7201',desc:'Pig iron and spiegeleisen in pigs, blocks or other primary forms',rate:18,chapter:'72',chapterName:'Iron & Steel',keywords:['pig iron','spiegeleisen','raw iron']},
+  {hsn:'7206',desc:'Iron and non-alloy steel in ingots or other primary forms',rate:18,chapter:'72',chapterName:'Iron & Steel',keywords:['steel ingot','iron ingot','steel billet','raw steel']},
+  {hsn:'7210',desc:'Flat-rolled products of iron or non-alloy steel, clad/plated/coated',rate:18,chapter:'72',chapterName:'Iron & Steel',keywords:['steel sheet','steel plate','galvanised sheet','tin plate','steel coil']},
+  {hsn:'7213',desc:'Bars and rods, hot-rolled, in irregularly wound coils (wire rod)',rate:18,chapter:'72',chapterName:'Iron & Steel',keywords:['wire rod','steel rod','steel bar','tmt bar','tmt rod','reinforcement bar','rebar','sariya']},
+  {hsn:'7214',desc:'Other bars and rods of iron or non-alloy steel',rate:18,chapter:'72',chapterName:'Iron & Steel',keywords:['steel bar','iron bar','ms bar','mild steel bar','flat bar']},
+
+  // Chapter 73 — Steel Articles
+  {hsn:'7301',desc:'Sheet piling of iron or steel; angles, shapes and sections',rate:18,chapter:'73',chapterName:'Iron & Steel Articles',keywords:['steel section','angle iron','channel','h beam','i beam','structural steel']},
+  {hsn:'7307',desc:'Tube or pipe fittings of iron or steel',rate:18,chapter:'73',chapterName:'Iron & Steel Articles',keywords:['pipe fitting','elbow','tee','flange','iron pipe fitting','steel fitting']},
+  {hsn:'7308',desc:'Structures and parts of structures of iron or steel',rate:18,chapter:'73',chapterName:'Iron & Steel Articles',keywords:['steel structure','iron structure','prefab structure','steel frame']},
+
+  // Chapter 74 — Copper
+  {hsn:'7401',desc:'Copper mattes; cement copper (precipitated copper)',rate:18,chapter:'74',chapterName:'Copper',keywords:['copper matte','copper ore','raw copper']},
+  {hsn:'7408',desc:'Copper wire',rate:18,chapter:'74',chapterName:'Copper',keywords:['copper wire','copper conductor','bare copper wire']},
+
+  // Chapter 76 — Aluminium
+  {hsn:'7601',desc:'Unwrought aluminium',rate:18,chapter:'76',chapterName:'Aluminium',keywords:['aluminium ingot','raw aluminium','aluminum ingot']},
+  {hsn:'7607',desc:'Aluminium foil',rate:18,chapter:'76',chapterName:'Aluminium',keywords:['aluminium foil','aluminum foil','kitchen foil','packing foil']},
+  {hsn:'7610',desc:'Aluminium structures and parts of structures (doors, windows)',rate:18,chapter:'76',chapterName:'Aluminium',keywords:['aluminium door','aluminium window','aluminium frame','aluminium section','aluminium profile']},
+
+  // Chapter 84 — Machinery & Equipment
+  {hsn:'8401',desc:'Nuclear reactors; fuel elements, isotope separation machines',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['nuclear reactor','atomic reactor']},
+  {hsn:'8413',desc:'Pumps for liquids; liquid elevators',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['pump','water pump','centrifugal pump','submersible pump','liquid pump']},
+  {hsn:'8414',desc:'Air or vacuum pumps, compressors, fans, hoods',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['compressor','fan','blower','air pump','vacuum pump','exhaust fan']},
+  {hsn:'8415',desc:'Air conditioning machines (split AC, window AC)',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['air conditioner','ac','split ac','window ac','hvac','air conditioning','air cooler']},
+  {hsn:'8418',desc:'Refrigerators, freezers and other refrigerating equipment',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['refrigerator','fridge','freezer','deep freezer','cold storage','whirlpool','lg fridge','samsung fridge']},
+  {hsn:'8421',desc:'Centrifuges; filtering or purifying machinery for liquids or gases',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['filter','centrifuge','water filter','air filter','oil filter','purifier']},
+  {hsn:'8422',desc:'Dish-washing machines; bottle-cleaning machines',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['dishwasher','dish washing machine','bottle washer']},
+  {hsn:'8423',desc:'Weighing machinery (weighing scales, balances)',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['weighing machine','scale','balance','weight scale','digital scale']},
+  {hsn:'8425',desc:'Pulley tackle and hoists; jacks; cranes',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['crane','hoist','jack','pulley','lifting equipment']},
+  {hsn:'8428',desc:'Other lifting, handling, loading or unloading machinery (conveyors)',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['conveyor','conveyor belt','forklift','pallet truck','material handling']},
+  {hsn:'8432',desc:'Agricultural, horticultural machinery for soil preparation',rate:0,chapter:'84',chapterName:'Machinery & Equipment',keywords:['tractor','plough','plow','cultivator','agricultural machine','farm equipment','seed drill']},
+  {hsn:'8443',desc:'Printing machinery; machines for auxiliary operations',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['printing machine','printer machine','offset printer','flexo printer']},
+  {hsn:'8450',desc:'Household or laundry-type washing machines',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['washing machine','laundry machine','washer','lg washing machine','samsung washer']},
+  {hsn:'8451',desc:'Machinery for washing, cleaning, wringing (industrial)',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['industrial washing','laundry industrial','dry cleaning machine']},
+  {hsn:'8452',desc:'Sewing machines',rate:5,chapter:'84',chapterName:'Machinery & Equipment',keywords:['sewing machine','stitch machine','tailoring machine','usha sewing','singer machine']},
+  {hsn:'8471',desc:'Automatic data processing machines (computers, laptops)',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['computer','laptop','desktop','server','tablet computer','macbook','dell','hp laptop']},
+  {hsn:'8472',desc:'Other office machines (photocopiers, fax, ATM)',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['photocopier','xerox machine','fax','atm machine','office machine','copier']},
+  {hsn:'8473',desc:'Parts and accessories for computers (Chapter 84.71)',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['computer part','keyboard','mouse','monitor','hard disk','ram','ssd','computer accessory']},
+  {hsn:'8481',desc:'Taps, cocks, valves for pipes, tanks (pressure control)',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['valve','tap','cock','ball valve','gate valve','pressure valve']},
+  {hsn:'8483',desc:'Transmission shafts, gears, gearboxes, ball screws',rate:18,chapter:'84',chapterName:'Machinery & Equipment',keywords:['gearbox','gear','shaft','bearing housing','transmission']},
+  {hsn:'8501',desc:'Electric motors and generators',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['electric motor','generator','dynamo','motor']},
+  {hsn:'8502',desc:'Electric generating sets and rotary converters',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['generator set','genset','diesel generator','power generator']},
+  {hsn:'8504',desc:'Electrical transformers, static converters (UPS), inductors',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['transformer','ups','inverter','static converter','ups battery']},
+  {hsn:'8507',desc:'Electric accumulators (batteries)',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['battery','electric battery','lead acid battery','lithium battery','battery pack']},
+  {hsn:'8516',desc:'Electric water heaters, hair dryers, irons, microwave ovens',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['microwave','oven','hair dryer','iron','geyser','water heater','electric iron','microwave oven']},
+  {hsn:'8517',desc:'Telephone sets; smartphones; base stations',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['mobile phone','smartphone','telephone','landline','iphone','android','samsung phone','mi phone','5g phone','feature phone']},
+  {hsn:'8518',desc:'Microphones, loudspeakers, headphones, amplifiers',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['speaker','headphone','microphone','earphone','amplifier','bluetooth speaker','earbuds']},
+  {hsn:'8519',desc:'Sound recording or sound reproducing apparatus',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['music player','mp3 player','cd player','record player']},
+  {hsn:'8521',desc:'Video recording or reproducing apparatus (DVD players)',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['dvd player','video player','blu ray','set top box','stb']},
+  {hsn:'8523',desc:'Discs, tapes, solid-state storage devices (pen drives, SSDs)',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['pen drive','usb drive','memory card','ssd','flash drive','sd card','hard disk','storage device']},
+  {hsn:'8525',desc:'Transmission apparatus for radio/TV broadcasting; cameras',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['camera','dslr','digital camera','cctv','surveillance camera','webcam','camcorder']},
+  {hsn:'8528',desc:'Monitors, projectors and television receivers',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['tv','television','lcd tv','led tv','monitor','projector','smart tv','oled','4k tv','samsung tv']},
+  {hsn:'8536',desc:'Electrical apparatus for switching circuits ≤1000V (switches, sockets)',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['switch','socket','mcb','circuit breaker','plug','electrical switch','switchgear']},
+  {hsn:'8539',desc:'Electric filament or discharge lamps; LED lamps',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['led','led light','bulb','tubelight','cfl','lamp','light bulb','led lamp','energy saving']},
+  {hsn:'8544',desc:'Insulated wire, cable, optical fibre cables',rate:18,chapter:'85',chapterName:'Electrical Equipment',keywords:['wire','cable','electrical wire','copper cable','optical fibre','fiber cable','coaxial cable']},
+
+  // Chapter 87 — Vehicles
+  {hsn:'8701',desc:'Tractors (excluding pedestrian-controlled tractors)',rate:5,chapter:'87',chapterName:'Vehicles',keywords:['tractor','farm tractor','agricultural tractor','mahindra tractor','john deere']},
+  {hsn:'8702',desc:'Motor vehicles for the transport of ten or more persons (buses)',rate:18,chapter:'87',chapterName:'Vehicles',keywords:['bus','minibus','coach','school bus','city bus']},
+  {hsn:'8703',desc:'Motor cars and other motor vehicles for transport of persons',rate:18,chapter:'87',chapterName:'Vehicles',keywords:['car','automobile','sedan','suv','hatchback','alto','swift','nexon','innova','creta','luxury car','electric car','ev']},
+  {hsn:'8704',desc:'Motor vehicles for the transport of goods (trucks)',rate:18,chapter:'87',chapterName:'Vehicles',keywords:['truck','lorry','goods vehicle','commercial vehicle','tata truck','ashok leyland']},
+  {hsn:'8711',desc:'Motorcycles (including mopeds) and cycles with auxiliary motor',rate:18,chapter:'87',chapterName:'Vehicles',keywords:['motorcycle','bike','scooter','moped','two wheeler','hero splendor','royal enfield','activa']},
+  {hsn:'8714',desc:'Parts and accessories of motorcycles and cycles',rate:18,chapter:'87',chapterName:'Vehicles',keywords:['bike part','motorcycle part','scooter part','two wheeler part','spare part vehicle']},
+  {hsn:'8716',desc:'Trailers and semi-trailers; other vehicles not mechanically propelled',rate:18,chapter:'87',chapterName:'Vehicles',keywords:['trailer','semi trailer','caravan','container trailer']},
+
+  // Chapter 88-89 — Aircraft & Ships
+  {hsn:'8802',desc:'Other aircraft — aeroplanes, helicopters',rate:5,chapter:'88',chapterName:'Aircraft & Spacecraft',keywords:['aircraft','airplane','helicopter','aeroplane','jet','plane']},
+  {hsn:'8901',desc:'Cruise ships, excursion boats, ferries, cargo ships',rate:5,chapter:'89',chapterName:'Ships & Boats',keywords:['ship','boat','ferry','cargo ship','cruise ship','vessel']},
+
+  // Chapter 90 — Optical & Medical Instruments
+  {hsn:'9006',desc:'Photographic cameras (other than cinematographic)',rate:18,chapter:'90',chapterName:'Optical & Medical Instruments',keywords:['camera','photographic camera','digital camera','mirrorless camera']},
+  {hsn:'9018',desc:'Instruments and appliances used in medical, surgical, dental (scalpel, syringe)',rate:5,chapter:'90',chapterName:'Optical & Medical Instruments',keywords:['syringe','scalpel','medical instrument','surgical instrument','stethoscope','bp machine','glucometer']},
+  {hsn:'9021',desc:'Orthopaedic appliances; artificial body parts; hearing aids',rate:5,chapter:'90',chapterName:'Optical & Medical Instruments',keywords:['hearing aid','artificial limb','orthopaedic','prosthetic','crutch','brace']},
+  {hsn:'9030',desc:'Oscilloscopes, spectrum analysers and other instruments for measuring',rate:18,chapter:'90',chapterName:'Optical & Medical Instruments',keywords:['oscilloscope','multimeter','measuring instrument','testing equipment']},
+
+  // Chapter 94 — Furniture
+  {hsn:'9401',desc:'Seats (chairs, sofas, office chairs, bar stools)',rate:18,chapter:'94',chapterName:'Furniture & Lamps',keywords:['chair','sofa','office chair','couch','seat','recliner','sofa set']},
+  {hsn:'9403',desc:'Other furniture (tables, beds, wardrobes, cabinets)',rate:18,chapter:'94',chapterName:'Furniture & Lamps',keywords:['table','bed','wardrobe','cabinet','furniture','desk','bookshelf','cupboard','almirah']},
+  {hsn:'9405',desc:'Luminaires and lighting fittings (chandeliers, lamps, lanterns)',rate:18,chapter:'94',chapterName:'Furniture & Lamps',keywords:['chandelier','lamp','lantern','light fitting','ceiling light','wall light','decorative light']},
+
+  // Chapter 95 — Toys & Games
+  {hsn:'9503',desc:'Tricycles, scooters, pedal cars, dolls, toys',rate:18,chapter:'95',chapterName:'Toys & Games',keywords:['toy','doll','tricycle','toy car','board game','puzzle','lego','video game']},
+  {hsn:'9504',desc:'Video game consoles and machines, playing cards',rate:18,chapter:'95',chapterName:'Toys & Games',keywords:['video game console','playstation','xbox','nintendo','playing card','chess','carrom']},
+  {hsn:'9506',desc:'Articles and equipment for sports, gymnastics, athletics',rate:18,chapter:'95',chapterName:'Toys & Games',keywords:['sports equipment','gym equipment','cricket bat','football','tennis racket','badminton','treadmill','dumbbell']},
+
+  // Chapter 96 — Miscellaneous Manufactured Articles
+  {hsn:'9601',desc:'Worked ivory, bone, tortoise-shell, horn (articles thereof)',rate:18,chapter:'96',chapterName:'Miscellaneous Articles',keywords:['ivory article','bone article','horn article','carved ivory']},
+  {hsn:'9603',desc:'Brooms, brushes, mops, feather dusters',rate:18,chapter:'96',chapterName:'Miscellaneous Articles',keywords:['broom','brush','mop','cleaning brush','feather duster','paint brush','toilet brush']},
+  {hsn:'9606',desc:'Buttons, press-fasteners, snap-fasteners and press-studs',rate:18,chapter:'96',chapterName:'Miscellaneous Articles',keywords:['button','snap fastener','press stud','hook fastener']},
+  {hsn:'9609',desc:'Pencils, crayons, chalks, drawing charcoals',rate:18,chapter:'96',chapterName:'Miscellaneous Articles',keywords:['pencil','crayon','chalk','drawing charcoal','colour pencil']},
+  {hsn:'9619',desc:'Sanitary towels, tampons, nappies and similar sanitary articles',rate:0,chapter:'96',chapterName:'Miscellaneous Articles',keywords:['sanitary pad','sanitary napkin','tampon','diaper','nappy','whisper','stayfree']},
+
+  // SAC Codes (Services)
+  {hsn:'9954',desc:'Construction services',rate:18,chapter:'99',chapterName:'Services (SAC)',keywords:['construction','building service','civil work','contractor','project construction']},
+  {hsn:'9983',desc:'Other professional, technical and business services (CA, legal, IT)',rate:18,chapter:'99',chapterName:'Services (SAC)',keywords:['professional service','ca service','accounting','audit','legal service','it service','consulting','advisory']},
+  {hsn:'9984',desc:'Telecommunications services',rate:18,chapter:'99',chapterName:'Services (SAC)',keywords:['telecom service','mobile service','internet service','broadband','jio','airtel','vodafone']},
+  {hsn:'9985',desc:'Support services (maintenance, cleaning, security)',rate:18,chapter:'99',chapterName:'Services (SAC)',keywords:['maintenance service','cleaning service','security service','facility management','housekeeping']},
+  {hsn:'9987',desc:'Repair services',rate:18,chapter:'99',chapterName:'Services (SAC)',keywords:['repair','maintenance repair','service repair','servicing']},
+  {hsn:'9988',desc:'Manufacturing services on physical inputs owned by others',rate:5,chapter:'99',chapterName:'Services (SAC)',keywords:['job work','manufacturing service','processing service','fabrication service']},
+  {hsn:'9997',desc:'Other services — education, health, recreation',rate:18,chapter:'99',chapterName:'Services (SAC)',keywords:['education service','training','coaching','health service','recreation service']},
+];
+
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
+function rateCls(rate) {
+  if (rate === 0 || rate === 0.25) return 'rate-0';
+  if (rate <= 5) return 'rate-5';
+  if (rate <= 12) return 'rate-12';
+  if (rate <= 18) return 'rate-18';
+  if (rate <= 28) return 'rate-28';
+  return 'rate-40';
+}
+function rateLabel(rate) {
+  if (rate === 0) return '0% (Exempt)';
+  if (rate === 0.25) return '0.25%';
+  return rate + '%';
+}
+function half(rate) {
+  if (rate === 0) return '0%';
+  if (rate === 0.25) return '0.125%';
+  return (rate / 2) + '%';
+}
+
+function renderSingle(item) {
+  return `
+    <div class="result-card mb-4">
+      <div class="result-header">
+        <div>
+          <div class="result-hsn">${item.hsn}</div>
+          <div class="text-xs text-[var(--text-dim)] font-semibold mt-1">Chapter ${item.chapter} — ${item.chapterName}</div>
+        </div>
+        <span class="rate-badge ${rateCls(item.rate)}" style="font-size:.95rem;padding:.4rem 1rem;">${rateLabel(item.rate)}</span>
+      </div>
+      <div class="result-body">
+        <div class="mb-4">
+          <div class="field-label">Description</div>
+          <div class="field-value">${item.desc}</div>
+        </div>
+        <div class="result-divider"></div>
+        <div class="rate-grid mb-4">
+          <div class="rate-cell">
+            <div class="rate-cell-value">${item.rate}%</div>
+            <div class="rate-cell-label">IGST (Interstate)</div>
+          </div>
+          <div class="rate-cell">
+            <div class="rate-cell-value">${half(item.rate)}</div>
+            <div class="rate-cell-label">CGST (Central)</div>
+          </div>
+          <div class="rate-cell">
+            <div class="rate-cell-value">${half(item.rate)}</div>
+            <div class="rate-cell-label">SGST (State)</div>
+          </div>
+        </div>
+        <div class="p-3 rounded-xl bg-[rgba(26,26,26,0.03)] border border-[var(--border)] text-xs text-[var(--text-dim)]">
+          <strong class="text-[var(--text-soft)]">Mandatory HSN digits on invoice:</strong>
+          Turnover &lt;₹5 Cr → 4 digits &nbsp;|&nbsp; ₹5 Cr – ₹50 Cr → 4 digits &nbsp;|&nbsp; &gt;₹50 Cr → 6 digits &nbsp;|&nbsp; Export/e-invoice → 8 digits
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderList(items, query) {
+  if (items.length === 0) {
+    return `
+      <div class="no-results">
+        <i data-lucide="search-x" style="width:40px;height:40px;color:var(--text-muted);margin:0 auto 1rem;display:block;"></i>
+        <p class="font-bold text-[var(--text-soft)]">No results for "${query}"</p>
+        <p class="text-sm text-[var(--text-muted)] mt-1">Try a different keyword or check the spelling</p>
+      </div>
+    `;
+  }
+  if (items.length === 1) return renderSingle(items[0]);
+  return `
+    <p class="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-3">${items.length} results for "${query}"</p>
+    <div class="results-list">
+      ${items.map((item, i) => `
+        <div class="result-row" style="animation-delay:${i * 40}ms" onclick="showSingle(${HSN_DATA.indexOf(item)})">
+          <div>
+            <div class="result-row-hsn">${item.hsn}</div>
+            <div class="result-row-desc">${item.desc}</div>
+            <div class="result-row-chapter mt-1">Chapter ${item.chapter} — ${item.chapterName}</div>
+          </div>
+          <div class="flex flex-col items-end gap-1 flex-shrink-0">
+            <span class="rate-badge ${rateCls(item.rate)}">${rateLabel(item.rate)}</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderCTA() {
+  return `
+    <div class="cta-banner">
+      <div>
+        <p class="font-bold text-sm text-[var(--cta-text)]">Ensure correct HSN codes in GSTR-1</p>
+        <p class="text-xs text-[var(--text-dim)] mt-0.5">Wrong HSN codes block ITC in GSTR-2B. GST Reco detects these mismatches automatically.</p>
+      </div>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup" style="white-space:nowrap;" onclick="gtag('event','cta_click',{button_text:'Try GST Reco Free',button_location:'hsn_result_banner'})">Try GST Reco Free →</a>
+    </div>
+  `;
+}
+
+function showSingle(idx) {
+  const item = HSN_DATA[idx];
+  const area = document.getElementById('results-area');
+  area.innerHTML = `
+    <div class="mb-3">
+      <button onclick="goBack()" class="text-xs font-semibold text-[var(--text-dim)] flex items-center gap-1 hover:text-black transition">
+        <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Back to results
+      </button>
+    </div>
+    ${renderSingle(item)}
+    ${renderCTA()}
+  `;
+  lucide.createIcons();
+  area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  gtag('event', 'hsn_lookup', { hsn_code: item.hsn, gst_rate: item.rate, chapter: item.chapter });
+}
+
+let lastResults = [];
+let lastQuery = '';
+
+function goBack() {
+  const area = document.getElementById('results-area');
+  area.innerHTML = renderList(lastResults, lastQuery) + renderCTA();
+  lucide.createIcons();
+}
+
+// ─── CODE SEARCH ───
+function searchByCode() {
+  const raw = document.getElementById('code-input').value.trim();
+  if (!raw) return;
+  const area = document.getElementById('results-area');
+
+  if (!/^\d+$/.test(raw)) {
+    area.innerHTML = `<div class="error-box" style="background:var(--error-bg);border:1px solid var(--error-border);border-radius:14px;padding:1.25rem 1.5rem;display:flex;align-items:flex-start;gap:.75rem;animation:slideUp .35s ease both;">
+      <i data-lucide="alert-circle" style="width:20px;height:20px;color:var(--error);flex-shrink:0;"></i>
+      <div><p class="font-bold text-sm" style="color:var(--error);">HSN codes contain only digits</p><p class="text-sm mt-1" style="color:#7f1d1d;">Please enter a numeric HSN code (e.g. 1001, 8471)</p></div>
+    </div>`;
+    lucide.createIcons(); return;
+  }
+
+  // Exact match first, then prefix match
+  let results = HSN_DATA.filter(h => h.hsn === raw);
+  if (results.length === 0) results = HSN_DATA.filter(h => h.hsn.startsWith(raw) || raw.startsWith(h.hsn.substring(0, Math.min(raw.length, 4))));
+  if (results.length === 0) results = HSN_DATA.filter(h => h.hsn.startsWith(raw.substring(0, 2)));
+
+  lastResults = results;
+  lastQuery = raw;
+
+  area.innerHTML = results.length === 0
+    ? `<div class="no-results"><i data-lucide="search-x" style="width:40px;height:40px;color:var(--text-muted);margin:0 auto 1rem;display:block;"></i><p class="font-bold text-[var(--text-soft)]">No HSN found for "${raw}"</p><p class="text-sm text-[var(--text-muted)] mt-1">Try a 2-digit chapter code to browse that chapter</p></div>`
+    : (results.length === 1 ? renderSingle(results[0]) : renderList(results, raw)) + renderCTA();
+
+  lucide.createIcons();
+  area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  gtag('event', 'hsn_lookup', { search_type: 'code', query: raw, result_count: results.length });
+}
+
+// ─── KEYWORD SEARCH ───
+function searchByKeyword() {
+  const raw = document.getElementById('keyword-input').value.trim().toLowerCase();
+  if (!raw) return;
+
+  const terms = raw.split(/\s+/);
+  const score = (item) => {
+    const desc = item.desc.toLowerCase();
+    const kws = item.keywords.join(' ');
+    let s = 0;
+    for (const t of terms) {
+      if (item.keywords.some(k => k.includes(t))) s += 3;
+      else if (desc.includes(t)) s += 2;
+      else if (kws.includes(t)) s += 1;
+    }
+    return s;
+  };
+
+  const results = HSN_DATA
+    .map(item => ({ item, s: score(item) }))
+    .filter(x => x.s > 0)
+    .sort((a, b) => b.s - a.s)
+    .slice(0, 12)
+    .map(x => x.item);
+
+  lastResults = results;
+  lastQuery = raw;
+
+  const area = document.getElementById('results-area');
+  area.innerHTML = renderList(results, raw) + (results.length > 0 ? renderCTA() : '');
+  lucide.createIcons();
+  area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  gtag('event', 'hsn_lookup', { search_type: 'keyword', query: raw, result_count: results.length });
+}
+
+function quickSearch(kw) {
+  document.getElementById('keyword-input').value = kw;
+  searchByKeyword();
+}
+
+// ─── TAB SWITCH ───
+function switchTab(tab) {
+  const isCode = tab === 'code';
+  document.getElementById('tab-code').classList.toggle('active', isCode);
+  document.getElementById('tab-keyword').classList.toggle('active', !isCode);
+  document.getElementById('panel-code').classList.toggle('hidden', !isCode);
+  document.getElementById('panel-keyword').classList.toggle('hidden', isCode);
+  document.getElementById('code-hints').classList.toggle('hidden', !isCode);
+  document.getElementById('keyword-hints').classList.toggle('hidden', isCode);
+  if (isCode) document.getElementById('code-hints').classList.remove('hidden');
+  else document.getElementById('keyword-hints').classList.remove('hidden');
+  document.getElementById('results-area').innerHTML = '';
+}
+
+// Enter key
+document.getElementById('code-input').addEventListener('keydown', e => { if(e.key==='Enter') searchByCode(); });
+document.getElementById('keyword-input').addEventListener('keydown', e => { if(e.key==='Enter') searchByKeyword(); });
+
+// Scroll reveal
+const ro = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+lucide.createIcons();
+</script>
+<!-- LinkedIn Insight Tag -->
+<script type="text/javascript">
+_linkedin_partner_id = "10109033";
+window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+</script>
+<script type="text/javascript">
+(function(l) {
+if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+window.lintrk.q=[]}
+var s = document.getElementsByTagName("script")[0];
+var b = document.createElement("script");
+b.type = "text/javascript";b.async = true;
+b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+s.parentNode.insertBefore(b, s);})(window.lintrk);
+</script>
+<noscript>
+<img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=10109033&fmt=gif" />
+</noscript>
+<!-- End LinkedIn Insight Tag -->
+</body>
+</html>

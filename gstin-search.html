@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GSTIN Search & Verification — Heyxia GST Reco</title>
+<meta name="description" content="Free GSTIN search and verification tool. Instantly validate any GSTIN format and fetch live taxpayer details — business name, registration status, address, and more." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<!-- Google Analytics GA4 Tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-982KPPE5W9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-982KPPE5W9");
+</script>
+
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-blue: #DCE7F7;
+    --card: #F2EAE0;
+    --text: #1A1A1A;
+    --text-soft: #2B2B2B;
+    --text-dim: #5C5C5C;
+    --text-muted: #8A8A8A;
+    --border: rgba(26,26,26,0.08);
+    --border-strong: rgba(26,26,26,0.14);
+    --cta-blue: #A8C8F0;
+    --cta-blue-dark: #8AB1E5;
+    --cta-text: #1A2A4A;
+    --brand-orange: #F5A86E;
+    --brand-coral: #E891A0;
+    --brand-lavender: #B89FE0;
+    --brand-violet: #9B7FD4;
+    --brand-gradient: linear-gradient(90deg,#F5A86E 0%,#E891A0 35%,#C99BCE 65%,#9B7FD4 100%);
+    --success: #16a34a;
+    --success-bg: #f0fdf4;
+    --success-border: #bbf7d0;
+    --error: #dc2626;
+    --error-bg: #fef2f2;
+    --error-border: #fecaca;
+    --warning: #d97706;
+    --warning-bg: #fffbeb;
+    --warning-border: #fde68a;
+  }
+
+  * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  html, body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; margin: 0; }
+
+  .bg-section-cream { background: var(--bg); }
+
+  .gradient-text {
+    background: var(--brand-gradient);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .nav-pill {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(26,26,26,0.06);
+    border-radius: 9999px;
+    box-shadow: 0 4px 20px -8px rgba(26,26,26,0.08);
+  }
+
+  .btn-signup {
+    background: var(--cta-blue);
+    color: var(--cta-text);
+    font-weight: 600;
+    padding: .65rem 1.2rem;
+    border-radius: 9999px;
+    transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(74,107,201,0.15);
+    text-decoration: none;
+  }
+  @media (min-width: 768px) {
+    .btn-signup { padding: .9rem 1.6rem; }
+  }
+  .btn-signup:hover { background: var(--cta-blue-dark); transform: translateY(-1px); }
+
+  .btn-primary {
+    background: var(--cta-blue);
+    color: var(--cta-text);
+    font-weight: 600;
+    padding: .9rem 1.6rem;
+    border-radius: 9999px;
+    transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(74,107,201,0.15);
+    text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--cta-blue-dark); transform: translateY(-1px); }
+
+  .btn-demo {
+    background: transparent;
+    color: var(--cta-text);
+    font-weight: 600;
+    padding: .65rem 1.2rem;
+    border-radius: 9999px;
+    transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1.5px solid rgba(26,42,74,0.2);
+    text-decoration: none;
+    font-size: 13px;
+  }
+  @media (min-width: 768px) { .btn-demo { padding: .75rem 1.4rem; font-size: 15px; } }
+  .btn-demo:hover { border-color: var(--cta-text); background: rgba(26,42,74,0.04); transform: translateY(-1px); }
+
+  /* Search input */
+  .search-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 1.1rem 1.5rem;
+    padding-right: 160px;
+    font-size: 1.05rem;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.04em;
+    border: 2px solid var(--border-strong);
+    border-radius: 9999px;
+    background: #fff;
+    color: var(--text);
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+    text-transform: uppercase;
+  }
+  .search-input::placeholder { text-transform: none; letter-spacing: 0; color: var(--text-muted); font-weight: 400; }
+  .search-input:focus { border-color: #A8C8F0; box-shadow: 0 0 0 4px rgba(168,200,240,0.2); }
+  .search-input.valid { border-color: #86efac; }
+  .search-input.invalid { border-color: #fca5a5; }
+
+  .search-btn {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--cta-blue);
+    color: var(--cta-text);
+    font-weight: 700;
+    font-size: .9rem;
+    padding: .7rem 1.4rem;
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+    transition: all .2s ease;
+    display: flex; align-items: center; gap: .4rem;
+    white-space: nowrap;
+  }
+  .search-btn:hover { background: var(--cta-blue-dark); transform: translateY(-50%) translateY(-1px); }
+  .search-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: translateY(-50%); }
+
+  /* Format hint pills */
+  .format-hint {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+  .hint-pill {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: rgba(26,26,26,0.04);
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    padding: 3px 10px;
+    letter-spacing: 0.02em;
+  }
+
+  /* Validation badge */
+  .validation-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: .85rem;
+    font-weight: 600;
+    padding: .4rem .9rem;
+    border-radius: 9999px;
+    border: 1px solid;
+    margin-top: .75rem;
+  }
+  .badge-valid { color: var(--success); background: var(--success-bg); border-color: var(--success-border); }
+  .badge-invalid { color: var(--error); background: var(--error-bg); border-color: var(--error-border); }
+  .badge-warning { color: var(--warning); background: var(--warning-bg); border-color: var(--warning-border); }
+
+  /* Result card */
+  .result-card {
+    background: #fff;
+    border: 1px solid var(--border-strong);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px -16px rgba(26,26,26,0.1);
+    max-width: 720px;
+    margin: 0 auto;
+    animation: slideUp .4s ease both;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .result-header {
+    padding: 1.5rem 2rem;
+    background: linear-gradient(135deg, #DCE7F7 0%, #EFE6DA 100%);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .result-gstin {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    color: var(--cta-text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    font-size: .8rem;
+    font-weight: 700;
+    padding: .3rem .8rem;
+    border-radius: 9999px;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+  .status-active { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+  .status-inactive { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+  .status-suspended { background: #fef9c3; color: #a16207; border: 1px solid #fde047; }
+  .status-cancelled { background: #f3f4f6; color: #6b7280; border: 1px solid #d1d5db; }
+  .status-unknown { background: #f3f4f6; color: #6b7280; border: 1px solid #d1d5db; }
+
+  .result-body { padding: 1.5rem 2rem; }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 580px) { .result-grid { grid-template-columns: 1fr; } }
+
+  .result-field { display: flex; flex-direction: column; gap: .2rem; }
+  .field-label {
+    font-size: .7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+  .field-value {
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .field-value.mono {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .03em;
+  }
+
+  .result-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 1.25rem 0;
+  }
+
+  /* GSTIN anatomy breakdown */
+  .anatomy-wrap {
+    background: rgba(168,200,240,0.08);
+    border: 1px solid rgba(168,200,240,0.3);
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+    margin-top: 1rem;
+  }
+  .anatomy-label {
+    font-size: .7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    margin-bottom: .6rem;
+  }
+  .anatomy-chars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .3rem;
+    font-family: 'Courier New', monospace;
+  }
+  .anatomy-char {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .2rem;
+  }
+  .char-box {
+    width: 32px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: .95rem;
+    border: 1.5px solid;
+  }
+  .char-desc {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: center;
+    max-width: 32px;
+    line-height: 1.2;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+  }
+
+  /* Color groups for anatomy */
+  .c-state    { background: #dbeafe; border-color: #93c5fd; color: #1d4ed8; }
+  .c-pan-type { background: #fef9c3; border-color: #fde047; color: #a16207; }
+  .c-pan-char { background: #fef9c3; border-color: #fde047; color: #a16207; }
+  .c-entity   { background: #ede9fe; border-color: #c4b5fd; color: #6d28d9; }
+  .c-z        { background: #f3f4f6; border-color: #d1d5db; color: #6b7280; }
+  .c-check    { background: #dcfce7; border-color: #86efac; color: #15803d; }
+
+  /* Loading spinner */
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2.5px solid rgba(26,42,74,0.2);
+    border-top-color: var(--cta-text);
+    border-radius: 50%;
+    animation: spin .6s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Error state */
+  .error-box {
+    background: var(--error-bg);
+    border: 1px solid var(--error-border);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    max-width: 720px;
+    margin: 0 auto;
+    animation: slideUp .4s ease both;
+  }
+
+  /* API key notice */
+  .api-notice {
+    background: var(--warning-bg);
+    border: 1px solid var(--warning-border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    font-size: .85rem;
+    color: #92400e;
+    max-width: 720px;
+    margin: 1rem auto 0;
+    display: none;
+  }
+  .api-notice a { color: #92400e; font-weight: 700; text-decoration: underline; }
+
+  /* CTA banner */
+  .cta-banner {
+    background: linear-gradient(135deg, #DCE7F7 0%, #EFE6DA 100%);
+    border: 1px solid rgba(168,200,240,0.4);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    max-width: 720px;
+    margin: 1.5rem auto 0;
+  }
+
+  /* Recent searches */
+  .recent-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    font-size: .8rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: rgba(26,26,26,0.04);
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    padding: .25rem .7rem;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .recent-tag:hover { background: rgba(168,200,240,0.2); border-color: rgba(168,200,240,0.5); color: var(--cta-text); }
+
+  .reveal { opacity:0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity:1; transform:none; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="fixed top-4 inset-x-0 z-50 px-4">
+  <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between gap-3 md:gap-4">
+    <a href="index.html" class="flex items-center pl-2">
+      <img src="heyxia-logo.png" alt="Heyxia" class="h-8 md:h-10 w-auto" style="max-width:160px;" />
+    </a>
+    <nav class="hidden md:flex items-center gap-10 text-[15px] text-[var(--text-soft)]">
+      <a href="index.html#features" class="hover:text-black transition">Features</a>
+      <a href="index.html#solutions" class="hover:text-black transition">Solutions</a>
+      <a href="pricing.html" class="hover:text-black transition">Pricing</a>
+      <a href="blog.html" class="hover:text-black transition">Blogs</a>
+      <!-- Tools dropdown -->
+      <div class="relative" id="tools-menu-wrap">
+        <button id="tools-btn" onclick="toggleToolsMenu()" class="flex items-center gap-1 font-semibold text-[var(--cta-text)] focus:outline-none" aria-haspopup="true" aria-expanded="false">
+          Tools
+          <svg id="tools-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s ease;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div id="tools-dropdown" class="hidden absolute left-0 top-[calc(100%+10px)] bg-white border border-[rgba(26,26,26,0.1)] rounded-2xl shadow-[0_12px_40px_-8px_rgba(26,26,26,0.15)] py-2 min-w-[200px] z-50">
+          <a href="gstin-search.html" class="flex items-center gap-3 px-4 py-2.5 hover:bg-[rgba(26,26,26,0.04)] transition text-[14px] text-[var(--text-soft)] hover:text-black rounded-xl mx-1 bg-[rgba(168,200,240,0.12)]">
+            <span class="w-7 h-7 rounded-lg bg-[#DCE7F7] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </span>
+            <div>
+              <div class="font-semibold text-[var(--cta-text)]">GSTIN Search</div>
+              <div class="text-[11px] text-[var(--text-muted)]">Verify taxpayer details</div>
+            </div>
+          </a>
+          <a href="hsn-lookup.html" class="flex items-center gap-3 px-4 py-2.5 hover:bg-[rgba(26,26,26,0.04)] transition text-[14px] text-[var(--text-soft)] hover:text-black rounded-xl mx-1">
+            <span class="w-7 h-7 rounded-lg bg-[#F2EAE0] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            </span>
+            <div>
+              <div class="font-semibold">HSN Rate Lookup</div>
+              <div class="text-[11px] text-[var(--text-muted)]">Find GST rates by code</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[13px] md:text-[15px]" onclick="gtag('event','cta_click',{button_text:'Sign Up for 14 Day Trial',button_location:'gstin_tool_nav'})">Sign Up for 14 Day Trial</a>
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[13px] md:text-[15px] hidden md:inline-flex" onclick="gtag('event','cta_click',{button_text:'Login',button_location:'gstin_tool_nav'})">Login</a>
+      <!-- Hamburger — mobile only -->
+      <button id="nav-hamburger" class="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-full hover:bg-gray-100 transition ml-1" aria-label="Open menu">
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300 my-[4px]"></span>
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="md:hidden hidden mt-2 mx-auto max-w-6xl px-4">
+    <div class="bg-white border border-gray-200 rounded-lg px-6 py-5 flex flex-col gap-4 text-[15px] text-[var(--text-soft)]">
+      <a href="index.html#features" class="hover:text-black transition" onclick="closeMobileMenu()">Features</a>
+      <a href="index.html#solutions" class="hover:text-black transition" onclick="closeMobileMenu()">Solutions</a>
+      <a href="pricing.html" class="hover:text-black transition" onclick="closeMobileMenu()">Pricing</a>
+      <a href="blog.html" class="hover:text-black transition" onclick="closeMobileMenu()">Blogs</a>
+      <div class="border-t border-gray-100 pt-1 mt-1">
+        <p class="text-[11px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-2">Tools</p>
+        <a href="gstin-search.html" class="flex items-center gap-2 py-1.5 font-semibold text-[var(--cta-text)]" onclick="closeMobileMenu()">
+          <span class="w-6 h-6 rounded-lg bg-[#DCE7F7] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
+          GSTIN Search
+        </a>
+        <a href="hsn-lookup.html" class="flex items-center gap-2 py-1.5 hover:text-black transition" onclick="closeMobileMenu()">
+          <span class="w-6 h-6 rounded-lg bg-[#F2EAE0] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          </span>
+          HSN Rate Lookup
+        </a>
+      </div>
+      <hr class="border-gray-200">
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px] text-center" onclick="gtag('event','cta_click',{button_text:'Login',button_location:'gstin_mobile_menu'})">Login</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hamburger = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = !mobileMenu.classList.contains('hidden');
+    mobileMenu.classList.toggle('hidden', isOpen);
+    const lines = hamburger.querySelectorAll('.ham-line');
+    if (!isOpen) {
+      lines[0].style.transform = 'translateY(6px) rotate(45deg)';
+      lines[1].style.opacity = '0';
+      lines[2].style.transform = 'translateY(-6px) rotate(-45deg)';
+    } else {
+      lines[0].style.transform = '';
+      lines[1].style.opacity = '';
+      lines[2].style.transform = '';
+    }
+  });
+
+  function closeMobileMenu() {
+    mobileMenu.classList.add('hidden');
+    const lines = hamburger.querySelectorAll('.ham-line');
+    lines[0].style.transform = '';
+    lines[1].style.opacity = '';
+    lines[2].style.transform = '';
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+      closeMobileMenu();
+    }
+  });
+
+  // Tools dropdown
+  function toggleToolsMenu() {
+    const dd = document.getElementById('tools-dropdown');
+    const chevron = document.getElementById('tools-chevron');
+    const btn = document.getElementById('tools-btn');
+    const isOpen = !dd.classList.contains('hidden');
+    dd.classList.toggle('hidden', isOpen);
+    chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  }
+  document.addEventListener('click', (e) => {
+    const wrap = document.getElementById('tools-menu-wrap');
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById('tools-dropdown').classList.add('hidden');
+      document.getElementById('tools-chevron').style.transform = '';
+      document.getElementById('tools-btn').setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>
+
+<!-- HERO -->
+<section class="pt-32 pb-16 px-6" style="background: linear-gradient(180deg, #f8f4ee 0%, #ffffff 100%);">
+  <div class="max-w-3xl mx-auto text-center">
+
+    <div class="inline-flex items-center gap-2 bg-white border border-[var(--border-strong)] rounded-full px-4 py-1.5 text-xs font-semibold text-[var(--text-dim)] mb-5 shadow-sm">
+      <span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span>
+      Free Tool — No login required
+    </div>
+
+    <h1 class="font-extrabold text-4xl md:text-6xl leading-[1.06] tracking-[-0.03em]">
+      GSTIN Search &<br><span class="gradient-text">Verification</span>
+    </h1>
+    <p class="mt-5 text-[var(--text-dim)] text-lg max-w-xl mx-auto leading-relaxed">
+      Instantly validate any GSTIN format and fetch live taxpayer details — business name, registration status, address, and filing type.
+    </p>
+
+    <!-- Search box -->
+    <div class="mt-10">
+      <div class="search-wrap">
+        <input
+          type="text"
+          id="gstin-input"
+          class="search-input"
+          placeholder="Enter GSTIN  e.g. 27AABCU9603R1ZX"
+          maxlength="15"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button class="search-btn" id="search-btn" onclick="handleSearch()">
+          <span id="btn-label">Search</span>
+          <span id="btn-spinner" class="spinner hidden"></span>
+        </button>
+      </div>
+
+      <!-- Live format validation feedback -->
+      <div id="format-feedback" class="mt-2 min-h-[28px] flex justify-center items-center"></div>
+
+      <div class="format-hint">
+        <span class="hint-pill">15 characters</span>
+        <span class="hint-pill">2-digit state code</span>
+        <span class="hint-pill">10-digit PAN</span>
+        <span class="hint-pill">Entity number</span>
+        <span class="hint-pill">Z + checksum</span>
+      </div>
+    </div>
+
+    <!-- Recent searches -->
+    <div id="recent-wrap" class="mt-5 hidden">
+      <p class="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-2">Recent</p>
+      <div id="recent-list" class="flex flex-wrap gap-2 justify-center"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RESULTS AREA -->
+<section class="pb-20 px-6">
+  <div id="results-area" class="max-w-3xl mx-auto"></div>
+
+  <!-- API notice (shown when no API key) -->
+  <div id="api-notice" class="api-notice">
+    <strong>Live lookup not configured.</strong> Format validation is working. To enable live taxpayer data, add your free API key from
+    <a href="https://gstincheck.co.in" target="_blank" rel="noopener">gstincheck.co.in</a> to this page (20 free requests on signup).
+    See the code comment in this file for instructions.
+  </div>
+</section>
+
+<!-- WHAT YOU CAN VERIFY section -->
+<section class="py-16 px-6" style="background: linear-gradient(180deg, #ffffff 0%, #DCE7F7 100%);">
+  <div class="max-w-4xl mx-auto reveal">
+    <h2 class="text-center font-extrabold text-2xl md:text-3xl tracking-tight mb-10">What this tool verifies</h2>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+      <div class="bg-white rounded-2xl p-5 border border-[var(--border)]">
+        <div class="w-9 h-9 rounded-xl bg-[#DCE7F7] flex items-center justify-center mb-3">
+          <i data-lucide="check-circle-2" class="w-5 h-5 text-[#1A2A4A]"></i>
+        </div>
+        <p class="font-700 text-sm font-bold text-[var(--text)]">Format Validity</p>
+        <p class="text-xs text-[var(--text-dim)] mt-1 leading-relaxed">Checks state code, PAN structure, entity digit, Z prefix, and checksum character</p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 border border-[var(--border)]">
+        <div class="w-9 h-9 rounded-xl bg-[#F2EAE0] flex items-center justify-center mb-3">
+          <i data-lucide="building-2" class="w-5 h-5 text-[#1A2A4A]"></i>
+        </div>
+        <p class="font-700 text-sm font-bold text-[var(--text)]">Business Name</p>
+        <p class="text-xs text-[var(--text-dim)] mt-1 leading-relaxed">Legal name and trade name as registered on GSTN portal</p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 border border-[var(--border)]">
+        <div class="w-9 h-9 rounded-xl bg-[#EDE9FE] flex items-center justify-center mb-3">
+          <i data-lucide="activity" class="w-5 h-5 text-[#6D28D9]"></i>
+        </div>
+        <p class="font-700 text-sm font-bold text-[var(--text)]">Registration Status</p>
+        <p class="text-xs text-[var(--text-dim)] mt-1 leading-relaxed">Active, Suspended, Cancelled, or Inactive — critical for ITC claims</p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 border border-[var(--border)]">
+        <div class="w-9 h-9 rounded-xl bg-[#FEF9C3] flex items-center justify-center mb-3">
+          <i data-lucide="map-pin" class="w-5 h-5 text-[#A16207]"></i>
+        </div>
+        <p class="font-700 text-sm font-bold text-[var(--text)]">Address</p>
+        <p class="text-xs text-[var(--text-dim)] mt-1 leading-relaxed">Registered principal place of business address</p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 border border-[var(--border)]">
+        <div class="w-9 h-9 rounded-xl bg-[#DCFCE7] flex items-center justify-center mb-3">
+          <i data-lucide="calendar" class="w-5 h-5 text-[#15803D]"></i>
+        </div>
+        <p class="font-700 text-sm font-bold text-[var(--text)]">Registration Date</p>
+        <p class="text-xs text-[var(--text-dim)] mt-1 leading-relaxed">Date of GST registration for audit trail</p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-5 border border-[var(--border)]">
+        <div class="w-9 h-9 rounded-xl bg-[#FEE2E2] flex items-center justify-center mb-3">
+          <i data-lucide="layers" class="w-5 h-5 text-[#B91C1C]"></i>
+        </div>
+        <p class="font-700 text-sm font-bold text-[var(--text)]">Dealer Type</p>
+        <p class="text-xs text-[var(--text-dim)] mt-1 leading-relaxed">Regular, Composition, or SEZ — affects ITC eligibility</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA FOOTER STRIP -->
+<section class="py-16 px-6 bg-white">
+  <div class="max-w-3xl mx-auto text-center reveal">
+    <h2 class="font-extrabold text-2xl md:text-3xl tracking-tight">Verify GSTINs at scale inside GST Reco</h2>
+    <p class="mt-3 text-[var(--text-dim)] max-w-lg mx-auto">Stop checking one by one. GST Reco reconciles your entire vendor base against GSTR-2B and flags mismatches automatically.</p>
+    <div class="mt-7 flex flex-wrap items-center justify-center gap-4">
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup" style="padding: .9rem 1.8rem; font-size: 1rem;" onclick="gtag('event','cta_click',{button_text:'Start 14-Day Free Trial',button_location:'gstin_tool_footer'})">Start 14-Day Free Trial</a>
+      <a href="mailto:varun.d@heyxia.io" style="font-size:.95rem; font-weight:600; color:var(--text-dim); text-decoration:none;" onclick="gtag('event','cta_click',{button_text:'Book a Demo',button_location:'gstin_tool_footer'})">Book a Demo →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-section-cream pt-16 pb-10 border-t border-[rgba(26,26,26,0.05)]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-10">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <img src="heyxia-logo.png" alt="Heyxia" class="h-10 w-auto" />
+        </div>
+        <p class="text-[var(--text-dim)] max-w-sm leading-relaxed">AI-powered GST reconciliation for finance teams, corporates, and chartered accountants across India.</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Pages</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="index.html" class="hover:text-black">Home</a></li>
+          <li><a href="index.html#features" class="hover:text-black">Features</a></li>
+          <li><a href="index.html#solutions" class="hover:text-black">Solutions</a></li>
+          <li><a href="pricing.html" class="hover:text-black">Pricing</a></li>
+          <li><a href="blog.html" class="hover:text-black">Blogs</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Information</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="mailto:varun.d@heyxia.io" class="hover:text-black">Contact Us</a></li>
+          <li><a href="privacy-policy.html" class="hover:text-black">Privacy Policy</a></li>
+          <li><a href="terms-of-use.html" class="hover:text-black">Terms of Use</a></li>
+          <li><a href="important-links.html" class="hover:text-black">Important Links</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-[rgba(26,26,26,0.06)] flex flex-col md:flex-row justify-between gap-2 text-xs text-[var(--text-muted)]">
+      <p>© 2026 GST Reco. All Rights Reserved.</p>
+      <p>Made with care for Indian finance teams.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ============================================================
+  // CONFIGURATION
+  // To enable live GSTIN lookup:
+  // 1. Sign up at https://gstincheck.co.in (free, 20 requests)
+  // 2. Get your API key
+  // 3. Replace the empty string below with your key
+  // ============================================================
+  const API_KEY = '';
+  const API_BASE = 'https://sheet.gstincheck.co.in/check/';
+
+  // State code map
+  const STATE_CODES = {
+    '01':'Jammu & Kashmir','02':'Himachal Pradesh','03':'Punjab','04':'Chandigarh',
+    '05':'Uttarakhand','06':'Haryana','07':'Delhi','08':'Rajasthan','09':'Uttar Pradesh',
+    '10':'Bihar','11':'Sikkim','12':'Arunachal Pradesh','13':'Nagaland','14':'Manipur',
+    '15':'Mizoram','16':'Tripura','17':'Meghalaya','18':'Assam','19':'West Bengal',
+    '20':'Jharkhand','21':'Odisha','22':'Chhattisgarh','23':'Madhya Pradesh',
+    '24':'Gujarat','25':'Daman & Diu','26':'Dadra & Nagar Haveli','27':'Maharashtra',
+    '28':'Andhra Pradesh (Old)','29':'Karnataka','30':'Goa','31':'Lakshadweep',
+    '32':'Kerala','33':'Tamil Nadu','34':'Puducherry','35':'Andaman & Nicobar Islands',
+    '36':'Telangana','37':'Andhra Pradesh','38':'Ladakh','97':'Other Territory','99':'Centre Jurisdiction'
+  };
+
+  const ENTITY_TYPES = {
+    '1':'Individual / Proprietor','2':'Partnership / LLP','3':'HUF',
+    '4':'Company (Private/Public)','5':'Trust','6':'Society / Club / AOP',
+    '7':'Government Department','8':'Public Sector Undertaking','9':'Local Authority',
+    'A':'AOP / BOI','B':'Local Authority','C':'Statutory Body','F':'Foreign Company',
+    'G':'Government','H':'HUF','L':'Local Authority','J':'Artificial Juridical Person',
+    'T':'Trust','K':'Krishi Kalyan Kendra'
+  };
+
+  const PAN_TYPES = {
+    'A':'AOP','B':'BOI','C':'Company','F':'Firm','G':'Government',
+    'H':'HUF','J':'Artificial Juridical Person','L':'Local Authority',
+    'P':'Individual','T':'Trust (AOP)'
+  };
+
+  // GSTIN format validator — returns { valid, error, breakdown }
+  function validateGSTINFormat(gstin) {
+    gstin = gstin.toUpperCase().trim();
+
+    if (gstin.length !== 15) return { valid: false, error: `GSTIN must be exactly 15 characters (you entered ${gstin.length})` };
+
+    const stateCode = gstin.substring(0, 2);
+    if (!/^\d{2}$/.test(stateCode)) return { valid: false, error: 'First 2 characters must be a numeric state code' };
+    if (!STATE_CODES[stateCode]) return { valid: false, error: `"${stateCode}" is not a valid state code` };
+
+    const pan = gstin.substring(2, 12);
+    if (!/^[A-Z]{3}[ABCFGHLJPTF][A-Z]\d{4}[A-Z]$/.test(pan)) {
+      return { valid: false, error: 'Characters 3–12 must form a valid PAN (e.g. AABCU9603R)' };
+    }
+
+    const entityNum = gstin[12];
+    if (!/^[1-9A-Z]$/.test(entityNum)) return { valid: false, error: 'Character 13 must be entity number (1–9 or A–Z)' };
+
+    if (gstin[13] !== 'Z') return { valid: false, error: 'Character 14 must always be "Z"' };
+
+    const checkChar = gstin[14];
+    if (!/^[0-9A-Z]$/.test(checkChar)) return { valid: false, error: 'Character 15 must be alphanumeric checksum' };
+
+    return {
+      valid: true,
+      gstin,
+      stateCode,
+      stateName: STATE_CODES[stateCode],
+      pan,
+      panType: PAN_TYPES[pan[3]] || 'Unknown',
+      panHolder: pan.substring(0, 3),
+      entityNum,
+      entityType: ENTITY_TYPES[entityNum] || 'Entity ' + entityNum,
+      checkChar
+    };
+  }
+
+  // Anatomy breakdown renderer
+  function renderAnatomy(g) {
+    const chars = g.gstin.split('');
+    const groups = [
+      { start: 0, end: 1,  cls: 'c-state',    desc: 'State' },
+      { start: 2, end: 5,  cls: 'c-pan-type',  desc: 'PAN' },
+      { start: 6, end: 11, cls: 'c-pan-char',  desc: 'PAN' },
+      { start: 12, end: 12, cls: 'c-entity',   desc: 'Entity' },
+      { start: 13, end: 13, cls: 'c-z',        desc: 'Z' },
+      { start: 14, end: 14, cls: 'c-check',    desc: 'Check' },
+    ];
+
+    const getClass = (i) => {
+      for (const g of groups) { if (i >= g.start && i <= g.end) return g.cls; }
+      return '';
+    };
+    const getDesc = (i) => {
+      if (i <= 1) return 'State';
+      if (i <= 11) return 'PAN';
+      if (i === 12) return 'Ent.';
+      if (i === 13) return 'Z';
+      return 'Chk';
+    };
+
+    return `
+      <div class="anatomy-wrap">
+        <p class="anatomy-label">GSTIN breakdown</p>
+        <div class="anatomy-chars">
+          ${chars.map((c, i) => `
+            <div class="anatomy-char">
+              <div class="char-box ${getClass(i)}">${c}</div>
+              <span class="char-desc">${getDesc(i)}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // Status badge helper
+  function statusBadge(status) {
+    if (!status) return `<span class="status-badge status-unknown">Unknown</span>`;
+    const s = status.toLowerCase();
+    if (s.includes('active') && !s.includes('in')) return `<span class="status-badge status-active"><span>●</span> Active</span>`;
+    if (s.includes('suspend')) return `<span class="status-badge status-suspended"><span>●</span> Suspended</span>`;
+    if (s.includes('cancel')) return `<span class="status-badge status-cancelled"><span>●</span> Cancelled</span>`;
+    if (s.includes('inactive') || s.includes('in-active')) return `<span class="status-badge status-inactive"><span>●</span> Inactive</span>`;
+    return `<span class="status-badge status-unknown">${status}</span>`;
+  }
+
+  // Render format-only result (no API key)
+  function renderFormatResult(g) {
+    return `
+      <div class="result-card">
+        <div class="result-header">
+          <div>
+            <div class="result-gstin">${g.gstin}</div>
+            <div class="text-xs text-[var(--text-dim)] mt-1 font-medium">${g.stateName} &nbsp;·&nbsp; ${g.panType} &nbsp;·&nbsp; ${g.entityType}</div>
+          </div>
+          <span class="validation-badge badge-valid" style="margin-top:0;">
+            <i data-lucide="check-circle-2" style="width:14px;height:14px;"></i>
+            Valid Format
+          </span>
+        </div>
+        <div class="result-body">
+          <div class="result-grid">
+            <div class="result-field">
+              <span class="field-label">State</span>
+              <span class="field-value">${g.stateName} (${g.stateCode})</span>
+            </div>
+            <div class="result-field">
+              <span class="field-label">PAN Number</span>
+              <span class="field-value mono">${g.pan}</span>
+            </div>
+            <div class="result-field">
+              <span class="field-label">Taxpayer Type</span>
+              <span class="field-value">${g.panType}</span>
+            </div>
+            <div class="result-field">
+              <span class="field-label">Entity Registration</span>
+              <span class="field-value">${g.entityType}</span>
+            </div>
+          </div>
+          <div class="result-divider"></div>
+          ${renderAnatomy(g)}
+          <div class="mt-4 p-4 rounded-xl bg-[#fffbeb] border border-[#fde68a] text-sm text-[#92400e]">
+            <strong>Format is valid.</strong> Live taxpayer details (business name, address, filing status) require API configuration.
+            <br><span class="text-xs mt-1 inline-block opacity-80">See the code comment in gstin-search.html for setup instructions.</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Render full live result
+  function renderLiveResult(g, data) {
+    const address = data.address
+      ? [data.address.bno, data.address.bname, data.address.street, data.address.location, data.address.state, data.address.pincode]
+          .filter(Boolean).join(', ')
+      : '—';
+
+    return `
+      <div class="result-card">
+        <div class="result-header">
+          <div>
+            <div class="result-gstin">${g.gstin}</div>
+            <div class="text-sm font-bold text-[var(--text-soft)] mt-1">${data['legal-name'] || data['trade-name'] || '—'}</div>
+            ${data['trade-name'] && data['trade-name'] !== data['legal-name']
+              ? `<div class="text-xs text-[var(--text-dim)] mt-0.5">Trade name: ${data['trade-name']}</div>`
+              : ''}
+          </div>
+          ${statusBadge(data.status)}
+        </div>
+        <div class="result-body">
+          <div class="result-grid">
+            <div class="result-field">
+              <span class="field-label">Legal Name</span>
+              <span class="field-value">${data['legal-name'] || '—'}</span>
+            </div>
+            <div class="result-field">
+              <span class="field-label">Trade Name</span>
+              <span class="field-value">${data['trade-name'] || '—'}</span>
+            </div>
+            <div class="result-field">
+              <span class="field-label">State</span>
+              <span class="field-value">${g.stateName} (${g.stateCode})</span>
+            </div>
+            <div class="result-field">
+              <span class="field-label">Registration Date</span>
+              <span class="field-value mono">${data['registration-date'] || '—'}</span>
+            </div>
+            <div class="result-field">
+              <span class="field-label">Dealer Type</span>
+              <span class="field-value">${data['dealer-type'] || '—'}</span>
+            </div>
+            <div class="result-field">
+              <span class="field-label">Entity Type</span>
+              <span class="field-value">${data['entity-type'] || g.entityType}</span>
+            </div>
+            <div class="result-field" style="grid-column: 1/-1;">
+              <span class="field-label">Address</span>
+              <span class="field-value">${address}</span>
+            </div>
+          </div>
+          <div class="result-divider"></div>
+          ${renderAnatomy(g)}
+        </div>
+      </div>
+    `;
+  }
+
+  // Main search handler
+  async function handleSearch() {
+    const raw = document.getElementById('gstin-input').value.trim().toUpperCase();
+    const area = document.getElementById('results-area');
+    const btn = document.getElementById('search-btn');
+    const label = document.getElementById('btn-label');
+    const spinner = document.getElementById('btn-spinner');
+    const apiNotice = document.getElementById('api-notice');
+
+    if (!raw) return;
+
+    // Validate format first
+    const validation = validateGSTINFormat(raw);
+    if (!validation.valid) {
+      area.innerHTML = `
+        <div class="error-box">
+          <i data-lucide="alert-circle" style="width:20px;height:20px;color:var(--error);flex-shrink:0;margin-top:1px;"></i>
+          <div>
+            <p class="font-bold text-sm" style="color:var(--error);">Invalid GSTIN Format</p>
+            <p class="text-sm mt-1" style="color:#7f1d1d;">${validation.error}</p>
+          </div>
+        </div>
+      `;
+      lucide.createIcons();
+      gtag('event', 'gstin_search', { search_result: 'invalid_format', gstin_length: raw.length });
+      return;
+    }
+
+    // Save to recent searches
+    saveRecent(raw);
+
+    // If no API key — show format result only
+    if (!API_KEY) {
+      area.innerHTML = renderFormatResult(validation);
+      apiNotice.style.display = 'block';
+      lucide.createIcons();
+      renderCTABanner();
+      gtag('event', 'gstin_search', { search_result: 'format_valid_no_api', state: validation.stateCode });
+      return;
+    }
+
+    // Live API lookup
+    btn.disabled = true;
+    label.classList.add('hidden');
+    spinner.classList.remove('hidden');
+    area.innerHTML = '';
+    apiNotice.style.display = 'none';
+
+    try {
+      const res = await fetch(`${API_BASE}${API_KEY}/${raw}`);
+      const json = await res.json();
+
+      if (json.flag === false || json.message === 'Invalid GSTIN') {
+        area.innerHTML = `
+          <div class="error-box">
+            <i data-lucide="alert-circle" style="width:20px;height:20px;color:var(--error);flex-shrink:0;margin-top:1px;"></i>
+            <div>
+              <p class="font-bold text-sm" style="color:var(--error);">GSTIN Not Found</p>
+              <p class="text-sm mt-1" style="color:#7f1d1d;">This GSTIN has a valid format but is not registered on the GSTN portal, or may have been cancelled.</p>
+            </div>
+          </div>
+        `;
+        gtag('event', 'gstin_search', { search_result: 'not_found' });
+      } else {
+        area.innerHTML = renderLiveResult(validation, json.data || json);
+        renderCTABanner();
+        gtag('event', 'gstin_search', { search_result: 'found', state: validation.stateCode, dealer_type: (json.data || json)['dealer-type'] });
+      }
+    } catch (err) {
+      area.innerHTML = `
+        <div class="error-box">
+          <i data-lucide="wifi-off" style="width:20px;height:20px;color:var(--error);flex-shrink:0;margin-top:1px;"></i>
+          <div>
+            <p class="font-bold text-sm" style="color:var(--error);">Lookup Failed</p>
+            <p class="text-sm mt-1" style="color:#7f1d1d;">Could not reach the GSTIN lookup service. Please check your connection and try again.</p>
+          </div>
+        </div>
+      `;
+      gtag('event', 'gstin_search', { search_result: 'api_error' });
+    }
+
+    lucide.createIcons();
+    btn.disabled = false;
+    label.classList.remove('hidden');
+    spinner.classList.add('hidden');
+  }
+
+  function renderCTABanner() {
+    const area = document.getElementById('results-area');
+    const banner = document.createElement('div');
+    banner.className = 'cta-banner';
+    banner.innerHTML = `
+      <div>
+        <p class="font-bold text-sm text-[var(--cta-text)]">Reconcile your entire vendor list automatically</p>
+        <p class="text-xs text-[var(--text-dim)] mt-0.5">GST Reco matches GSTR-2B vs your books and flags supplier defaults in minutes.</p>
+      </div>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup" style="white-space:nowrap;" onclick="gtag('event','cta_click',{button_text:'Try GST Reco Free',button_location:'gstin_result_banner'})">Try GST Reco Free →</a>
+    `;
+    area.appendChild(banner);
+  }
+
+  // Live format validation as user types
+  document.getElementById('gstin-input').addEventListener('input', function() {
+    const val = this.value.toUpperCase();
+    this.value = val;
+    const feedback = document.getElementById('format-feedback');
+    const input = this;
+
+    if (val.length === 0) {
+      feedback.innerHTML = '';
+      input.className = 'search-input';
+      return;
+    }
+
+    if (val.length < 15) {
+      feedback.innerHTML = `<span class="hint-pill">${val.length}/15 characters</span>`;
+      input.className = 'search-input';
+      return;
+    }
+
+    const v = validateGSTINFormat(val);
+    if (v.valid) {
+      feedback.innerHTML = `<span class="validation-badge badge-valid" style="font-size:.78rem;padding:.3rem .75rem;"><i data-lucide="check-circle-2" style="width:12px;height:12px;"></i> Valid format — ${v.stateName}</span>`;
+      input.classList.add('valid');
+      input.classList.remove('invalid');
+    } else {
+      feedback.innerHTML = `<span class="validation-badge badge-invalid" style="font-size:.78rem;padding:.3rem .75rem;"><i data-lucide="x-circle" style="width:12px;height:12px;"></i> ${v.error}</span>`;
+      input.classList.add('invalid');
+      input.classList.remove('valid');
+    }
+    lucide.createIcons();
+  });
+
+  // Enter key to search
+  document.getElementById('gstin-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') handleSearch();
+  });
+
+  // Recent searches
+  const RECENT_KEY = 'gstin_recent';
+  function saveRecent(gstin) {
+    let list = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+    list = [gstin, ...list.filter(g => g !== gstin)].slice(0, 5);
+    localStorage.setItem(RECENT_KEY, JSON.stringify(list));
+    renderRecent();
+  }
+  function renderRecent() {
+    const list = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+    const wrap = document.getElementById('recent-wrap');
+    const container = document.getElementById('recent-list');
+    if (list.length === 0) { wrap.classList.add('hidden'); return; }
+    wrap.classList.remove('hidden');
+    container.innerHTML = list.map(g => `
+      <span class="recent-tag" onclick="document.getElementById('gstin-input').value='${g}';handleSearch();">
+        <i data-lucide="clock-3" style="width:11px;height:11px;"></i>${g}
+      </span>
+    `).join('');
+    lucide.createIcons();
+  }
+
+  // Scroll reveal
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // Init
+  lucide.createIcons();
+  renderRecent();
+</script>
+<!-- LinkedIn Insight Tag -->
+<script type="text/javascript">
+_linkedin_partner_id = "10109033";
+window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+window._linkedin_data_partner_ids.push(_linkedin_partner_id);
+</script>
+<script type="text/javascript">
+(function(l) {
+if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
+window.lintrk.q=[]}
+var s = document.getElementsByTagName("script")[0];
+var b = document.createElement("script");
+b.type = "text/javascript";b.async = true;
+b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+s.parentNode.insertBefore(b, s);})(window.lintrk);
+</script>
+<noscript>
+<img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=10109033&fmt=gif" />
+</noscript>
+<!-- End LinkedIn Insight Tag -->
+</body>
+</html>

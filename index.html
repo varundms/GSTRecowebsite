@@ -427,31 +427,6 @@
   .hero-slide-frame video[data-src]:not([src]) + .video-placeholder,
   .hero-slide-frame video[data-src][src=""] + .video-placeholder{ display:flex !important; }
 
-  .trust-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 12.5px;
-    font-weight: 600;
-    color: #1A2A4A;
-    background: linear-gradient(135deg, rgba(168,200,240,0.28) 0%, rgba(155,127,212,0.18) 100%);
-    border: 1px solid rgba(74,107,201,0.22);
-    border-radius: 9999px;
-    padding: 5px 13px;
-    backdrop-filter: blur(4px);
-    box-shadow: 0 2px 10px -2px rgba(74,107,201,0.18), inset 0 1px 0 rgba(255,255,255,0.7);
-    letter-spacing: 0.01em;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .trust-pill:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 16px -2px rgba(74,107,201,0.28), inset 0 1px 0 rgba(255,255,255,0.7);
-  }
-  .trust-sep {
-    color: rgba(26,26,26,0.2);
-    font-size: 13px;
-  }
-
   /* Donut for blocked credit */
   .donut{
     width: 140px; height: 140px;
@@ -502,7 +477,7 @@
   transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
   pointer-events: none;
 ">
-  <a href="https://gstreco.heyxia.app/signup" class="btn-signup" onclick="gtag('event','cta_click',{button_text:'Start 14 Day Free Trial',button_location:'sticky_side'})" style="
+  <a href="https://gstreco.heyxia.app/signup" class="btn-signup" style="
     pointer-events: auto;
     display: flex;
     align-items: center;
@@ -550,10 +525,37 @@
       <a href="#solutions" class="hover:text-black transition">Solutions</a>
       <a href="pricing.html" class="hover:text-black transition">Pricing</a>
       <a href="blog.html" class="hover:text-black transition">Blogs</a>
+      <!-- Tools dropdown -->
+      <div class="relative" id="tools-menu-wrap">
+        <button id="tools-btn" onclick="toggleToolsMenu()" class="flex items-center gap-1 hover:text-black transition focus:outline-none" aria-haspopup="true" aria-expanded="false">
+          Tools
+          <svg id="tools-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s ease;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div id="tools-dropdown" class="hidden absolute left-0 top-[calc(100%+10px)] bg-white border border-[rgba(26,26,26,0.1)] rounded-2xl shadow-[0_12px_40px_-8px_rgba(26,26,26,0.15)] py-2 min-w-[210px] z-50">
+          <a href="gstin-search.html" class="flex items-center gap-3 px-4 py-2.5 hover:bg-[rgba(26,26,26,0.04)] transition text-[14px] text-[var(--text-soft)] hover:text-black rounded-xl mx-1">
+            <span class="w-7 h-7 rounded-lg bg-[#DCE7F7] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </span>
+            <div>
+              <div class="font-semibold">GSTIN Search</div>
+              <div class="text-[11px] text-[var(--text-muted)]">Verify taxpayer details</div>
+            </div>
+          </a>
+          <a href="hsn-lookup.html" class="flex items-center gap-3 px-4 py-2.5 hover:bg-[rgba(26,26,26,0.04)] transition text-[14px] text-[var(--text-soft)] hover:text-black rounded-xl mx-1">
+            <span class="w-7 h-7 rounded-lg bg-[#F2EAE0] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            </span>
+            <div>
+              <div class="font-semibold">HSN Rate Lookup</div>
+              <div class="text-[11px] text-[var(--text-muted)]">Find GST rates by code</div>
+            </div>
+          </a>
+        </div>
+      </div>
     </nav>
     <div class="flex items-center gap-2">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[13px] md:text-[15px]" onclick="gtag('event','cta_click',{button_text:'Sign Up for 14 Day Trial',button_location:'nav'})">Sign Up for 14 Day Trial</a>
-      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[13px] md:text-[15px] hidden md:inline-flex" onclick="gtag('event','cta_click',{button_text:'Login',button_location:'nav'})">Login</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[13px] md:text-[15px]">Sign Up for 14 Day Trial</a>
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[13px] md:text-[15px] hidden md:inline-flex">Login</a>
       <!-- Hamburger button — mobile only -->
       <button id="nav-hamburger" class="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-full hover:bg-gray-100 transition ml-1" aria-label="Open menu">
         <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
@@ -570,6 +572,16 @@
       <a href="#solutions" class="hover:text-black transition" onclick="closeMobileMenu()">Solutions</a>
       <a href="pricing.html" class="hover:text-black transition" onclick="closeMobileMenu()">Pricing</a>
       <a href="blog.html" class="hover:text-black transition" onclick="closeMobileMenu()">Blogs</a>
+      <hr class="border-gray-200">
+      <div class="flex flex-col gap-1">
+        <span class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-1">Free Tools</span>
+        <a href="gstin-search.html" class="hover:text-black transition flex items-center gap-2" onclick="closeMobileMenu()">
+          <span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span>GSTIN Search
+        </a>
+        <a href="hsn-lookup.html" class="hover:text-black transition flex items-center gap-2" onclick="closeMobileMenu()">
+          <span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span>HSN Rate Lookup
+        </a>
+      </div>
       <hr class="border-gray-200">
       <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px] text-center" onclick="gtag('event','cta_click',{button_text:'Login',button_location:'mobile_menu'})">Login</a>
     </div>
@@ -610,6 +622,25 @@
       closeMobileMenu();
     }
   });
+
+  // Tools dropdown
+  function toggleToolsMenu() {
+    const dd = document.getElementById('tools-dropdown');
+    const chevron = document.getElementById('tools-chevron');
+    const btn = document.getElementById('tools-btn');
+    const isOpen = !dd.classList.contains('hidden');
+    dd.classList.toggle('hidden', isOpen);
+    chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  }
+  document.addEventListener('click', (e) => {
+    const wrap = document.getElementById('tools-menu-wrap');
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById('tools-dropdown').classList.add('hidden');
+      document.getElementById('tools-chevron').style.transform = '';
+      document.getElementById('tools-btn').setAttribute('aria-expanded', 'false');
+    }
+  });
 </script>
 
 <!-- HERO -->
@@ -625,8 +656,8 @@
       Eliminate manual effort with seamlessly integrated GST and IMS reconciliation. Our intelligent matching and discrepancy detection work in tandem to ensure 100% accuracy and audit-ready filings.
     </p>
     <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base" onclick="gtag('event','cta_click',{button_text:'Sign Up for 14-Day Trial',button_location:'hero'})">Sign Up for 14-Day Trial</a>
-      <a href="mailto:varun.d@heyxia.io" class="btn-demo text-base" onclick="gtag('event','cta_click',{button_text:'Book a Demo',button_location:'hero'})">Book a Demo</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Sign Up for 14-Day Trial</a>
+      <a href="mailto:varun.d@heyxia.io" class="btn-demo text-base">Book a Demo</a>
     </div>
 
     <!-- Trust strip -->
@@ -637,6 +668,32 @@
       <span class="trust-sep hidden md:inline">·</span>
       <span class="trust-pill">⏱ Setup in 2 minutes</span>
     </div>
+    <style>
+      .trust-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: #1A2A4A;
+        background: linear-gradient(135deg, rgba(168,200,240,0.28) 0%, rgba(155,127,212,0.18) 100%);
+        border: 1px solid rgba(74,107,201,0.22);
+        border-radius: 9999px;
+        padding: 5px 13px;
+        backdrop-filter: blur(4px);
+        box-shadow: 0 2px 10px -2px rgba(74,107,201,0.18), inset 0 1px 0 rgba(255,255,255,0.7);
+        letter-spacing: 0.01em;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .trust-pill:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px -2px rgba(74,107,201,0.28), inset 0 1px 0 rgba(255,255,255,0.7);
+      }
+      .trust-sep {
+        color: rgba(26,26,26,0.2);
+        font-size: 13px;
+      }
+    </style>
 
     <!-- Hero product slideshow -->
     <div class="mt-20 reveal max-w-5xl mx-auto">
@@ -1031,7 +1088,7 @@
 
     <!-- CTA -->
     <div class="text-center mt-14 reveal">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base" onclick="gtag('event','cta_click',{button_text:'Start Free Trial for Your Team',button_location:'solutions'})">Start Free Trial for Your Team</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Start Free Trial for Your Team</a>
     </div>
 
   </div>
@@ -1130,7 +1187,7 @@
 
     <!-- CTA -->
     <div class="text-center mt-14 reveal">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base" onclick="gtag('event','cta_click',{button_text:'Start Free Trial for Your Firm',button_location:'solutions_ca'})">Start Free Trial for Your Firm</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Start Free Trial for Your Firm</a>
     </div>
 
   </div>
@@ -1371,7 +1428,7 @@
     <h2 class="font-extrabold text-[2rem] md:text-[2.75rem] tracking-[-0.02em]">14 Days. Full Access. Zero Risk</h2>
     <p class="mt-6 text-lg text-[var(--text-dim)]">Try GST Reco for free and experience the power of automation.</p>
     <div class="mt-10">
-      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base" onclick="gtag('event','cta_click',{button_text:'Sign Up for 14-Day Trial',button_location:'footer_cta'})">Sign Up for 14-Day Trial</a>
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-base">Sign Up for 14-Day Trial</a>
     </div>
   </div>
 </section>
@@ -1391,7 +1448,7 @@
         <ul class="space-y-2 text-sm text-[var(--text-dim)]">
           <li><a href="#" class="hover:text-black">Home</a></li>
           <li><a href="#features" class="hover:text-black">Features</a></li>
-          <li><a href="#solutions" class="hover:text-black">Solutions</a></li>
+          <li><a href="#platform" class="hover:text-black">Solutions</a></li>
           <li><a href="pricing.html" class="hover:text-black">Pricing</a></li>
           <li><a href="blog.html" class="hover:text-black">Blogs</a></li>
         </ul>
