@@ -115,4 +115,14 @@ for (const file of htmlFiles) {
   console.log(`Wrote out/${file}`);
 }
 
+const jsDir = path.join(root, "js");
+if (fs.existsSync(jsDir)) {
+  const outJs = path.join(outDir, "js");
+  fs.mkdirSync(outJs, { recursive: true });
+  for (const file of fs.readdirSync(jsDir).filter((f) => f.endsWith(".js"))) {
+    fs.copyFileSync(path.join(jsDir, file), path.join(outJs, file));
+    console.log(`Wrote out/js/${file}`);
+  }
+}
+
 console.log(`Build complete (${htmlFiles.length} HTML). Media from ${base}`);
