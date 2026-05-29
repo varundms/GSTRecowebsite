@@ -307,6 +307,65 @@ tr:hover td { background: var(--surface-2); }
   .editor-layout { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ===== LOGIN GATE ===== */
+#login-gate {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+}
+.login-box {
+  width: 100%; max-width: 400px;
+  background: var(--surface); border: 1px solid var(--border-2);
+  border-radius: 20px; padding: 36px 32px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+}
+.login-logo { margin-bottom: 6px; }
+.login-logo img { height: 40px; width: auto; }
+.login-heading { font-size: 22px; font-weight: 700; margin: 18px 0 4px; }
+.login-sub { font-size: 13px; color: var(--text-dim); margin-bottom: 28px; }
+.login-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.login-field label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; }
+.login-field input {
+  background: var(--surface-2); border: 1px solid var(--border-2);
+  border-radius: 10px; padding: 11px 14px; font-size: 14px;
+  color: var(--text); font-family: inherit; outline: none;
+  transition: border-color .15s;
+}
+.login-field input:focus { border-color: var(--accent); }
+.login-field input::placeholder { color: var(--text-muted); }
+.login-error {
+  font-size: 13px; color: var(--red); background: rgba(248,113,113,0.08);
+  border: 1px solid rgba(248,113,113,0.2); border-radius: 8px;
+  padding: 10px 14px; margin-bottom: 16px; display: none;
+}
+.login-btn {
+  width: 100%; padding: 12px; border-radius: 10px; border: none;
+  background: var(--accent); color: var(--accent-dark);
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  font-family: inherit; transition: all .15s; margin-top: 4px;
+}
+.login-btn:hover { background: #8AB1E5; transform: translateY(-1px); }
+.login-domain-note {
+  text-align: center; font-size: 12px; color: var(--text-muted);
+  margin-top: 18px;
+}
+.login-domain-note span {
+  background: var(--surface-3); padding: 2px 8px;
+  border-radius: 5px; font-family: monospace; font-size: 11px;
+}
+
+/* Logout button in sidebar footer */
+.logout-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 9px; border-radius: 10px; font-size: 13px; font-weight: 600;
+  background: rgba(248,113,113,0.08); color: var(--red);
+  border: 1px solid rgba(248,113,113,0.15);
+  cursor: pointer; transition: all .15s; margin-top: 8px;
+  font-family: inherit;
+}
+.logout-btn:hover { background: rgba(248,113,113,0.15); }
 </style>
 
 <!-- LinkedIn Insight Tag -->
@@ -351,7 +410,36 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
 </head>
 <body>
 
-<div class="app">
+<!-- ===== LOGIN GATE ===== -->
+<div id="login-gate">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="heyxia-logo.png" alt="Heyxia" style="mix-blend-mode:multiply;" onerror="this.style.display='none'">
+    </div>
+    <div class="login-heading">Blog CMS</div>
+    <div class="login-sub">Sign in with your Heyxia team account to continue.</div>
+
+    <div class="login-field">
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="you@heyxia.io" autocomplete="email" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="Enter your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+
+    <div class="login-error" id="login-error"></div>
+
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+
+    <div class="login-domain-note">
+      Access restricted to <span>@heyxia.io</span> accounts only
+    </div>
+  </div>
+</div>
+<!-- ===== END LOGIN GATE ===== -->
+
+<div class="app" id="cms-app" style="display:none">
   <!-- ===== SIDEBAR ===== -->
   <aside class="sidebar">
     <div class="sidebar-logo">
@@ -384,13 +472,22 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
       <div class="nav-item" onclick="showView('sync')" id="nav-sync">
         <i data-lucide="refresh-cw"></i> Sync / Export
       </div>
+
+      <div class="nav-section" style="margin-top:12px">Account</div>
+      <div class="nav-item" onclick="showView('settings')" id="nav-settings">
+        <i data-lucide="settings"></i> Settings
+      </div>
     </nav>
 
     <div class="sidebar-footer">
+      <div id="sidebar-user" style="font-size:12px;color:var(--text-muted);margin-bottom:8px;padding:0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
       <a href="blog.html" target="_blank" class="view-site-btn">
         <i data-lucide="external-link" style="width:14px;height:14px;"></i>
         View Blog
       </a>
+      <button class="logout-btn" onclick="doLogout()">
+        <i data-lucide="log-out" style="width:13px;height:13px;"></i> Sign Out
+      </button>
     </div>
   </aside>
 
@@ -755,6 +852,49 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
         </div>
       </div>
     </div>
+
+    <!-- ===== SETTINGS VIEW ===== -->
+    <div id="view-settings" style="display:none">
+      <div class="topbar">
+        <div class="page-title">Settings</div>
+      </div>
+      <div class="content" style="max-width:520px;">
+
+        <!-- Change own password -->
+        <div class="sync-card" style="margin-bottom:16px;">
+          <h3>🔑 Change Your Password</h3>
+          <p style="margin-bottom:18px;">You are signed in as <strong id="settings-current-user" style="color:var(--accent);"></strong>. Enter your current password, then choose a new one.</p>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="field">
+              <label>Current Password</label>
+              <input type="password" id="pw-current" placeholder="Enter current password" autocomplete="current-password">
+            </div>
+            <div class="field">
+              <label>New Password</label>
+              <input type="password" id="pw-new" placeholder="At least 8 characters">
+            </div>
+            <div class="field">
+              <label>Confirm New Password</label>
+              <input type="password" id="pw-confirm" placeholder="Repeat new password">
+            </div>
+            <div id="pw-error" style="font-size:13px;color:var(--red);background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.2);border-radius:8px;padding:10px 14px;display:none;"></div>
+            <div id="pw-success" style="font-size:13px;color:var(--green);background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);border-radius:8px;padding:10px 14px;display:none;"></div>
+            <button class="btn btn-primary" style="align-self:flex-start;" onclick="changePassword()">
+              <i data-lucide="check" style="width:14px;height:14px;"></i> Update Password
+            </button>
+          </div>
+        </div>
+
+        <!-- Team accounts overview (read-only) -->
+        <div class="sync-card">
+          <h3>👥 Team Accounts</h3>
+          <p style="margin-bottom:16px;">All active accounts with access to this CMS.</p>
+          <div id="team-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -789,14 +929,86 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
 </div>
 
 <script>
-// ===== SUPABASE CONFIG (injected at build from env / Vercel) =====
-const SUPABASE_URL = '__SUPABASE_URL__';
-const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY__';
-// ================================================================
+// ===== TEAM CREDENTIALS ==============================================
+// Add / remove team members here. Email must end with @heyxia.io
+// To change a password: update the value next to the email.
+// To add a new member: add a new line  'name@heyxia.io': 'theirpassword',
+const TEAM = {
+  'varun.d@heyxia.io': 'Varun@2025',
+  'torna.p@heyxia.io': 'Torna@2025',
+  'yash.h@heyxia.io':  'Yash@2025',
+};
+// =====================================================================
 
-function encodeFilterValue(value) {
-  return encodeURIComponent(String(value));
+const SESSION_KEY  = 'cms_auth_user';
+const PW_STORE_KEY = 'cms_pw_overrides'; // localStorage key for changed passwords
+
+// Returns effective passwords: hardcoded TEAM merged with any user-saved overrides
+function getPasswords() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PW_STORE_KEY) || '{}');
+    return Object.assign({}, TEAM, saved);
+  } catch(e) { return Object.assign({}, TEAM); }
 }
+
+function checkAuth() {
+  const user = sessionStorage.getItem(SESSION_KEY);
+  if (user) {
+    showCMS(user);
+  }
+  // else login gate stays visible (default)
+}
+
+function doLogin() {
+  const email    = document.getElementById('login-email').value.trim().toLowerCase();
+  const password = document.getElementById('login-password').value;
+  const errEl    = document.getElementById('login-error');
+  errEl.style.display = 'none';
+
+  if (!email) { showLoginError('Please enter your email address.'); return; }
+  if (!email.endsWith('@heyxia.io')) { showLoginError('Access is restricted to @heyxia.io accounts only.'); return; }
+  if (!password) { showLoginError('Please enter your password.'); return; }
+  const passwords = getPasswords();
+  if (!passwords[email] || passwords[email] !== password) { showLoginError('Invalid email or password. Please try again.'); return; }
+
+  sessionStorage.setItem(SESSION_KEY, email);
+  showCMS(email);
+}
+
+function showLoginError(msg) {
+  const el = document.getElementById('login-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function showCMS(user) {
+  document.getElementById('login-gate').style.display = 'none';
+  document.getElementById('cms-app').style.display = '';
+  const userEl = document.getElementById('sidebar-user');
+  if (userEl) userEl.textContent = '● ' + user;
+  // Boot CMS only after auth is confirmed
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+  if (typeof loadPosts === 'function') {
+    loadPosts().then(() => { renderDashboard(); setupAutosave(); });
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('cms-app').style.display = 'none';
+  document.getElementById('login-gate').style.display = 'flex';
+  document.getElementById('login-password').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+// Run auth check immediately
+checkAuth();
+// =====================================================================
+
+// ===== SUPABASE CONFIG — PASTE YOUR VALUES BELOW =====
+const SUPABASE_URL = 'https://qkswqnyucjqtcoptxyjz.supabase.co';
+const SUPABASE_ANON_KEY = ' eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFrc3dxbnl1Y2pxdGNvcHR4eWp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNzA4MzQsImV4cCI6MjA5Mjg0NjgzNH0.1RrH6ZTg4AuPndco4d_j-yYHRbGbQFCJRKD6N38Pz-A';
+// =====================================================
 
 const SB = {
   async query(method, path, body) {
@@ -816,8 +1028,8 @@ const SB = {
   },
   async getAll()       { return this.query('GET', 'posts?order=created_at.desc'); },
   async insert(data)   { return this.query('POST', 'posts', data); },
-  async update(id, data){ return this.query('PATCH', `posts?id=eq.${encodeFilterValue(id)}`, data); },
-  async remove(id)     { return this.query('DELETE', `posts?id=eq.${encodeFilterValue(id)}`); },
+  async update(id, data){ return this.query('PATCH', `posts?id=eq.${id}`, data); },
+  async remove(id)     { return this.query('DELETE', `posts?id=eq.${id}`); },
 };
 
 // ===== STATE =====
@@ -876,7 +1088,7 @@ function updateCounts() {
 }
 
 // ===== VIEWS =====
-const views = ['dashboard', 'posts', 'new', 'sync'];
+const views = ['dashboard', 'posts', 'new', 'sync', 'settings'];
 function showView(name) {
   views.forEach(v => {
     document.getElementById('view-' + v).style.display = v === name ? '' : 'none';
@@ -887,6 +1099,14 @@ function showView(name) {
   if (name === 'dashboard') renderDashboard();
   if (name === 'posts') { currentFilter = null; document.getElementById('posts-view-title').textContent = 'All Posts'; renderPostsTable(); }
   if (name === 'new') { resetEditor(); document.getElementById('editor-title').textContent = 'New Post'; currentEditId = null; }
+  if (name === 'settings') {
+    const u = sessionStorage.getItem(SESSION_KEY);
+    document.getElementById('settings-current-user').textContent = u || '';
+    document.getElementById('pw-error').style.display   = 'none';
+    document.getElementById('pw-success').style.display = 'none';
+    renderTeamList();
+    lucide.createIcons();
+  }
 }
 
 function filterView(status) {
@@ -1446,6 +1666,59 @@ async function clearAllPosts() {
 }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
+// ===== SETTINGS =====
+function changePassword() {
+  const currentUser = sessionStorage.getItem(SESSION_KEY);
+  const current  = document.getElementById('pw-current').value;
+  const newPw    = document.getElementById('pw-new').value;
+  const confirm  = document.getElementById('pw-confirm').value;
+  const errEl    = document.getElementById('pw-error');
+  const okEl     = document.getElementById('pw-success');
+  errEl.style.display = 'none';
+  okEl.style.display  = 'none';
+
+  const passwords = getPasswords();
+  if (passwords[currentUser] !== current) {
+    errEl.textContent = 'Current password is incorrect.';
+    errEl.style.display = 'block'; return;
+  }
+  if (newPw.length < 8) {
+    errEl.textContent = 'New password must be at least 8 characters.';
+    errEl.style.display = 'block'; return;
+  }
+  if (newPw !== confirm) {
+    errEl.textContent = 'New passwords do not match.';
+    errEl.style.display = 'block'; return;
+  }
+
+  // Save override to localStorage
+  const saved = JSON.parse(localStorage.getItem(PW_STORE_KEY) || '{}');
+  saved[currentUser] = newPw;
+  localStorage.setItem(PW_STORE_KEY, JSON.stringify(saved));
+
+  document.getElementById('pw-current').value = '';
+  document.getElementById('pw-new').value     = '';
+  document.getElementById('pw-confirm').value = '';
+  okEl.textContent = 'Password updated successfully!';
+  okEl.style.display = 'block';
+  showToast('Password updated!', 'success');
+}
+
+function renderTeamList() {
+  const currentUser = sessionStorage.getItem(SESSION_KEY);
+  const el = document.getElementById('team-list');
+  if (!el) return;
+  el.innerHTML = Object.keys(getPasswords()).map(email => `
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;">
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--accent-dark);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--accent);flex-shrink:0;">
+        ${email.split('.')[0][0].toUpperCase()}
+      </div>
+      <div style="flex:1;font-size:13px;color:var(--text);">${email}</div>
+      ${email === currentUser ? '<span style="font-size:11px;font-weight:600;background:rgba(168,200,240,0.15);color:var(--accent);padding:2px 9px;border-radius:99px;">You</span>' : ''}
+    </div>
+  `).join('');
+}
+
 // ===== SYNC — now just a refresh button =====
 function exportPosts() {
   const data = JSON.stringify(posts, null, 2);
@@ -1505,7 +1778,7 @@ document.addEventListener('selectionchange', () => {
 document.getElementById('post-content').addEventListener('keyup', updateToolbar);
 document.getElementById('post-content').addEventListener('mouseup', updateToolbar);
 
-loadPosts().then(() => { renderDashboard(); setupAutosave(); });
+// CMS boot is triggered by showCMS() after authentication is confirmed.
 </script>
 </body>
 </html>
