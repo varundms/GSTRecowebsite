@@ -64,6 +64,7 @@ function rewriteHtml(html, base) {
   }
   let out = rewriteAttr(html, "src");
   out = rewriteAttr(out, "href");
+  out = rewriteAttr(out, "content");
   return out;
 }
 
