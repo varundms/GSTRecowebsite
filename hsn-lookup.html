@@ -940,6 +940,229 @@ function searchByCode() {
   });
 }
 
+// ─── STEMMER — strips common English & Indian-English suffixes ───
+function stem(w) {
+  const rules = [
+    'ishing','ashing','essing','alling','elling','illing','anning','anning',
+    'ction','tion','sion','ment','ness','ness','ical','ical','able','ible',
+    'ated','ized','ised','ing','ers','ied','ies','ed','er','ly','al',
+    'ves','es','s'
+  ];
+  for (const sfx of rules) {
+    if (w.endsWith(sfx) && w.length - sfx.length >= 3)
+      return w.slice(0, -sfx.length);
+  }
+  return w;
+}
+
+// ─── SYNONYM EXPANSION — maps obscure / jargon terms to searchable terms ───
+const SYN = {
+  // Cargo / shipping / logistics
+  lashing:['rope','strap','webbing','cord','sling','tie down','securin'],
+  lash:['rope','strap','webbing','cord'],
+  strapping:['strap','webbing','band','lashing'],
+  dunnage:['packing','packaging','bag','airbag'],
+  sling:['rope','strap','wire rope','webbing','lifting'],
+  rigging:['wire rope','chain','shackle','sling','block'],
+  tarpaulin:['tarp','waterproof cover','canvas'],
+  tarp:['tarpaulin','waterproof','canvas'],
+  luffing:['crane','derrick'],
+  hatch:['cover','ship'],
+  mooring:['rope','chain','buoy'],
+  // Packaging
+  corrugation:['corrugated','cardboard','packaging'],
+  palletizing:['pallet','wooden','packaging'],
+  shrinkwrap:['shrink','plastic film','polyethylene'],
+  blister:['packaging','PVC','plastic'],
+  sachet:['pouch','packaging','plastic'],
+  // Construction
+  shuttering:['formwork','plywood','steel','wood'],
+  formwork:['shuttering','plywood','mould'],
+  scaffolding:['pipe','tube','steel','structure'],
+  falsework:['steel','pipe','support'],
+  cladding:['sheet','panel','metal','composite'],
+  fascia:['board','panel','aluminium'],
+  soffit:['board','panel','ceiling'],
+  plinth:['concrete','brick','foundation'],
+  lintel:['concrete','steel','beam'],
+  purlin:['steel','Z section','C section','roofing'],
+  joist:['steel','beam','structural'],
+  rafter:['wood','steel','roof'],
+  truss:['steel','wood','roof structure'],
+  decking:['sheet','steel','floor'],
+  parapet:['wall','brick','concrete'],
+  // Automotive
+  bumper:['car part','fender','plastic','polyurethane'],
+  fender:['car part','bumper','metal','plastic'],
+  bonnet:['car part','hood','steel'],
+  windshield:['glass','safety glass','laminated'],
+  windscreen:['glass','safety glass','laminated'],
+  dashcam:['camera','vehicle','electronic'],
+  headlight:['lamp','LED','vehicle lighting'],
+  taillight:['lamp','LED','vehicle lighting'],
+  hubcap:['wheel cover','plastic','tyre'],
+  alloy:['wheel','aluminium','vehicle'],
+  // Electrical / electronics
+  inverter:['UPS','power','solar','battery charger'],
+  transformer:['electrical','power','distribution'],
+  switchgear:['breaker','MCB','panel','electrical'],
+  busbar:['copper','aluminium','electrical'],
+  armature:['motor','winding','coil'],
+  contactor:['relay','switch','electrical'],
+  rectifier:['diode','power supply','converter'],
+  oscillator:['crystal','electronic','frequency'],
+  condenser:['capacitor','electrical','AC'],
+  accumulator:['battery','energy storage'],
+  dynamo:['generator','alternator'],
+  solenoid:['valve','coil','actuator'],
+  relay:['switch','electrical','contactor'],
+  // Textiles / garments
+  lycra:['spandex','elastane','stretch fabric'],
+  spandex:['lycra','elastane','stretch'],
+  elastane:['lycra','spandex','stretch fabric'],
+  fleece:['fabric','polar','knit','polyester'],
+  velcro:['hook loop','fastener','tape'],
+  interfacing:['fabric','stiffening','nonwoven'],
+  interlining:['fabric','lining','garment'],
+  gusset:['fabric','garment','pocket'],
+  twill:['weave','fabric','cotton'],
+  poplin:['fabric','cotton','woven'],
+  organza:['fabric','silk','sheer'],
+  chiffon:['fabric','polyester','sheer'],
+  georgette:['fabric','polyester','crepe'],
+  voile:['fabric','cotton','sheer'],
+  brocade:['fabric','silk','woven','decorative'],
+  jacquard:['fabric','woven','machine'],
+  // Hardware / tools
+  fastener:['screw','bolt','nut','rivet'],
+  grommet:['eyelet','rubber','metal','seal'],
+  ferrule:['fitting','pipe','metal','end cap'],
+  bushing:['sleeve','bearing','rubber','metal'],
+  dowel:['pin','rod','wood','metal'],
+  collet:['chuck','CNC','tool holder','lathe'],
+  mandrel:['arbor','tool','metal'],
+  anvil:['iron','forging','tool'],
+  // Food / Indian terms
+  namkeen:['snack','fried','salted','nimki'],
+  farsan:['snack','fried','gram flour'],
+  chakli:['snack','fried','rice flour'],
+  murukku:['snack','fried','rice'],
+  bhujia:['snack','fried','bikaneri'],
+  papad:['appalam','fryum','crisp','wafer'],
+  appalam:['papad','rice','lentil'],
+  poha:['flattened rice','beaten rice','chivda'],
+  chivda:['poha','flattened rice','snack'],
+  khichdi:['rice','lentil','mixed'],
+  upma:['semolina','rava','breakfast'],
+  idli:['rice','urad','batter'],
+  dosa:['rice','batter','crepe'],
+  paratha:['wheat','flatbread','bread'],
+  chapati:['roti','wheat','flatbread'],
+  roti:['chapati','wheat','bread'],
+  naan:['bread','wheat','oven'],
+  puri:['wheat','fried','bread'],
+  samosa:['pastry','fried','potato'],
+  pakora:['fritter','gram flour','fried'],
+  bhaji:['fritter','vegetable','fried'],
+  chaat:['snack','spiced','food'],
+  mithai:['sweet','confectionery','sugar'],
+  ladoo:['sweet','ball','gram flour'],
+  barfi:['sweet','milk','sugar'],
+  halwa:['sweet','dessert','ghee'],
+  kheer:['dessert','milk','rice'],
+  rabdi:['dessert','milk','sweet'],
+  rasgulla:['sweet','cheese','sugar syrup'],
+  gulab:['sweet','jamun','syrup'],
+  jalebi:['sweet','fried','syrup'],
+  chikki:['sweet','peanut','jaggery'],
+  rewari:['sweet','sesame','jaggery'],
+  gajak:['sweet','sesame','peanut'],
+  peda:['sweet','milk','sugar'],
+  soan:['sweet','papdi','gram'],
+  atta:['wheat flour','whole wheat','chakki'],
+  maida:['refined flour','all purpose flour','white flour'],
+  suji:['semolina','rava','sooji'],
+  rava:['semolina','suji','sooji'],
+  sooji:['semolina','rava','suji'],
+  dalia:['broken wheat','porridge','daliya'],
+  besan:['gram flour','chickpea flour','besen'],
+  sattu:['roasted gram flour','roasted chickpea'],
+  jaggery:['gur','brown sugar','cane','unrefined'],
+  gur:['jaggery','cane sugar','molasses','unrefined'],
+  mishri:['rock sugar','sugar candy','crystallised'],
+  saunf:['fennel seed','anise','mukhwas'],
+  ajwain:['carom seed','thymol seed','bishop weed'],
+  kalonji:['nigella seed','onion seed','black cumin'],
+  jeera:['cumin seed','zeera','cumin'],
+  dhania:['coriander seed','dhania powder','coriander'],
+  methi:['fenugreek seed','fenugreek leaf','kasoori'],
+  haldi:['turmeric','curcumin'],
+  mirch:['chilli pepper','red chilli','chili'],
+  imli:['tamarind','sour','chutney'],
+  amchur:['dry mango powder','mango powder','sour'],
+  hing:['asafoetida','ferula','resin'],
+  kesar:['saffron','safran','spice'],
+  elaichi:['cardamom','green cardamom','black cardamom'],
+  laung:['clove','dried bud','spice'],
+  dalchini:['cinnamon','cassia bark'],
+  tejpatta:['bay leaf','dried leaf'],
+  javitri:['mace','spice'],
+  jaiphal:['nutmeg','spice'],
+  // Hindi product names
+  sabun:['soap','cleansing bar','detergent'],
+  taal:['lock','padlock','security'],
+  bijli:['electricity','electrical','power'],
+  pankha:['fan','ceiling fan','air'],
+  kapda:['fabric','cloth','textile','garment'],
+  juta:['shoe','footwear','sandal'],
+  ghadi:['clock','watch','timepiece'],
+  mez:['table','desk','furniture'],
+  kursi:['chair','seat','furniture'],
+  palang:['bed','cot','furniture'],
+  almirah:['wardrobe','cabinet','cupboard','steel almirah'],
+  // Pharma / medical jargon
+  api:['active ingredient','bulk drug','pharmaceutical'],
+  excipient:['filler','binder','pharmaceutical','inactive ingredient'],
+  pellet:['tablet','granule','pharmaceutical'],
+  vial:['glass bottle','injection','pharmaceutical'],
+  ampoule:['injection','glass','pharmaceutical'],
+  nebulizer:['inhaler','respiratory','medical'],
+  glucometer:['blood glucose meter','glucose test','diabetes'],
+  suture:['surgical thread','wound closure','needle'],
+  cannula:['IV catheter','needle','medical tube'],
+  // Metal / engineering jargon
+  billet:['steel bar','semifinished','iron'],
+  bloom:['steel','semifinished','iron'],
+  slab:['steel plate','flat','rolling'],
+  coil:['steel roll','wire roll','metal roll'],
+  plate:['steel sheet','flat plate','metal plate'],
+  bar:['rod','round bar','flat bar','steel','iron'],
+  section:['structural','angle','channel','beam','steel'],
+  extrusion:['aluminium profile','section','extruded'],
+  casting:['cast iron','sand cast','die cast','aluminium casting'],
+  forging:['forged steel','drop forged','hammer forged'],
+  fabrication:['steel structure','welded structure','custom metal'],
+  machining:['CNC machined','turned','milled','lathed'],
+  galvanizing:['galvanised','zinc coated','GI'],
+  annealing:['heat treatment','softening','normalizing'],
+  quenching:['hardening','heat treatment','steel'],
+  tempering:['heat treatment','steel','hardening'],
+  // Other common jargon
+  coolant:['antifreeze','cutting fluid','engine coolant','radiator fluid'],
+  lubricant:['oil','grease','engine oil','gear oil'],
+  solvent:['thinner','paint thinner','cleaning solvent','acetone','MEK'],
+  flux:['welding flux','soldering flux','brazing flux'],
+  refractory:['furnace lining','fire brick','high temp material'],
+  abrasive:['grinding wheel','sandpaper','emery','corundum'],
+  gasket:['seal','packing','O-ring','washer seal'],
+  insulation:['mineral wool','glass wool','foam insulation','thermal insulation'],
+  geotextile:['woven PP','nonwoven','filter fabric','drainage fabric'],
+  membrane:['waterproofing','HDPE sheet','geomembrane'],
+  lining:['inner layer','coating','pipe lining','tank lining'],
+  coating:['paint','protective coat','powder coat','plating'],
+  plating:['electroplating','zinc plate','chrome plate','nickel plate'],
+};
+
 // ─── KEYWORD SEARCH ───
 function searchByKeyword() {
   const raw = document.getElementById('keyword-input').value.trim().toLowerCase();
@@ -949,24 +1172,45 @@ function searchByKeyword() {
   whenReady(() => {
     const terms = raw.split(/\s+/).filter(Boolean);
 
+    // Expand each term: original + stem + synonyms of both
+    function expandTerms(termList) {
+      const expanded = new Set(termList);
+      for (const t of termList) {
+        const s = stem(t);
+        if (s !== t) expanded.add(s);
+        for (const base of [t, s]) {
+          if (SYN[base]) SYN[base].forEach(x => expanded.add(x.toLowerCase()));
+        }
+      }
+      return Array.from(expanded);
+    }
+
+    const allTerms = expandTerms(terms);
+
     const score = (item) => {
       const desc  = item.desc.toLowerCase();
       const kws   = (item.keywords || []).join(' ').toLowerCase();
       const ch    = (item.chapterName || '').toLowerCase();
+      const kArr  = (item.keywords || []).map(k => k.toLowerCase());
       let s = 0;
-      for (const t of terms) {
-        // Exact keyword match — highest score
-        if ((item.keywords || []).some(k => k.toLowerCase() === t))       s += 5;
-        // Keyword contains term
-        else if (kws.includes(t))                                          s += 3;
-        // Description contains term
-        else if (desc.includes(t))                                         s += 2;
-        // Chapter name contains term
-        else if (ch.includes(t))                                           s += 1;
-        // Partial / starts-with match in description
-        else if (desc.split(/\s+/).some(w => w.startsWith(t) && t.length >= 3)) s += 1;
+
+      for (const t of allTerms) {
+        const isOriginal = terms.includes(t);
+        const w = isOriginal ? 1 : 0.6; // original terms score higher than expanded
+        if (kArr.some(k => k === t))                             s += 5 * w;  // exact keyword
+        else if (kArr.some(k => k.includes(t) && t.length >= 4)) s += 3 * w;  // keyword contains term
+        else if (kws.includes(t))                                 s += 2.5 * w;// keyword string
+        else if (desc.includes(t))                                s += 2 * w;  // description
+        else if (ch.includes(t))                                  s += 1 * w;  // chapter name
+        // Partial: any keyword starts with 4+ chars of term
+        else if (t.length >= 4 && kArr.some(k => k.startsWith(t)))  s += 1.5 * w;
+        // Reverse partial: term starts with a keyword (e.g. "lashing" starts with "lash")
+        else if (kArr.some(k => k.length >= 4 && t.startsWith(k)))  s += 1 * w;
+        // Partial: description word starts with term
+        else if (t.length >= 4 && desc.split(/\s+/).some(w2 => w2.startsWith(t))) s += 0.8 * w;
       }
-      // Bonus: all terms matched
+
+      // Bonus: ALL original terms matched
       if (s > 0 && terms.length > 1) {
         const allMatch = terms.every(t => desc.includes(t) || kws.includes(t));
         if (allMatch) s += terms.length * 2;
@@ -974,7 +1218,7 @@ function searchByKeyword() {
       return s;
     };
 
-    const results = HSN_DATA
+    let results = HSN_DATA
       .map(item => ({ item, s: score(item) }))
       .filter(x => x.s > 0)
       .sort((a, b) => b.s - a.s)
