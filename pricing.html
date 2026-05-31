@@ -200,6 +200,23 @@
       <a href="index.html#solutions" class="hover:text-black transition">Solutions</a>
       <a href="pricing.html" class="text-black font-semibold transition">Pricing</a>
       <a href="blog.html" class="hover:text-black transition">Blogs</a>
+      <!-- Tools dropdown -->
+      <div class="relative" id="tools-menu-wrap">
+        <button id="tools-btn" onclick="toggleToolsMenu()" class="flex items-center gap-1 hover:text-black transition focus:outline-none" aria-haspopup="true" aria-expanded="false">
+          Tools
+          <svg id="tools-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s ease;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div id="tools-dropdown" class="hidden absolute left-0 top-[calc(100%+10px)] bg-white border border-[rgba(26,26,26,0.1)] rounded-2xl shadow-[0_12px_40px_-8px_rgba(26,26,26,0.15)] py-2 min-w-[210px] z-50">
+          <a href="gstin-search.html" class="flex items-center gap-3 px-4 py-2.5 hover:bg-[rgba(26,26,26,0.04)] transition text-[14px] text-[var(--text-soft)] hover:text-black rounded-xl mx-1">
+            <span class="w-7 h-7 rounded-lg bg-[#DCE7F7] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+            <div><div class="font-semibold">GSTIN Search</div><div class="text-[11px] text-[var(--text-muted)]">Verify taxpayer details</div></div>
+          </a>
+          <a href="hsn-lookup.html" class="flex items-center gap-3 px-4 py-2.5 hover:bg-[rgba(26,26,26,0.04)] transition text-[14px] text-[var(--text-soft)] hover:text-black rounded-xl mx-1">
+            <span class="w-7 h-7 rounded-lg bg-[#F2EAE0] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span>
+            <div><div class="font-semibold">HSN Rate Lookup</div><div class="text-[11px] text-[var(--text-muted)]">Find GST rates by code</div></div>
+          </a>
+        </div>
+      </div>
     </nav>
     <div class="flex items-center gap-2">
       <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[13px] md:text-[15px]">Sign Up for 14 Day Trial</a>
@@ -218,6 +235,12 @@
       <a href="index.html#solutions" class="hover:text-black transition" onclick="closeMobileMenu()">Solutions</a>
       <a href="pricing.html" class="text-black font-semibold" onclick="closeMobileMenu()">Pricing</a>
       <a href="blog.html" class="hover:text-black transition" onclick="closeMobileMenu()">Blogs</a>
+      <hr class="border-gray-200">
+      <div class="flex flex-col gap-1">
+        <span class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-1">Free Tools</span>
+        <a href="gstin-search.html" class="hover:text-black transition flex items-center gap-2" onclick="closeMobileMenu()"><span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span>GSTIN Search</a>
+        <a href="hsn-lookup.html" class="hover:text-black transition flex items-center gap-2" onclick="closeMobileMenu()"><span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span>HSN Rate Lookup</a>
+      </div>
       <hr class="border-gray-200">
       <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px] text-center">Login</a>
     </div>
@@ -250,7 +273,23 @@
   }
   document.addEventListener('click', (e) => {
     if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) closeMobileMenu();
+    // Close tools dropdown on outside click
+    const wrap = document.getElementById('tools-menu-wrap');
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById('tools-dropdown').classList.add('hidden');
+      document.getElementById('tools-chevron').style.transform = '';
+      document.getElementById('tools-btn').setAttribute('aria-expanded','false');
+    }
   });
+  function toggleToolsMenu() {
+    const dd = document.getElementById('tools-dropdown');
+    const chevron = document.getElementById('tools-chevron');
+    const btn = document.getElementById('tools-btn');
+    const isOpen = !dd.classList.contains('hidden');
+    dd.classList.toggle('hidden', isOpen);
+    chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  }
 </script>
 
 <!-- PAGE HERO -->

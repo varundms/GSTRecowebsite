@@ -430,11 +430,40 @@
 
 <script>
 // ─────────────────────────────────────────────
-// HSN DATASET — covers all 99 chapters
-// Format: { hsn, description, rate, cgst, sgst, igst, chapter, chapterName, keywords[] }
-// Rates per GST 2.0 (Notification 9/2025-CT(Rate), effective 22 Sept 2025)
+// HSN DATASET — loaded from hsn-data.json (1000+ entries, all 99 chapters)
+// Fallback inline data kept for offline / direct file open scenarios
 // ─────────────────────────────────────────────
-const HSN_DATA = [
+let HSN_DATA = [];
+let _dataReady = false;
+
+// Show loading state in results area
+function showLoadingState() {
+  const area = document.getElementById('results-area');
+  if (area && !area.innerHTML.trim()) {
+    area.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted);font-size:.9rem;">
+      <i data-lucide="loader" style="width:24px;height:24px;margin:0 auto .5rem;display:block;animation:spin 1s linear infinite;"></i>
+      Loading HSN data…
+    </div>`;
+    lucide.createIcons();
+  }
+}
+
+// Load comprehensive dataset from JSON file
+fetch('hsn-data.json')
+  .then(r => r.json())
+  .then(data => {
+    HSN_DATA = data;
+    _dataReady = true;
+    console.log(`HSN data loaded: ${HSN_DATA.length} entries`);
+  })
+  .catch(() => {
+    // Fallback: use the inline compact dataset below
+    _dataReady = true;
+    console.warn('hsn-data.json not found — using fallback dataset');
+  });
+
+// Inline fallback (compact — only used if JSON fetch fails)
+const HSN_FALLBACK = [
   // Chapter 1 — Live Animals
   {hsn:'0101',desc:'Live horses, asses, mules and hinnies',rate:0,chapter:'01',chapterName:'Live Animals',keywords:['horse','mule','donkey','ass']},
   {hsn:'0102',desc:'Live bovine animals (cattle, buffalo)',rate:0,chapter:'01',chapterName:'Live Animals',keywords:['cattle','cow','buffalo','bull','bovine']},
@@ -735,6 +764,9 @@ const HSN_DATA = [
   {hsn:'9997',desc:'Other services — education, health, recreation',rate:18,chapter:'99',chapterName:'Services (SAC)',keywords:['education service','training','coaching','health service','recreation service']},
 ];
 
+// If JSON fetch failed, use fallback
+fetch('hsn-data.json').catch(() => { if (HSN_DATA.length === 0) HSN_DATA = HSN_FALLBACK; });
+
 // ─────────────────────────────────────────────
 // HELPERS
 // ─────────────────────────────────────────────
@@ -811,7 +843,7 @@ function renderList(items, query) {
     <p class="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide mb-3">${items.length} results for "${query}"</p>
     <div class="results-list">
       ${items.map((item, i) => `
-        <div class="result-row" style="animation-delay:${i * 40}ms" onclick="showSingle(${HSN_DATA.indexOf(item)})">
+        <div class="result-row" style="animation-delay:${i * 40}ms" onclick="showSingle(${i})">
           <div>
             <div class="result-row-hsn">${item.hsn}</div>
             <div class="result-row-desc">${item.desc}</div>
@@ -839,7 +871,7 @@ function renderCTA() {
 }
 
 function showSingle(idx) {
-  const item = HSN_DATA[idx];
+  const item = lastResults[idx];
   const area = document.getElementById('results-area');
   area.innerHTML = `
     <div class="mb-3">
@@ -864,6 +896,12 @@ function goBack() {
   lucide.createIcons();
 }
 
+// Wait for data to be ready, then run callback
+function whenReady(fn) {
+  if (HSN_DATA.length > 0) { fn(); return; }
+  const t = setInterval(() => { if (HSN_DATA.length > 0) { clearInterval(t); fn(); } }, 80);
+}
+
 // ─── CODE SEARCH ───
 function searchByCode() {
   const raw = document.getElementById('code-input').value.trim();
@@ -878,21 +916,28 @@ function searchByCode() {
     lucide.createIcons(); return;
   }
 
-  // Exact match first, then prefix match
-  let results = HSN_DATA.filter(h => h.hsn === raw);
-  if (results.length === 0) results = HSN_DATA.filter(h => h.hsn.startsWith(raw) || raw.startsWith(h.hsn.substring(0, Math.min(raw.length, 4))));
-  if (results.length === 0) results = HSN_DATA.filter(h => h.hsn.startsWith(raw.substring(0, 2)));
+  showLoadingState();
+  whenReady(() => {
+    // 1. Exact match
+    let results = HSN_DATA.filter(h => h.hsn === raw);
+    // 2. Input is prefix of existing codes
+    if (!results.length) results = HSN_DATA.filter(h => h.hsn.startsWith(raw));
+    // 3. Existing codes are prefix of input (user typed more digits than we have)
+    if (!results.length) results = HSN_DATA.filter(h => raw.startsWith(h.hsn));
+    // 4. Chapter-level — first 2 digits
+    if (!results.length) results = HSN_DATA.filter(h => h.hsn.startsWith(raw.substring(0, 2)));
 
-  lastResults = results;
-  lastQuery = raw;
+    lastResults = results;
+    lastQuery = raw;
 
-  area.innerHTML = results.length === 0
-    ? `<div class="no-results"><i data-lucide="search-x" style="width:40px;height:40px;color:var(--text-muted);margin:0 auto 1rem;display:block;"></i><p class="font-bold text-[var(--text-soft)]">No HSN found for "${raw}"</p><p class="text-sm text-[var(--text-muted)] mt-1">Try a 2-digit chapter code to browse that chapter</p></div>`
-    : (results.length === 1 ? renderSingle(results[0]) : renderList(results, raw)) + renderCTA();
+    area.innerHTML = results.length === 0
+      ? `<div class="no-results"><i data-lucide="search-x" style="width:40px;height:40px;color:var(--text-muted);margin:0 auto 1rem;display:block;"></i><p class="font-bold text-[var(--text-soft)]">No HSN found for "${raw}"</p><p class="text-sm text-[var(--text-muted)] mt-1">Try a 2-digit chapter code to browse that chapter</p></div>`
+      : (results.length === 1 ? renderSingle(results[0]) : renderList(results, raw)) + renderCTA();
 
-  lucide.createIcons();
-  area.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  gtag('event', 'hsn_lookup', { search_type: 'code', query: raw, result_count: results.length });
+    lucide.createIcons();
+    area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    gtag('event', 'hsn_lookup', { search_type: 'code', query: raw, result_count: results.length });
+  });
 }
 
 // ─── KEYWORD SEARCH ───
@@ -900,34 +945,51 @@ function searchByKeyword() {
   const raw = document.getElementById('keyword-input').value.trim().toLowerCase();
   if (!raw) return;
 
-  const terms = raw.split(/\s+/);
-  const score = (item) => {
-    const desc = item.desc.toLowerCase();
-    const kws = item.keywords.join(' ');
-    let s = 0;
-    for (const t of terms) {
-      if (item.keywords.some(k => k.includes(t))) s += 3;
-      else if (desc.includes(t)) s += 2;
-      else if (kws.includes(t)) s += 1;
-    }
-    return s;
-  };
+  showLoadingState();
+  whenReady(() => {
+    const terms = raw.split(/\s+/).filter(Boolean);
 
-  const results = HSN_DATA
-    .map(item => ({ item, s: score(item) }))
-    .filter(x => x.s > 0)
-    .sort((a, b) => b.s - a.s)
-    .slice(0, 12)
-    .map(x => x.item);
+    const score = (item) => {
+      const desc  = item.desc.toLowerCase();
+      const kws   = (item.keywords || []).join(' ').toLowerCase();
+      const ch    = (item.chapterName || '').toLowerCase();
+      let s = 0;
+      for (const t of terms) {
+        // Exact keyword match — highest score
+        if ((item.keywords || []).some(k => k.toLowerCase() === t))       s += 5;
+        // Keyword contains term
+        else if (kws.includes(t))                                          s += 3;
+        // Description contains term
+        else if (desc.includes(t))                                         s += 2;
+        // Chapter name contains term
+        else if (ch.includes(t))                                           s += 1;
+        // Partial / starts-with match in description
+        else if (desc.split(/\s+/).some(w => w.startsWith(t) && t.length >= 3)) s += 1;
+      }
+      // Bonus: all terms matched
+      if (s > 0 && terms.length > 1) {
+        const allMatch = terms.every(t => desc.includes(t) || kws.includes(t));
+        if (allMatch) s += terms.length * 2;
+      }
+      return s;
+    };
 
-  lastResults = results;
-  lastQuery = raw;
+    const results = HSN_DATA
+      .map(item => ({ item, s: score(item) }))
+      .filter(x => x.s > 0)
+      .sort((a, b) => b.s - a.s)
+      .slice(0, 15)
+      .map(x => x.item);
 
-  const area = document.getElementById('results-area');
-  area.innerHTML = renderList(results, raw) + (results.length > 0 ? renderCTA() : '');
-  lucide.createIcons();
-  area.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  gtag('event', 'hsn_lookup', { search_type: 'keyword', query: raw, result_count: results.length });
+    lastResults = results;
+    lastQuery = raw;
+
+    const area = document.getElementById('results-area');
+    area.innerHTML = renderList(results, raw) + (results.length > 0 ? renderCTA() : '');
+    lucide.createIcons();
+    area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    gtag('event', 'hsn_lookup', { search_type: 'keyword', query: raw, result_count: results.length });
+  });
 }
 
 function quickSearch(kw) {
