@@ -286,29 +286,29 @@
     <!-- Tab toggle -->
     <div class="mt-8">
       <div class="tab-bar">
-        <button class="tab-btn active" id="tab-code" onclick="switchTab('code')">
-          Search by HSN Code
-        </button>
-        <button class="tab-btn" id="tab-keyword" onclick="switchTab('keyword')">
+        <button class="tab-btn active" id="tab-keyword" onclick="switchTab('keyword')">
           Search by Keyword
+        </button>
+        <button class="tab-btn" id="tab-code" onclick="switchTab('code')">
+          Search by HSN Code
         </button>
       </div>
     </div>
 
     <!-- Search box -->
     <div class="mt-5">
-      <!-- Code search -->
-      <div id="panel-code" class="search-wrap">
-        <input type="text" id="code-input" class="search-input" placeholder="Enter HSN code  e.g. 1001, 8471, 9403" maxlength="8" autocomplete="off" spellcheck="false" inputmode="numeric" />
-        <button class="search-btn" onclick="searchByCode()">
-          <span>Look Up</span>
-        </button>
-      </div>
       <!-- Keyword search -->
-      <div id="panel-keyword" class="search-wrap hidden">
+      <div id="panel-keyword" class="search-wrap">
         <input type="text" id="keyword-input" class="search-input" placeholder="Type a product  e.g. rice, mobile phone, cement" autocomplete="off" spellcheck="false" />
         <button class="search-btn" onclick="searchByKeyword()">
           <span>Search</span>
+        </button>
+      </div>
+      <!-- Code search -->
+      <div id="panel-code" class="search-wrap hidden">
+        <input type="text" id="code-input" class="search-input" placeholder="Enter HSN code  e.g. 1001, 8471, 9403" maxlength="8" autocomplete="off" spellcheck="false" inputmode="numeric" />
+        <button class="search-btn" onclick="searchByCode()">
+          <span>Look Up</span>
         </button>
       </div>
 
@@ -317,16 +317,8 @@
         Rates reflect GST 2.0 slabs (0%, 5%, 18%, 40%) per Notification No. 9/2025-CT(Rate)
       </div>
 
-      <!-- Code hints -->
-      <div id="code-hints" class="flex flex-wrap gap-2 justify-center mt-4">
-        <span class="hint-pill">2-digit = Chapter</span>
-        <span class="hint-pill">4-digit = Heading</span>
-        <span class="hint-pill">6-digit = Sub-heading</span>
-        <span class="hint-pill">8-digit = Tariff item</span>
-      </div>
-
       <!-- Keyword popular -->
-      <div id="keyword-hints" class="hidden flex-wrap gap-2 justify-center mt-4">
+      <div id="keyword-hints" class="flex flex-wrap gap-2 justify-center mt-4">
         <span class="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wide w-full mb-1">Popular searches</span>
         <span class="popular-chip" onclick="quickSearch('rice')">Rice</span>
         <span class="popular-chip" onclick="quickSearch('mobile phone')">Mobile Phone</span>
@@ -338,6 +330,14 @@
         <span class="popular-chip" onclick="quickSearch('furniture')">Furniture</span>
         <span class="popular-chip" onclick="quickSearch('car')">Car / Automobile</span>
         <span class="popular-chip" onclick="quickSearch('iron steel')">Iron &amp; Steel</span>
+      </div>
+
+      <!-- Code hints — shown when HSN Code tab is active -->
+      <div id="code-hints" class="hidden flex-wrap gap-2 justify-center mt-4">
+        <span class="hint-pill">2-digit = Chapter</span>
+        <span class="hint-pill">4-digit = Heading</span>
+        <span class="hint-pill">6-digit = Sub-heading</span>
+        <span class="hint-pill">8-digit = Tariff item</span>
       </div>
     </div>
   </div>
