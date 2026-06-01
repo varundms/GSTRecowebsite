@@ -612,11 +612,8 @@
 <section class="pb-20 px-6">
   <div id="results-area" class="max-w-3xl mx-auto"></div>
 
-  <!-- API notice (shown when no API key) -->
-  <div id="api-notice" class="api-notice">
-    <strong>Live lookup not configured.</strong> Format validation is working. To enable live taxpayer data, add your free API key from
-    <a href="https://gstincheck.co.in" target="_blank" rel="noopener">gstincheck.co.in</a> to this page (20 free requests on signup).
-    See the code comment in this file for instructions.
+  <div id="api-notice" class="api-notice hidden">
+    <strong>Live lookup is temporarily unavailable.</strong> Format validation still works. If this persists, the GSTIN search service may need configuration on the server.
   </div>
 </section>
 
@@ -727,80 +724,40 @@
   </div>
 </footer>
 
+<script src="js/gstin-search-utils.js"></script>
 <script>
-  // ============================================================
-  // CONFIGURATION
-  // To enable live GSTIN lookup:
-  // 1. Sign up at https://gstincheck.co.in (free, 20 requests)
-  // 2. Get your API key
-  // 3. Replace the empty string below with your key
-  // ============================================================
-  const API_KEY = '';
-  const API_BASE = 'https://sheet.gstincheck.co.in/check/';
+  const SUPABASE_URL = '__SUPABASE_URL__';
+  const SUPABASE_ANON_KEY = '__SUPABASE_ANON_KEY__';
+  const {
+    validateGSTINFormat,
+    escapeHtml,
+    fetchGstinDetails,
+    isLookupConfigured,
+    formatDisplayDate,
+  } = GstinSearchUtils;
 
-  // State code map
-  const STATE_CODES = {
-    '01':'Jammu & Kashmir','02':'Himachal Pradesh','03':'Punjab','04':'Chandigarh',
-    '05':'Uttarakhand','06':'Haryana','07':'Delhi','08':'Rajasthan','09':'Uttar Pradesh',
-    '10':'Bihar','11':'Sikkim','12':'Arunachal Pradesh','13':'Nagaland','14':'Manipur',
-    '15':'Mizoram','16':'Tripura','17':'Meghalaya','18':'Assam','19':'West Bengal',
-    '20':'Jharkhand','21':'Odisha','22':'Chhattisgarh','23':'Madhya Pradesh',
-    '24':'Gujarat','25':'Daman & Diu','26':'Dadra & Nagar Haveli','27':'Maharashtra',
-    '28':'Andhra Pradesh (Old)','29':'Karnataka','30':'Goa','31':'Lakshadweep',
-    '32':'Kerala','33':'Tamil Nadu','34':'Puducherry','35':'Andaman & Nicobar Islands',
-    '36':'Telangana','37':'Andhra Pradesh','38':'Ladakh','97':'Other Territory','99':'Centre Jurisdiction'
-  };
+  const LOOKUP_ENABLED = isLookupConfigured(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const ENTITY_TYPES = {
-    '1':'Individual / Proprietor','2':'Partnership / LLP','3':'HUF',
-    '4':'Company (Private/Public)','5':'Trust','6':'Society / Club / AOP',
-    '7':'Government Department','8':'Public Sector Undertaking','9':'Local Authority',
-    'A':'AOP / BOI','B':'Local Authority','C':'Statutory Body','F':'Foreign Company',
-    'G':'Government','H':'HUF','L':'Local Authority','J':'Artificial Juridical Person',
-    'T':'Trust','K':'Krishi Kalyan Kendra'
-  };
-
-  const PAN_TYPES = {
-    'A':'AOP','B':'BOI','C':'Company','F':'Firm','G':'Government',
-    'H':'HUF','J':'Artificial Juridical Person','L':'Local Authority',
-    'P':'Individual','T':'Trust (AOP)'
-  };
-
-  // GSTIN format validator — returns { valid, error, breakdown }
-  function validateGSTINFormat(gstin) {
-    gstin = gstin.toUpperCase().trim();
-
-    if (gstin.length !== 15) return { valid: false, error: `GSTIN must be exactly 15 characters (you entered ${gstin.length})` };
-
-    const stateCode = gstin.substring(0, 2);
-    if (!/^\d{2}$/.test(stateCode)) return { valid: false, error: 'First 2 characters must be a numeric state code' };
-    if (!STATE_CODES[stateCode]) return { valid: false, error: `"${stateCode}" is not a valid state code` };
-
-    const pan = gstin.substring(2, 12);
-    if (!/^[A-Z]{3}[ABCFGHLJPTF][A-Z]\d{4}[A-Z]$/.test(pan)) {
-      return { valid: false, error: 'Characters 3–12 must form a valid PAN (e.g. AABCU9603R)' };
+  function fieldRow(label, value, opts) {
+    const mono = opts && opts.mono ? ' mono' : '';
+    const full = opts && opts.fullWidth;
+    const rawHtml = opts && opts.rawHtml;
+    let v = '—';
+    if (rawHtml && value) {
+      v = value;
+    } else if (value != null && value !== '') {
+      v = escapeHtml(value);
     }
+    return `
+      <div class="result-field"${full ? ' style="grid-column:1/-1"' : ''}>
+        <span class="field-label">${escapeHtml(label)}</span>
+        <span class="field-value${mono}">${v}</span>
+      </div>`;
+  }
 
-    const entityNum = gstin[12];
-    if (!/^[1-9A-Z]$/.test(entityNum)) return { valid: false, error: 'Character 13 must be entity number (1–9 or A–Z)' };
-
-    if (gstin[13] !== 'Z') return { valid: false, error: 'Character 14 must always be "Z"' };
-
-    const checkChar = gstin[14];
-    if (!/^[0-9A-Z]$/.test(checkChar)) return { valid: false, error: 'Character 15 must be alphanumeric checksum' };
-
-    return {
-      valid: true,
-      gstin,
-      stateCode,
-      stateName: STATE_CODES[stateCode],
-      pan,
-      panType: PAN_TYPES[pan[3]] || 'Unknown',
-      panHolder: pan.substring(0, 3),
-      entityNum,
-      entityType: ENTITY_TYPES[entityNum] || 'Entity ' + entityNum,
-      checkChar
-    };
+  function renderNatureTags(items) {
+    if (!items || !items.length) return '—';
+    return items.map((n) => `<span class="hint-pill" style="margin:2px;">${escapeHtml(n)}</span>`).join(' ');
   }
 
   // Anatomy breakdown renderer
@@ -859,8 +816,8 @@
       <div class="result-card">
         <div class="result-header">
           <div>
-            <div class="result-gstin">${g.gstin}</div>
-            <div class="text-xs text-[var(--text-dim)] mt-1 font-medium">${g.stateName} &nbsp;·&nbsp; ${g.panType} &nbsp;·&nbsp; ${g.entityType}</div>
+            <div class="result-gstin">${escapeHtml(g.gstin)}</div>
+            <div class="text-xs text-[var(--text-dim)] mt-1 font-medium">${escapeHtml(g.stateName)} &nbsp;·&nbsp; ${escapeHtml(g.panType)} &nbsp;·&nbsp; ${escapeHtml(g.entityType)}</div>
           </div>
           <span class="validation-badge badge-valid" style="margin-top:0;">
             <i data-lucide="check-circle-2" style="width:14px;height:14px;"></i>
@@ -871,81 +828,66 @@
           <div class="result-grid">
             <div class="result-field">
               <span class="field-label">State</span>
-              <span class="field-value">${g.stateName} (${g.stateCode})</span>
+              <span class="field-value">${escapeHtml(g.stateName)} (${escapeHtml(g.stateCode)})</span>
             </div>
             <div class="result-field">
               <span class="field-label">PAN Number</span>
-              <span class="field-value mono">${g.pan}</span>
+              <span class="field-value mono">${escapeHtml(g.pan)}</span>
             </div>
             <div class="result-field">
               <span class="field-label">Taxpayer Type</span>
-              <span class="field-value">${g.panType}</span>
+              <span class="field-value">${escapeHtml(g.panType)}</span>
             </div>
             <div class="result-field">
               <span class="field-label">Entity Registration</span>
-              <span class="field-value">${g.entityType}</span>
+              <span class="field-value">${escapeHtml(g.entityType)}</span>
             </div>
           </div>
           <div class="result-divider"></div>
           ${renderAnatomy(g)}
           <div class="mt-4 p-4 rounded-xl bg-[#fffbeb] border border-[#fde68a] text-sm text-[#92400e]">
-            <strong>Format is valid.</strong> Live taxpayer details (business name, address, filing status) require API configuration.
-            <br><span class="text-xs mt-1 inline-block opacity-80">See the code comment in gstin-search.html for setup instructions.</span>
+            <strong>Format is valid.</strong> Live taxpayer details from the GSTN portal are unavailable until the lookup service is configured.
           </div>
         </div>
       </div>
     `;
   }
 
-  // Render full live result
+  // Render full live result (Microvista public search)
   function renderLiveResult(g, data) {
-    const address = data.address
-      ? [data.address.bno, data.address.bname, data.address.street, data.address.location, data.address.state, data.address.pincode]
-          .filter(Boolean).join(', ')
-      : '—';
+    const trade = data.tradeName || '';
+    const legal = data.legalName || '';
 
     return `
       <div class="result-card">
         <div class="result-header">
           <div>
-            <div class="result-gstin">${g.gstin}</div>
-            <div class="text-sm font-bold text-[var(--text-soft)] mt-1">${data['legal-name'] || data['trade-name'] || '—'}</div>
-            ${data['trade-name'] && data['trade-name'] !== data['legal-name']
-              ? `<div class="text-xs text-[var(--text-dim)] mt-0.5">Trade name: ${data['trade-name']}</div>`
+            <div class="result-gstin">${escapeHtml(g.gstin)}</div>
+            <div class="text-sm font-bold text-[var(--text-soft)] mt-1">${escapeHtml(data.displayName || legal || trade || '—')}</div>
+            ${trade && legal && trade !== legal
+              ? `<div class="text-xs text-[var(--text-dim)] mt-0.5">Trade name: ${escapeHtml(trade)}</div>`
               : ''}
           </div>
           ${statusBadge(data.status)}
         </div>
         <div class="result-body">
           <div class="result-grid">
-            <div class="result-field">
-              <span class="field-label">Legal Name</span>
-              <span class="field-value">${data['legal-name'] || '—'}</span>
-            </div>
-            <div class="result-field">
-              <span class="field-label">Trade Name</span>
-              <span class="field-value">${data['trade-name'] || '—'}</span>
-            </div>
-            <div class="result-field">
-              <span class="field-label">State</span>
-              <span class="field-value">${g.stateName} (${g.stateCode})</span>
-            </div>
-            <div class="result-field">
-              <span class="field-label">Registration Date</span>
-              <span class="field-value mono">${data['registration-date'] || '—'}</span>
-            </div>
-            <div class="result-field">
-              <span class="field-label">Dealer Type</span>
-              <span class="field-value">${data['dealer-type'] || '—'}</span>
-            </div>
-            <div class="result-field">
-              <span class="field-label">Entity Type</span>
-              <span class="field-value">${data['entity-type'] || g.entityType}</span>
-            </div>
-            <div class="result-field" style="grid-column: 1/-1;">
-              <span class="field-label">Address</span>
-              <span class="field-value">${address}</span>
-            </div>
+            ${fieldRow('Legal Name', legal)}
+            ${fieldRow('Trade Name', trade)}
+            ${fieldRow('State', `${g.stateName} (${g.stateCode})`)}
+            ${fieldRow('Registration Date', formatDisplayDate(data.registrationDate), { mono: true })}
+            ${fieldRow('Last Updated', formatDisplayDate(data.lastUpdateDate), { mono: true })}
+            ${fieldRow('Cancellation Date', formatDisplayDate(data.cancellationDate), { mono: true })}
+            ${fieldRow('Dealer Type', data.dealerType)}
+            ${fieldRow('Constitution', data.constitutionOfBusiness)}
+            ${fieldRow('E-Invoice Status', data.einvoiceStatus)}
+            ${fieldRow('State Jurisdiction', data.stateJurisdiction)}
+            ${fieldRow('Centre Jurisdiction', data.centerJurisdiction)}
+            ${fieldRow('Nature of Business', renderNatureTags(data.natureOfBusiness), { fullWidth: true, rawHtml: true })}
+            ${fieldRow('Principal Address', data.principalAddress, { fullWidth: true })}
+            ${data.principalNatureOfTrade ? fieldRow('Principal place type', data.principalNatureOfTrade) : ''}
+            ${data.additionalAddress ? fieldRow('Additional Address', data.additionalAddress, { fullWidth: true }) : ''}
+            ${fieldRow('Entity Type', data.constitutionOfBusiness || g.entityType)}
           </div>
           <div class="result-divider"></div>
           ${renderAnatomy(g)}
@@ -973,7 +915,7 @@
           <i data-lucide="alert-circle" style="width:20px;height:20px;color:var(--error);flex-shrink:0;margin-top:1px;"></i>
           <div>
             <p class="font-bold text-sm" style="color:var(--error);">Invalid GSTIN Format</p>
-            <p class="text-sm mt-1" style="color:#7f1d1d;">${validation.error}</p>
+            <p class="text-sm mt-1" style="color:#7f1d1d;">${escapeHtml(validation.error)}</p>
           </div>
         </div>
       `;
@@ -985,42 +927,48 @@
     // Save to recent searches
     saveRecent(raw);
 
-    // If no API key — show format result only
-    if (!API_KEY) {
+    if (!LOOKUP_ENABLED) {
       area.innerHTML = renderFormatResult(validation);
-      apiNotice.style.display = 'block';
+      apiNotice.classList.remove('hidden');
       lucide.createIcons();
       renderCTABanner();
       gtag('event', 'gstin_search', { search_result: 'format_valid_no_api', state: validation.stateCode });
       return;
     }
 
-    // Live API lookup
     btn.disabled = true;
     label.classList.add('hidden');
     spinner.classList.remove('hidden');
     area.innerHTML = '';
-    apiNotice.style.display = 'none';
+    apiNotice.classList.add('hidden');
 
     try {
-      const res = await fetch(`${API_BASE}${API_KEY}/${raw}`);
-      const json = await res.json();
+      const result = await fetchGstinDetails(SUPABASE_URL, SUPABASE_ANON_KEY, raw);
 
-      if (json.flag === false || json.message === 'Invalid GSTIN') {
+      if (!result.ok) {
+        const title = result.code === 'not_found' ? 'GSTIN Not Found' : 'Lookup Failed';
         area.innerHTML = `
           <div class="error-box">
             <i data-lucide="alert-circle" style="width:20px;height:20px;color:var(--error);flex-shrink:0;margin-top:1px;"></i>
             <div>
-              <p class="font-bold text-sm" style="color:var(--error);">GSTIN Not Found</p>
-              <p class="text-sm mt-1" style="color:#7f1d1d;">This GSTIN has a valid format but is not registered on the GSTN portal, or may have been cancelled.</p>
+              <p class="font-bold text-sm" style="color:var(--error);">${escapeHtml(title)}</p>
+              <p class="text-sm mt-1" style="color:#7f1d1d;">${escapeHtml(result.message)}</p>
             </div>
           </div>
         `;
-        gtag('event', 'gstin_search', { search_result: 'not_found' });
+        if (result.code === 'not_found') {
+          gtag('event', 'gstin_search', { search_result: 'not_found' });
+        } else {
+          gtag('event', 'gstin_search', { search_result: 'api_error' });
+        }
       } else {
-        area.innerHTML = renderLiveResult(validation, json.data || json);
+        area.innerHTML = renderLiveResult(validation, result.data);
         renderCTABanner();
-        gtag('event', 'gstin_search', { search_result: 'found', state: validation.stateCode, dealer_type: (json.data || json)['dealer-type'] });
+        gtag('event', 'gstin_search', {
+          search_result: 'found',
+          state: validation.stateCode,
+          dealer_type: result.data.dealerType || '',
+        });
       }
     } catch (err) {
       area.innerHTML = `

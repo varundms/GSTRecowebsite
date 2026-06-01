@@ -64,7 +64,6 @@ function rewriteHtml(html, base) {
   }
   let out = rewriteAttr(html, "src");
   out = rewriteAttr(out, "href");
-  out = rewriteAttr(out, "content");
   return out;
 }
 
@@ -108,7 +107,7 @@ for (const file of htmlFiles) {
   let html = rewriteHtml(fs.readFileSync(srcPath, "utf8"), base);
   html = html.replaceAll("__SUPABASE_URL__", supabaseUrl);
   html = html.replaceAll("__SUPABASE_ANON_KEY__", supabaseAnon);
-  if (html.includes("__SUPABASE")) {
+  if (html.includes("__SUPABASE_URL__") || html.includes("__SUPABASE_ANON_KEY__")) {
     console.error(`Unresolved Supabase placeholders in ${file}`);
     process.exit(1);
   }
