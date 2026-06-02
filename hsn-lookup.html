@@ -450,16 +450,17 @@ function showLoadingState() {
 
 // Load comprehensive dataset from JSON file
 fetch('hsn-data.json')
-  .then(r => r.json())
+  .then(r => { if (!r.ok) throw new Error('not found'); return r.json(); })
   .then(data => {
     HSN_DATA = data;
     _dataReady = true;
     console.log(`HSN data loaded: ${HSN_DATA.length} entries`);
   })
   .catch(() => {
-    // Fallback: use the inline compact dataset below
+    // JSON file not available — use the inline fallback dataset
+    HSN_DATA = HSN_FALLBACK;
     _dataReady = true;
-    console.warn('hsn-data.json not found — using fallback dataset');
+    console.warn('hsn-data.json unavailable — using built-in dataset');
   });
 
 // Inline fallback (compact — only used if JSON fetch fails)
@@ -764,8 +765,8 @@ const HSN_FALLBACK = [
   {hsn:'9997',desc:'Other services — education, health, recreation',rate:18,chapter:'99',chapterName:'Services (SAC)',keywords:['education service','training','coaching','health service','recreation service']},
 ];
 
-// If JSON fetch failed, use fallback
-fetch('hsn-data.json').catch(() => { if (HSN_DATA.length === 0) HSN_DATA = HSN_FALLBACK; });
+// Safety net: if data still empty after 4s, force-use fallback
+setTimeout(() => { if (HSN_DATA.length === 0) { HSN_DATA = HSN_FALLBACK; _dataReady = true; } }, 4000);
 
 // ─────────────────────────────────────────────
 // HELPERS
@@ -896,10 +897,21 @@ function goBack() {
   lucide.createIcons();
 }
 
-// Wait for data to be ready, then run callback
+// Wait for data to be ready, then run callback — max 5s wait, then force fallback
 function whenReady(fn) {
   if (HSN_DATA.length > 0) { fn(); return; }
-  const t = setInterval(() => { if (HSN_DATA.length > 0) { clearInterval(t); fn(); } }, 80);
+  let attempts = 0;
+  const t = setInterval(() => {
+    attempts++;
+    if (HSN_DATA.length > 0) {
+      clearInterval(t);
+      fn();
+    } else if (attempts >= 62) { // ~5 seconds
+      clearInterval(t);
+      if (HSN_DATA.length === 0) { HSN_DATA = HSN_FALLBACK; _dataReady = true; }
+      fn();
+    }
+  }, 80);
 }
 
 // ─── CODE SEARCH ───
