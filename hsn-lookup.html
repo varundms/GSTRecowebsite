@@ -970,9 +970,9 @@ function stem(w) {
 // ─── SYNONYM EXPANSION — maps obscure / jargon terms to searchable terms ───
 const SYN = {
   // Cargo / shipping / logistics
-  lashing:['rope','strap','webbing','cord','sling','tie down','securin'],
-  lash:['rope','strap','webbing','cord'],
-  strapping:['strap','webbing','band','lashing'],
+  lashing:['lashing rope','lashing strap','lashing webbing','wire rope sling','tie down strap','cargo securing','ratchet strap'],
+  lash:['lashing rope','lashing strap','lashing webbing'],
+  strapping:['lashing strap','strapping band','packaging strap','PET strap'],
   dunnage:['packing','packaging','bag','airbag'],
   sling:['rope','strap','wire rope','webbing','lifting'],
   rigging:['wire rope','chain','shackle','sling','block'],
@@ -1199,32 +1199,39 @@ function searchByKeyword() {
 
     const allTerms = expandTerms(terms);
 
+    // Word-boundary safe check — prevents "cord" matching "recording"
+    function hasWord(text, term) {
+      if (!term || term.length < 2) return false;
+      const esc = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return new RegExp('(?:^|[^a-z0-9])' + esc + '(?:[^a-z0-9]|$)').test(text);
+    }
+
     const score = (item) => {
       const desc  = item.desc.toLowerCase();
-      const kws   = (item.keywords || []).join(' ').toLowerCase();
+      const kws   = (item.keywords || []).join(' | ').toLowerCase(); // | separator avoids cross-keyword matches
       const ch    = (item.chapterName || '').toLowerCase();
       const kArr  = (item.keywords || []).map(k => k.toLowerCase());
       let s = 0;
 
       for (const t of allTerms) {
-        const isOriginal = terms.includes(t);
-        const w = isOriginal ? 1 : 0.6; // original terms score higher than expanded
-        if (kArr.some(k => k === t))                             s += 5 * w;  // exact keyword
-        else if (kArr.some(k => k.includes(t) && t.length >= 4)) s += 3 * w;  // keyword contains term
-        else if (kws.includes(t))                                 s += 2.5 * w;// keyword string
-        else if (desc.includes(t))                                s += 2 * w;  // description
-        else if (ch.includes(t))                                  s += 1 * w;  // chapter name
-        // Partial: any keyword starts with 4+ chars of term
-        else if (t.length >= 4 && kArr.some(k => k.startsWith(t)))  s += 1.5 * w;
-        // Reverse partial: term starts with a keyword (e.g. "lashing" starts with "lash")
-        else if (kArr.some(k => k.length >= 4 && t.startsWith(k)))  s += 1 * w;
-        // Partial: description word starts with term
-        else if (t.length >= 4 && desc.split(/\s+/).some(w2 => w2.startsWith(t))) s += 0.8 * w;
+        const isOrig = terms.includes(t);
+        const w = isOrig ? 1 : 0.6;
+
+        if (kArr.some(k => k === t))                                    s += 5 * w; // exact keyword
+        else if (t.length >= 4 && kArr.some(k => hasWord(k, t)))        s += 3 * w; // keyword word-boundary match
+        else if (t.length >= 4 && hasWord(kws, t))                      s += 2 * w; // keyword string word match
+        // Description & chapter: ONLY for original query terms — prevents false positives from synonyms
+        else if (isOrig && hasWord(desc, t))                             s += 2;
+        else if (isOrig && hasWord(ch, t))                               s += 1;
+        // Prefix match: keyword starts with the term (e.g. search "lash" hits "lashing rope")
+        else if (t.length >= 4 && kArr.some(k => k.startsWith(t)))      s += 1.5 * w;
+        // Reverse prefix: term starts with a keyword
+        else if (kArr.some(k => k.length >= 5 && t.startsWith(k)))      s += 1 * w;
       }
 
-      // Bonus: ALL original terms matched
+      // Bonus: all original terms matched somewhere
       if (s > 0 && terms.length > 1) {
-        const allMatch = terms.every(t => desc.includes(t) || kws.includes(t));
+        const allMatch = terms.every(t => hasWord(desc, t) || hasWord(kws, t));
         if (allMatch) s += terms.length * 2;
       }
       return s;
