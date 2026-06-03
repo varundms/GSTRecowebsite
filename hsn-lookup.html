@@ -977,43 +977,239 @@ async function apiCodeSearch(code) {
   return apiKeywordSearch(code);
 }
 
-// ─── LOCAL FALLBACK SEARCH — simple, clean, no false positives ───────────────
-// Checks whole words only. No synonym expansion.
-function localWordMatch(text, term) {
-  if (!text || !term || term.length < 2) return false;
-  const esc = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp('(?:^|[^a-z0-9])' + esc + '(?:[^a-z0-9]|$)', 'i').test(text);
+// ─── STEMMER — simple suffix-stripping ───────────────────────────────────────
+function stem(w) {
+  w = w.toLowerCase().trim();
+  if (w.length <= 3) return w;
+  const rules = [
+    'ings','ations','nesses','ments','eries','ical','ous','ful',
+    'ing','ness','ment','ies','ied','ers','ess','es','ed','er','s'
+  ];
+  for (const sfx of rules) {
+    if (w.endsWith(sfx) && w.length - sfx.length >= 3) {
+      return w.slice(0, w.length - sfx.length);
+    }
+  }
+  // Strip trailing silent 'e' (medicine→medicin, valve→valv, cable→cabl)
+  if (w.endsWith('e') && w.length >= 5) return w.slice(0, -1);
+  return w;
 }
 
-function localSearch(query) {
-  const terms = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
-  const scored = HSN_DATA.map(item => {
-    const desc = item.desc.toLowerCase();
-    const kws  = (item.keywords || []).join(' ').toLowerCase();
-    const kArr = (item.keywords || []).map(k => k.toLowerCase());
-    let s = 0;
-    for (const t of terms) {
-      if (kArr.some(k => k === t))                              s += 6;  // exact keyword match
-      else if (kArr.some(k => localWordMatch(k, t)))            s += 4;  // word boundary match in keyword phrase
-      else if (localWordMatch(kws, t))                          s += 3;  // word boundary match in keyword string
-      else if (localWordMatch(desc, t))                         s += 2;  // word boundary match in description
-      else if (t.length >= 4 && kArr.some(k => k.includes(t))) s += 1.5; // substring in any keyword
-      else if (t.length >= 4 && desc.includes(t))              s += 1;   // substring in description
-      else if (t.length >= 5 && kArr.some(k => k.startsWith(t))) s += 1.5; // prefix in keyword
-      else if (t.length >= 5 && desc.split(/\s+/).some(w => w.startsWith(t))) s += 1;
+// ─── SYNONYM MAP — covers common Indian product search variations ─────────────
+const SYN = {
+  // Cargo / logistics
+  'lash':['strap','tie','webbing','cord','rope','cargo strap','secure','securing'],
+  'lashing':['strap','tie-down','webbing','cargo strap','rope','cord','securing'],
+  'strap':['lashing','belt','band','tie','webbing','buckle'],
+  'sling':['lifting sling','cargo sling','wire sling','webbing sling'],
+  'fastener':['bolt','nut','screw','rivet','clip','clamp','buckle'],
+  // Electronics
+  'mobile':['phone','smartphone','handset','cellular','iphone','android'],
+  'phone':['mobile','smartphone','telephone','handset','cellular'],
+  'laptop':['computer','notebook','portable computer','macbook'],
+  'computer':['laptop','desktop','pc','server','notebook'],
+  'tv':['television','monitor','display','led tv','smart tv'],
+  'television':['tv','monitor','display','led tv'],
+  'ac':['air conditioner','airconditioner','split ac','window ac','cooling'],
+  'fridge':['refrigerator','freezer','cooling','cold storage'],
+  'refrigerator':['fridge','freezer','cooling'],
+  'light':['lamp','bulb','led','tube','luminaire','lantern'],
+  'bulb':['lamp','led','light','tube','cfl'],
+  'battery':['accumulator','cell','power cell','lithium','lead acid'],
+  'wire':['cable','conductor','cord','electrical wire'],
+  'cable':['wire','conductor','cord','optical fibre'],
+  // Vehicles
+  'car':['automobile','vehicle','motor car','sedan','suv','hatchback'],
+  'automobile':['car','motor car','vehicle'],
+  'bike':['motorcycle','scooter','moped','two wheeler'],
+  'motorcycle':['bike','scooter','moped','two wheeler'],
+  'truck':['lorry','goods vehicle','commercial vehicle'],
+  'bus':['coach','minibus','public transport'],
+  'tractor':['farm equipment','agricultural machine'],
+  // Apparel / textiles
+  'shoe':['footwear','sandal','slipper','boot','chappal','sneaker'],
+  'shoes':['footwear','sandal','slipper','boot','chappal','sneaker'],
+  'footwear':['shoe','sandal','slipper','boot','chappal'],
+  'cloth':['fabric','textile','material','garment'],
+  'fabric':['cloth','textile','material','weave'],
+  'garment':['clothing','apparel','dress','wear','shirt','trouser'],
+  'clothing':['garment','apparel','dress','wear','textile'],
+  'saree':['sari','silk saree','cotton saree','woven fabric'],
+  // Pharma / medical
+  'medicine':['drug','tablet','capsule','pharmaceutical','medicament'],
+  'drug':['medicine','tablet','capsule','pharmaceutical','medicament'],
+  'tablet':['medicine','capsule','pill','drug','pharmaceutical'],
+  'injection':['syringe','vaccine','pharmaceutical','drug'],
+  'medical':['healthcare','pharmaceutical','surgical','clinical'],
+  // Food
+  'rice':['paddy','basmati','chawal','grain','cereal'],
+  'wheat':['atta','flour','gehun','grain','cereal'],
+  'flour':['atta','maida','powder','milling','cereal'],
+  'sugar':['sucrose','cheeni','jaggery','sweetener','gur'],
+  'milk':['dairy','cream','lactose','cattle product'],
+  'oil':['lubricant','cooking oil','edible oil','fat','grease'],
+  'spice':['masala','condiment','pepper','turmeric','cumin'],
+  // Construction / materials
+  'cement':['concrete','mortar','building material','portland','opc'],
+  'steel':['iron','metal','alloy','ms','mild steel','tmt'],
+  'iron':['steel','metal','alloy','cast iron','pig iron'],
+  'tile':['ceramic','floor tile','wall tile','vitrified','porcelain'],
+  'paint':['coating','varnish','lacquer','enamel','primer'],
+  'pipe':['tube','hose','conduit','plumbing'],
+  'valve':['tap','cock','fitting','gate valve','ball valve'],
+  'pump':['water pump','motor pump','centrifugal','submersible'],
+  'brick':['block','masonry','refractory','building material'],
+  'glass':['glazing','float glass','window glass','mirror'],
+  'wood':['timber','lumber','plywood','mdf','hardwood'],
+  'marble':['granite','stone','flooring','slab'],
+  'granite':['marble','stone','flooring','slab'],
+  // Chemicals / household
+  'soap':['detergent','cleaner','wash','surfactant','handwash'],
+  'detergent':['soap','cleaner','washing powder','surf','ariel'],
+  'plastic':['polymer','pvc','polyethylene','hdpe','ldpe'],
+  'rubber':['vulcanised','latex','elastomer','tyre material'],
+  'leather':['hide','skin','genuine leather','tanned'],
+  'paper':['stationery','board','paperboard','printing paper'],
+  'fertilizer':['manure','compost','nutrient','urea','npk'],
+  'pesticide':['insecticide','herbicide','fungicide','agrochemical'],
+  // Machinery / equipment
+  'fan':['blower','cooler','ventilator','exhaust'],
+  'motor':['engine','drive','electric motor','generator'],
+  'generator':['genset','power generator','diesel generator'],
+  'transformer':['converter','ups','inverter','voltage'],
+  'switch':['socket','mcb','breaker','circuit breaker','plug'],
+  'bolt':['nut','screw','fastener','threaded'],
+  'screw':['bolt','nut','fastener','threaded'],
+  'bearing':['ball bearing','roller bearing','bush'],
+  'gear':['gearbox','transmission','sprocket','chain drive'],
+  'chain':['sprocket','link','drive chain','conveyor chain'],
+  'tool':['equipment','instrument','implement','hand tool'],
+  'lock':['padlock','key','latch','door lock'],
+  // Precious metals / gems
+  'gold':['sona','precious metal','jewellery','ornament'],
+  'silver':['chandi','precious metal','jewellery','ornament'],
+  'jewellery':['jewelry','ornament','necklace','ring','bangle','earring'],
+  'jewelry':['jewellery','ornament','necklace','ring','bangle'],
+  'diamond':['gem','gemstone','precious stone','heera'],
+  // Misc
+  'furniture':['chair','table','bed','wardrobe','cabinet','sofa'],
+  'book':['printed','publication','textbook','novel','stationery'],
+  'toy':['game','doll','plaything','tricycle','puzzle'],
+  'cigarette':['tobacco','smoking','cigar'],
+  'tobacco':['cigarette','cigar','gutka','pan masala'],
+  'beer':['alcohol','liquor','beverage','malt'],
+  'bag':['sack','pouch','handbag','backpack','luggage','suitcase'],
+  'camera':['dslr','digital camera','cctv','webcam','camcorder'],
+  'tyre':['tire','rubber tyre','pneumatic'],
+  'fuel':['petrol','diesel','petroleum','lpg','cng'],
+  'coal':['coke','lignite','solid fuel'],
+  'aircraft':['aeroplane','airplane','helicopter','plane'],
+  'ship':['vessel','boat','ferry','cargo ship'],
+};
+
+// ─── INVERTED INDEX — built once from all description + keyword text ──────────
+let _idx = null;
+let _hsnMap = null;
+
+function buildIndex() {
+  _idx = {};
+  _hsnMap = {};
+  for (const item of HSN_DATA) {
+    _hsnMap[item.hsn] = item;
+    const tokens = tokenize(
+      item.desc + ' ' + item.chapterName + ' ' + (item.keywords || []).join(' ')
+    );
+    for (const w of tokens) {
+      const s = stem(w);
+      // Index both the original word and its stem so either form matches
+      for (const key of [w, s]) {
+        if (!_idx[key]) _idx[key] = new Set();
+        _idx[key].add(item.hsn);
+      }
     }
-    // Bonus: all terms matched
-    if (s > 0 && terms.length > 1) {
-      if (terms.every(t => localWordMatch(desc, t) || localWordMatch(kws, t) || kws.includes(t))) s += terms.length * 2;
-    }
-    return { item, s };
-  })
-  .filter(x => x.s > 0)
-  .sort((a, b) => b.s - a.s)
-  .slice(0, 50)
-  .map(x => x.item);
-  return scored;
+  }
 }
+
+function tokenize(text) {
+  return text.toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter(w => w.length >= 3 && !STOP_WORDS.has(w));
+}
+
+const STOP_WORDS = new Set(['the','and','for','are','with','from','that','this',
+  'not','its','was','has','per','all','can','use','used','other','including',
+  'whether','their','into']);
+
+function getExpanded(term) {
+  const s = stem(term);
+  const synTerms = SYN[term] || SYN[s] || [];
+  const all = [term, s, ...synTerms, ...synTerms.map(stem)];
+  return [...new Set(all.map(x => x.toLowerCase()))];
+}
+
+// ─── MAIN LOCAL SEARCH ────────────────────────────────────────────────────────
+function localSearch(query) {
+  if (!_idx || !_hsnMap) buildIndex();
+
+  const terms = query.toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter(w => w.length >= 2);
+
+  if (!terms.length) return [];
+
+  const scores = {}; // hsn -> score
+
+  for (const t of terms) {
+    const expanded = getExpanded(t);
+
+    for (const [ei, et] of expanded.entries()) {
+      // Weight: original term=10, stem of original=8, synonym=4, stem of synonym=3
+      const weight = ei === 0 ? 10 : ei === 1 ? 8 : ei < 3 ? 4 : 3;
+      const matches = _idx[et] || new Set();
+      for (const hsn of matches) {
+        scores[hsn] = (scores[hsn] || 0) + weight;
+      }
+    }
+
+    // Extra bonus: exact full-keyword match in item.keywords array
+    for (const item of HSN_DATA) {
+      if ((item.keywords || []).some(k => k.toLowerCase() === t)) {
+        scores[item.hsn] = (scores[item.hsn] || 0) + 5;
+      }
+    }
+  }
+
+  // Multi-term bonus/penalty: each term must match on its OWN (stem only, no synonyms)
+  // This prevents circular synonym matches (e.g. "mobile" ↔ "phone" confusing crane results)
+  if (terms.length > 1) {
+    for (const hsn of Object.keys(scores)) {
+      let matchedTerms = 0;
+      for (const t of terms) {
+        const st = stem(t);
+        if ((_idx[t] && _idx[t].has(hsn)) || (_idx[st] && _idx[st].has(hsn))) matchedTerms++;
+      }
+      if (matchedTerms === terms.length) {
+        scores[hsn] *= 2.0;  // all terms present — strong boost
+      } else {
+        scores[hsn] *= Math.pow(matchedTerms / terms.length, 2); // squared penalty for partial
+      }
+    }
+  }
+
+  const minScore = terms.length === 1 ? 6 : 10;
+  return Object.entries(scores)
+    .filter(([, s]) => s >= minScore)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 50)
+    .map(([hsn]) => _hsnMap[hsn])
+    .filter(Boolean);
+}
+
+// Rebuild index when data is (re)loaded
+const _origFetch = window._hsnDataLoaded;
+function onHSNDataLoaded() { _idx = null; _hsnMap = null; }
 
 function localCodeSearch(raw) {
   let results = HSN_DATA.filter(h => h.hsn === raw);
