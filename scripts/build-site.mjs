@@ -124,5 +124,12 @@ if (fs.existsSync(jsDir)) {
     console.log(`Wrote out/js/${file}`);
   }
 }
-
+// Copy root-level JSON data files (e.g. hsn-data.json)
+for (const file of fs.readdirSync(root).filter(
+  (f) => f.endsWith('.json') && fs.statSync(path.join(root, f)).isFile()
+       && !['package.json','vercel.json'].includes(f)
+)) {
+  fs.copyFileSync(path.join(root, file), path.join(outDir, file));
+  console.log(`Wrote out/${file}`);
+}
 console.log(`Build complete (${htmlFiles.length} HTML). Media from ${base}`);
