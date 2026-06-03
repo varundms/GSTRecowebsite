@@ -914,20 +914,6 @@ function whenReady(fn) {
   }, 80);
 }
 
-// =============================================================
-//  API CONFIG — get your FREE key at data.gov.in/user/register
-//  Paste your key below, then save and upload the file
-// =============================================================
-const DATA_GOV_API_KEY  = 'YOUR_API_KEY_HERE';
-const DATA_GOV_RESOURCE = '31d85d38-4d5a-4528-99a3-86ea92e5c201';
-const DATA_GOV_BASE     = `https://api.data.gov.in/resource/${DATA_GOV_RESOURCE}`;
-// =============================================================
-
-// Check if a valid API key has been entered
-function apiKeySet() {
-  return DATA_GOV_API_KEY && DATA_GOV_API_KEY !== 'YOUR_API_KEY_HERE';
-}
-
 // Show inline spinner inside results area
 function showSpinner(msg) {
   const area = document.getElementById('results-area');
@@ -936,45 +922,6 @@ function showSpinner(msg) {
     <div>${msg || 'Searching…'}</div>
   </div>`;
   lucide.createIcons();
-}
-
-// Map a data.gov.in record to our internal format
-function mapAPIRecord(rec) {
-  const hsn  = String(rec.hsn_code || rec.hsncode || rec.hsn_cd || rec.hsn || '').trim().replace(/^0+(?=\d{4})/, '');
-  const desc = (rec.commodity_description || rec.description || rec.commodity || rec.item_description || rec.name || '').trim();
-  if (!hsn && !desc) return null;
-  const chapter = hsn.padStart(2,'0').substring(0,2);
-  // Look up GST rate from local dataset
-  const local = HSN_DATA.find(h => h.hsn === hsn)
-             || HSN_DATA.find(h => hsn.startsWith(h.hsn) && h.hsn.length >= 4)
-             || HSN_DATA.find(h => h.chapter === chapter);
-  const rate  = local ? local.rate : null;
-  const cgst  = local ? local.cgst : (rate != null ? rate/2 : null);
-  const sgst  = local ? local.sgst : (rate != null ? rate/2 : null);
-  const igst  = local ? local.igst : rate;
-  const chapterName = local ? local.chapterName : `Chapter ${chapter}`;
-  return { hsn, desc, rate, cgst, sgst, igst, chapter, chapterName, keywords: [], _api: true };
-}
-
-// Call data.gov.in API — keyword search
-async function apiKeywordSearch(query) {
-  const url = `${DATA_GOV_BASE}?api-key=${encodeURIComponent(DATA_GOV_API_KEY)}&format=json&q=${encodeURIComponent(query)}&limit=20&offset=0`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`API ${res.status}`);
-  const data = await res.json();
-  return (data.records || []).map(mapAPIRecord).filter(Boolean);
-}
-
-// Call data.gov.in API — code search
-async function apiCodeSearch(code) {
-  // Try exact filter first, then fallback to query
-  const url = `${DATA_GOV_BASE}?api-key=${encodeURIComponent(DATA_GOV_API_KEY)}&format=json&filters[hsn_code]=${code}&limit=20`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`API ${res.status}`);
-  const data = await res.json();
-  if (data.records && data.records.length > 0) return data.records.map(mapAPIRecord).filter(Boolean);
-  // Fallback: search query
-  return apiKeywordSearch(code);
 }
 
 // ─── STEMMER — simple suffix-stripping ───────────────────────────────────────
@@ -1207,31 +1154,12 @@ function localSearch(query) {
     .filter(Boolean);
 }
 
-// Rebuild index when data is (re)loaded
-const _origFetch = window._hsnDataLoaded;
-function onHSNDataLoaded() { _idx = null; _hsnMap = null; }
-
 function localCodeSearch(raw) {
   let results = HSN_DATA.filter(h => h.hsn === raw);
   if (!results.length) results = HSN_DATA.filter(h => h.hsn.startsWith(raw));
   if (!results.length) results = HSN_DATA.filter(h => raw.startsWith(h.hsn));
   if (!results.length) results = HSN_DATA.filter(h => h.hsn.startsWith(raw.substring(0,2)));
   return results;
-}
-
-// Show "no API key" notice inside results
-function showNoKeyNotice() {
-  document.getElementById('results-area').innerHTML = `
-    <div style="background:rgba(168,200,240,0.1);border:1px solid rgba(168,200,240,0.3);border-radius:14px;padding:20px 24px;max-width:520px;margin:0 auto;">
-      <p style="font-weight:700;font-size:15px;margin-bottom:8px;">🔑 API key not configured</p>
-      <p style="font-size:13px;color:var(--text-dim);line-height:1.6;margin-bottom:12px;">
-        To get live results from the government HSN database:<br>
-        1. Register free at <a href="https://data.gov.in/user/register" target="_blank" style="color:var(--cta-text);font-weight:600;">data.gov.in/user/register</a><br>
-        2. Copy your API key<br>
-        3. Paste it in <code style="background:rgba(0,0,0,0.06);padding:1px 6px;border-radius:4px;">hsn-lookup.html</code> where it says <code style="background:rgba(0,0,0,0.06);padding:1px 6px;border-radius:4px;">YOUR_API_KEY_HERE</code>
-      </p>
-      <p style="font-size:12px;color:var(--text-muted);">Searching built-in dataset instead…</p>
-    </div>`;
 }
 
 // ─── CODE SEARCH ───
@@ -1251,22 +1179,8 @@ function searchByCode() {
   showSpinner('Looking up HSN ' + raw + '…');
 
   async function run() {
-    let results = [];
-
-    // Try API first
-    if (apiKeySet()) {
-      try {
-        results = await apiCodeSearch(raw);
-      } catch(e) {
-        console.warn('API code search failed:', e.message);
-      }
-    }
-
-    // Fall back to local search
-    if (!results.length) {
-      await new Promise(r => whenReady(r)); // ensure local data is loaded
-      results = localCodeSearch(raw);
-    }
+    await new Promise(r => whenReady(r));
+    const results = localCodeSearch(raw);
 
     lastResults = results;
     lastQuery = raw;
@@ -1282,7 +1196,6 @@ function searchByCode() {
   run();
 }
 
-// Stemmer and synonym map removed — replaced by API + clean local search above
 // ─── KEYWORD SEARCH ───
 function searchByKeyword() {
   const raw = document.getElementById('keyword-input').value.trim().toLowerCase();
@@ -1292,25 +1205,8 @@ function searchByKeyword() {
   showSpinner('Searching for "' + raw + '"…');
 
   async function run() {
-    let results = [];
-
-    // 1. Try API first
-    if (apiKeySet()) {
-      try {
-        results = await apiKeywordSearch(raw);
-      } catch(e) {
-        console.warn('API keyword search failed:', e.message);
-      }
-    } else {
-      showNoKeyNotice();
-      await new Promise(r => setTimeout(r, 1200)); // brief pause to show notice
-    }
-
-    // 2. Fall back to clean local search
-    if (!results.length) {
-      await new Promise(r => whenReady(r));
-      results = localSearch(raw);
-    }
+    await new Promise(r => whenReady(r));
+    const results = localSearch(raw);
 
     lastResults = results;
     lastQuery = raw;
