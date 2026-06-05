@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact Us — Heyxia GST Reco</title>
+<meta name="description" content="Get in touch with Heyxia GST Reco. Reach out for a demo, pricing questions, or support." />
+
+<!-- Open Graph / Social Preview -->
+<meta property="og:type"         content="website" />
+<meta property="og:url"          content="https://gstreco.heyxia.io/contact.html" />
+<meta property="og:title"        content="Contact Us — Heyxia GST Reco" />
+<meta property="og:description"  content="Get in touch with Heyxia GST Reco. Reach out for a demo, pricing questions, or support." />
+<meta property="og:image"        content="https://gstreco.heyxia.io/og-image.png" />
+<meta property="og:image:width"  content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name"    content="GST Reco by Heyxia" />
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card"        content="summary_large_image" />
+<meta name="twitter:title"       content="Contact Us — Heyxia GST Reco" />
+<meta name="twitter:description" content="Get in touch with Heyxia GST Reco. Reach out for a demo, pricing questions, or support." />
+<meta name="twitter:image"       content="https://gstreco.heyxia.io/og-image.png" />
+
+<!-- Google Ads Tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18164929821"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "AW-18164929821");
+</script>
+<!-- Google Analytics GA4 Tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-982KPPE5W9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-982KPPE5W9");
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+  :root{
+    --bg: #ffffff;
+    --bg-blue: #DCE7F7;
+    --card: #F2EAE0;
+    --text: #1A1A1A;
+    --text-soft: #2B2B2B;
+    --text-dim: #5C5C5C;
+    --text-muted: #8A8A8A;
+    --border: rgba(26,26,26,0.08);
+    --border-strong: rgba(26,26,26,0.14);
+    --cta-blue: #A8C8F0;
+    --cta-blue-dark: #8AB1E5;
+    --cta-text: #1A2A4A;
+    --brand-orange: #F5A86E;
+    --brand-coral: #E891A0;
+    --brand-pink: #D49AC4;
+    --brand-lavender: #B89FE0;
+    --brand-violet: #9B7FD4;
+    --brand-gradient: linear-gradient(90deg,#F5A86E 0%,#E891A0 35%,#C99BCE 65%,#9B7FD4 100%);
+  }
+  *{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+  html,body{ background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+  .gradient-text{
+    background: var(--brand-gradient);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .btn-primary{
+    background: var(--cta-blue); color: var(--cta-text); font-weight: 600;
+    padding: .9rem 1.6rem; border-radius: 9999px; transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(74,107,201,0.15);
+  }
+  .btn-primary:hover{ background: var(--cta-blue-dark); transform: translateY(-1px); }
+  .btn-signup{
+    background: var(--cta-blue); color: var(--cta-text); font-weight: 600;
+    padding: .65rem 1.2rem; border-radius: 9999px; transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(74,107,201,0.15);
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+  @media (min-width: 768px) { .btn-signup { padding: .9rem 1.6rem; } }
+  .btn-signup:hover{ background: var(--cta-blue-dark); transform: translateY(-1px); }
+  @keyframes glowPulse {
+    0%   { box-shadow: 0 0 6px 2px rgba(100,160,255,0.2); }
+    50%  { box-shadow: 0 0 16px 5px rgba(100,160,255,0.45), 0 0 30px 10px rgba(100,160,255,0.2); }
+    100% { box-shadow: 0 0 6px 2px rgba(100,160,255,0.2); }
+  }
+  .nav-pill{
+    background: rgba(255,255,255,0.7); backdrop-filter: blur(14px);
+    border: 1px solid rgba(26,26,26,0.06); border-radius: 9999px;
+    box-shadow: 0 4px 20px -8px rgba(26,26,26,0.08);
+  }
+  .card-soft{
+    background: rgba(255,255,255,0.4); backdrop-filter: blur(6px);
+    border: 1px solid var(--border); border-radius: 24px;
+  }
+  .reveal{ opacity:0; transform: translateY(20px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+  .input-field{
+    width: 100%; border: 1px solid var(--border-strong); border-radius: 12px;
+    padding: .75rem 1rem; font-size: 15px; font-family: inherit;
+    background: rgba(255,255,255,0.8); color: var(--text);
+    transition: border-color .2s ease, box-shadow .2s ease;
+    outline: none;
+  }
+  .input-field:focus{ border-color: #A8C8F0; box-shadow: 0 0 0 3px rgba(168,200,240,0.25); }
+  .input-field::placeholder{ color: var(--text-muted); }
+  .btn-submit{
+    background: var(--cta-blue); color: var(--cta-text); font-weight: 600;
+    padding: .9rem 2.4rem; border-radius: 9999px; transition: all .2s ease;
+    display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+    border: none; cursor: pointer; font-size: 15px; font-family: inherit;
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+  .btn-submit:hover{ background: var(--cta-blue-dark); transform: translateY(-1px); }
+  .contact-card{
+    background: linear-gradient(160deg, #f7f3ff 0%, #eef4fd 60%, #fdf4ef 100%);
+    border: 1px solid var(--border); border-radius: 20px;
+    padding: 2rem; display: flex; flex-direction: column; gap: .75rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="fixed top-4 inset-x-0 z-50 px-4">
+  <div class="max-w-6xl mx-auto nav-pill px-4 py-2 flex items-center justify-between gap-3 md:gap-4">
+    <a href="index.html" class="flex items-center pl-2">
+      <img src="heyxia-logo.png" alt="Heyxia" class="h-8 md:h-10 w-auto" />
+    </a>
+    <nav class="hidden md:flex items-center gap-10 text-[15px] text-[var(--text-soft)]">
+      <a href="index.html#features" class="hover:text-black transition">Features</a>
+      <a href="index.html#solutions" class="hover:text-black transition">Solutions</a>
+      <a href="pricing.html" class="hover:text-black transition">Pricing</a>
+      <a href="blog.html" class="hover:text-black transition">Blogs</a>
+      <div class="relative" id="tools-menu-wrap">
+        <button id="tools-btn" onclick="toggleToolsMenu()" class="flex items-center gap-1 hover:text-black transition focus:outline-none" aria-haspopup="true" aria-expanded="false">
+          Tools
+          <svg id="tools-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .2s ease;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div id="tools-dropdown" class="hidden absolute left-0 top-[calc(100%+10px)] bg-white border border-[rgba(26,26,26,0.1)] rounded-2xl shadow-[0_12px_40px_-8px_rgba(26,26,26,0.15)] py-2 min-w-[210px] z-50">
+          <a href="gstin-search.html" class="flex items-center gap-3 px-4 py-2.5 hover:bg-[rgba(26,26,26,0.04)] transition text-[14px] text-[var(--text-soft)] hover:text-black rounded-xl mx-1">
+            <span class="w-7 h-7 rounded-lg bg-[#DCE7F7] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+            <div><div class="font-semibold">GSTIN Search</div><div class="text-[11px] text-[var(--text-muted)]">Verify taxpayer details</div></div>
+          </a>
+          <a href="hsn-lookup.html" class="flex items-center gap-3 px-4 py-2.5 hover:bg-[rgba(26,26,26,0.04)] transition text-[14px] text-[var(--text-soft)] hover:text-black rounded-xl mx-1">
+            <span class="w-7 h-7 rounded-lg bg-[#F2EAE0] flex-shrink-0" style="display:flex;align-items:center;justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span>
+            <div><div class="font-semibold">HSN Rate Lookup</div><div class="text-[11px] text-[var(--text-muted)]">Find GST rates by code</div></div>
+          </a>
+        </div>
+      </div>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="https://gstreco.heyxia.app/signup" class="btn-signup text-[13px] md:text-[15px]">Sign Up for 14 Day Trial</a>
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[13px] md:text-[15px] hidden md:inline-flex">Login</a>
+      <button id="nav-hamburger" class="md:hidden flex flex-col justify-center items-center w-9 h-9 rounded-full hover:bg-gray-100 transition ml-1" aria-label="Open menu">
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300 my-[4px]"></span>
+        <span class="ham-line block w-5 h-[2px] bg-[var(--text)] rounded transition-all duration-300"></span>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile dropdown -->
+  <div id="mobile-menu" class="md:hidden hidden mt-2 mx-auto max-w-6xl px-4">
+    <div class="bg-white border border-gray-200 rounded-lg px-6 py-5 flex flex-col gap-4 text-[15px] text-[var(--text-soft)]">
+      <a href="index.html#features" class="hover:text-black transition" onclick="closeMobileMenu()">Features</a>
+      <a href="index.html#solutions" class="hover:text-black transition" onclick="closeMobileMenu()">Solutions</a>
+      <a href="pricing.html" class="hover:text-black transition" onclick="closeMobileMenu()">Pricing</a>
+      <a href="blog.html" class="hover:text-black transition" onclick="closeMobileMenu()">Blogs</a>
+      <hr class="border-gray-200">
+      <div class="flex flex-col gap-1">
+        <span class="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-1">Free Tools</span>
+        <a href="gstin-search.html" class="hover:text-black transition flex items-center gap-2" onclick="closeMobileMenu()"><span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span>GSTIN Search</a>
+        <a href="hsn-lookup.html" class="hover:text-black transition flex items-center gap-2" onclick="closeMobileMenu()"><span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block"></span>HSN Rate Lookup</a>
+      </div>
+      <hr class="border-gray-200">
+      <a href="https://gstreco.heyxia.app/login" class="btn-primary text-[15px] text-center">Login</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const hamburger = document.getElementById('nav-hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    const isOpen = !mobileMenu.classList.contains('hidden');
+    mobileMenu.classList.toggle('hidden', isOpen);
+    const lines = hamburger.querySelectorAll('.ham-line');
+    if (!isOpen) {
+      lines[0].style.transform = 'translateY(6px) rotate(45deg)';
+      lines[1].style.opacity = '0';
+      lines[2].style.transform = 'translateY(-6px) rotate(-45deg)';
+    } else {
+      lines[0].style.transform = '';
+      lines[1].style.opacity = '';
+      lines[2].style.transform = '';
+    }
+  });
+  function closeMobileMenu() {
+    mobileMenu.classList.add('hidden');
+    const lines = hamburger.querySelectorAll('.ham-line');
+    lines[0].style.transform = '';
+    lines[1].style.opacity = '';
+    lines[2].style.transform = '';
+  }
+  function toggleToolsMenu() {
+    const dd = document.getElementById('tools-dropdown');
+    const chevron = document.getElementById('tools-chevron');
+    const isHidden = dd.classList.contains('hidden');
+    dd.classList.toggle('hidden', !isHidden);
+    chevron.style.transform = isHidden ? 'rotate(180deg)' : '';
+  }
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) closeMobileMenu();
+    const wrap = document.getElementById('tools-menu-wrap');
+    if (wrap && !wrap.contains(e.target)) {
+      document.getElementById('tools-dropdown').classList.add('hidden');
+      document.getElementById('tools-chevron').style.transform = '';
+    }
+  });
+</script>
+
+<!-- HERO -->
+<section class="pt-36 pb-20 px-6" style="background: linear-gradient(180deg, #E8EFF9 0%, #ffffff 100%);">
+  <div class="max-w-2xl mx-auto text-center reveal">
+    <p class="text-xs uppercase tracking-[.22em] font-semibold text-[var(--text-muted)] mb-4">Get in Touch</p>
+    <h1 class="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight mb-5">
+      We'd love to <span class="gradient-text">hear from you</span>
+    </h1>
+    <p class="text-[var(--text-dim)] text-lg leading-relaxed">
+      Whether you're looking for a demo, have a pricing question, or need support — our team is here to help.
+    </p>
+  </div>
+</section>
+
+<!-- CONTACT CARDS -->
+<section class="pb-24 px-6">
+  <div class="max-w-3xl mx-auto">
+    <div class="flex flex-col gap-5 reveal">
+
+        <div class="contact-card">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#DCE7F7;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <p class="text-xs uppercase tracking-[.18em] font-semibold text-[var(--text-muted)]">Email</p>
+          <a href="mailto:varun.d@heyxia.io" class="text-[var(--text)] font-semibold hover:underline break-all">varun.d@heyxia.io</a>
+          <a href="mailto:torna.p@heyxia.io" class="text-[var(--text)] font-semibold hover:underline break-all">torna.p@heyxia.io</a>
+          <p class="text-sm text-[var(--text-dim)]">For sales, partnerships, and general enquiries.</p>
+        </div>
+
+        <div class="contact-card">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#F2EAE0;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.63 3.37 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <p class="text-xs uppercase tracking-[.18em] font-semibold text-[var(--text-muted)]">WhatsApp / Phone</p>
+          <a href="https://wa.me/917378300031" class="text-[var(--text)] font-semibold hover:underline">+91 73783 00031</a>
+        </div>
+
+        <div class="contact-card">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#EDE8F8;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <p class="text-xs uppercase tracking-[.18em] font-semibold text-[var(--text-muted)]">Response Time</p>
+          <p class="text-[var(--text)] font-semibold">Within 24 hours</p>
+          <p class="text-sm text-[var(--text-dim)]">We usually respond faster on business days.</p>
+        </div>
+
+        <div class="contact-card">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:#E8F5EC;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A2A4A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <p class="text-xs uppercase tracking-[.18em] font-semibold text-[var(--text-muted)]">Office Address</p>
+          <p class="text-[var(--text)] font-semibold">Dahotre Corp Tech Pvt. Ltd.</p>
+          <p class="text-sm text-[var(--text-dim)] leading-relaxed">Floor 7, Kotibhaskar Business Court, Karve Rd, opposite Karishma Society, Kothrud Industrial Area, Mayur Colony, Kothrud, Pune, Maharashtra 411038</p>
+        </div>
+
+      </div>
+
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<section class="py-16 px-6" style="background: linear-gradient(180deg, #ffffff 0%, #E8EFF9 100%);">
+  <div class="max-w-2xl mx-auto text-center reveal">
+    <h2 class="text-2xl md:text-3xl font-bold mb-4">Ready to see it in action?</h2>
+    <p class="text-[var(--text-dim)] mb-8">Start a 14-day free trial — no credit card required.</p>
+    <a href="https://gstreco.heyxia.app/signup" class="btn-submit" style="margin:0 auto;">
+      Start Free Trial
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-[var(--bg)] pt-16 pb-10 border-t border-[rgba(26,26,26,0.05)]">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-4 gap-10">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <img src="heyxia-logo.png" alt="Heyxia" class="h-10 w-auto" />
+        </div>
+        <p class="text-[var(--text-dim)] max-w-sm leading-relaxed">AI-powered GST reconciliation for finance teams, corporates, and chartered accountants across India.</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Pages</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="index.html" class="hover:text-black">Home</a></li>
+          <li><a href="index.html#features" class="hover:text-black">Features</a></li>
+          <li><a href="index.html#platform" class="hover:text-black">Solutions</a></li>
+          <li><a href="pricing.html" class="hover:text-black">Pricing</a></li>
+          <li><a href="blog.html" class="hover:text-black">Blogs</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[.2em] text-[var(--text-muted)] mb-4 font-semibold">Information</p>
+        <ul class="space-y-2 text-sm text-[var(--text-dim)]">
+          <li><a href="contact.html" class="text-black font-semibold">Contact Us</a></li>
+          <li><a href="privacy-policy.html" class="hover:text-black">Privacy Policy</a></li>
+          <li><a href="terms-of-use.html" class="hover:text-black">Terms of Use</a></li>
+          <li><a href="important-links.html" class="hover:text-black">Important Links</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-[rgba(26,26,26,0.06)] flex flex-col md:flex-row justify-between gap-2 text-xs text-[var(--text-muted)]">
+      <p>© 2026 GST Reco. All Rights Reserved.</p>
+      <p>Made with care for Indian finance teams.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const form = document.getElementById('contact-form');
+    const data = new FormData(form);
+    const subject = encodeURIComponent(data.get('subject') || 'Contact Form Enquiry');
+    const body = encodeURIComponent(
+      `Name: ${data.get('name')}\nPhone: ${data.get('phone') || '—'}\nType: ${data.get('type') || '—'}\n\n${data.get('message')}`
+    );
+    window.location.href = `mailto:varun.d@heyxia.io?subject=${subject}&body=${body}`;
+    form.classList.add('hidden');
+    document.getElementById('form-success').classList.remove('hidden');
+  }
+</script>
+</body>
+</html>
